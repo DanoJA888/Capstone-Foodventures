@@ -1,0 +1,38 @@
+[
+    {
+        "title": "Breaking News: New Scientific Discovery",
+        "content": "Scientists have made a groundbreaking discovery that could revolutionize the field of astrophysics.",
+        "userId": 1
+    },
+    {
+        "title": "Politics: Election Results Announced",
+        "content": "The election results are in, revealing a surprising outcome that will shape the future of the nation.",
+        "userId": 2
+    },
+    {
+        "title": "Sports: World Championship Match Recap",
+        "content": "In a thrilling match, the two teams battled it out until the last minute, showcasing their skills and determination.",
+        "userId": 3
+    },
+    {
+        "title": "Technology: New Smartphone Release",
+        "content": "The highly anticipated smartphone model has finally been released, boasting innovative features and advanced capabilities.",
+        "userId": 4
+    }, {
+        "title": "Entertainment: Movie Review",
+        "content": "The latest blockbuster film has hit the theaters, captivating audiences with its stunning visuals and gripping storyline.",
+        "userId": 5
+    }, {
+        "title": "Health: Tips for a Balanced Lifestyle",
+        "content": "Discover practical tips and expert advice on maintaining a healthy lifestyle, both physically and mentally.",
+        "userId": 6
+    }, {
+        "title": "Business: Company's Record Profits",
+        "content": "The company has reported record-breaking profits this quarter, surpassing all expectations and setting new industry standards.",
+        "userId": 7
+    }, {
+        "title": "Science: Climate Change Research",
+        "content": "Scientists have published a comprehensive study on the impact of climate change, highlighting the urgent need for action.",
+        "userId": 8
+    }
+]
