@@ -12,4 +12,14 @@ router.get('/user', async (req, res) => {
         res.status(500).json({message: err.message});
     }
 });
+
+router.post('/user', async (req, res) =>{
+    try {
+        const createUser = await User.create(req.body)
+        res.status(201).json(createUser)
+    }
+    catch(error){
+        res.status(500).json({message: error.message});
+    }
+})
 export default router;

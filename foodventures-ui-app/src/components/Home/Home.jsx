@@ -34,6 +34,10 @@ export default function Home() {
     });
   };
 
+  const uploadNewUser = async () =>{
+    axios.post("http://localhost:3001/user", currForm);
+  }
+
   return (<div className="home">
     <p>Home</p>
     <div>
@@ -64,7 +68,7 @@ export default function Home() {
         <input type="text" name="username" id="unId" placeholder="Username" onChange={handleChange}/>
         <input type="text" name="email" id="emailId" placeholder="Email" onChange={handleChange}/>
         <input type="text" name="password" id="pwId" placeholder="Password" onChange={handleChange}/>
-        <button>Create Account</button>
+        <button onClick={() => uploadNewUser()}>Create Account</button>
       </form>
     </div>
   </div>)
