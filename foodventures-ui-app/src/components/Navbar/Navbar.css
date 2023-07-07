@@ -1,0 +1,19 @@
+.navbar {
+    background: #2f97229a;
+    
+}
+
+.navbar-content {
+    color: #fff;
+    max-width: 1100px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.navbar-links{
+    display:flex;
+    text-align: center;
+    gap: 10%;
+    
+    flex: 1;
+}
