@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../../UserContext.js";
+import axios from "axios";
 
 export default function Signup() {
   const [currInfo, setInfo] = useState({
@@ -14,20 +15,43 @@ export default function Signup() {
 
   const handleChange = (event) => {
     setInfo({
-      ...currForm,
+      ...currInfo,
       [event.target.name]: event.target.value,
     });
   };
+  async function uploadNewUser(event) {
+    event.preventDefault();
+
+    try {
+      const response = await axios.post("http://localhost:3001/user", currInfo);
+
+      setInfo({
+        username: "",
+        email: "",
+        password: "",
+      });
+
+      const user = response.data.user;
+      updateUser(user);
+      navigate("/");
+      alert("Sign Up Successful.");
+    } catch (error) {
+      alert("Username or email already exists.");
+    }
+  }
+
+  console.log(currInfo);
 
   return (
     <div>
-      <form >
+      <form onSubmit={uploadNewUser}>
         <h2>Sign Up</h2>
         <div>
           <label htmlFor="username">Username:</label>
           <input
             type="text"
             id="username"
+            name="username"
             onChange={handleChange}
             required
           />
@@ -37,6 +61,7 @@ export default function Signup() {
           <input
             type="email"
             id="email"
+            name="email"
             onChange={handleChange}
             required
           />
@@ -46,6 +71,7 @@ export default function Signup() {
           <input
             type="password"
             id="password"
+            name="password"
             onChange={handleChange}
             required
           />

@@ -1,5 +1,6 @@
 import React , { useEffect, useState } from "react"
 import { BrowserRouter, Routes, Route} from 'react-router-dom'
+
 import { UserContext } from '../UserContext';
 import Navbar from "../Navbar/Navbar"
 import Sidebar from "../Sidebar/Sidebar"
@@ -11,10 +12,9 @@ import Login from "../User/Login/Login"
 import Signup from "../User/Signup/Signup"
 
 export default function App() {
-
-  const [user, setUser] = useState(() => {
+  const [currUser, setUser] = useState(() => {
     // Retrieve the user data from storage or set it to null if not found
-    const storedUser = localStorage.getItem('user');
+    const storedUser = localStorage.getItem('currUser');
     return storedUser ? JSON.parse(storedUser) : null;
   });
 
@@ -24,12 +24,12 @@ export default function App() {
 
   useEffect(() => {
     // Save the user data to storage whenever the user state changes
-    localStorage.setItem('user', JSON.stringify(user));
-  }, [user]);
+    localStorage.setItem('user', JSON.stringify(currUser));
+  }, [currUser]);
 
   return (
     <div className="app">
-      <UserContext.Provider value={{ user, updateUser }}>
+      <UserContext.Provider value={{ currUser, updateUser }}>
       <BrowserRouter>
         <main>
           <Navbar />
