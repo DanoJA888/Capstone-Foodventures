@@ -7,7 +7,7 @@ import session from "express-session";
 import SequelizeStoreInit from 'connect-session-sequelize';
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
 app.use(cors({
     origin: 'http://localhost:3000',
