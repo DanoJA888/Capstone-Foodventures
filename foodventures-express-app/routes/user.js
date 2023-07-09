@@ -64,3 +64,8 @@ router.post("/user/login", async (req, res) => {
   res.status(200).json({ user });
 });
 export default router;
+
+router.post("/user/logout", async (req, res) => {
+    req.session.destroy();
+    res.status(200).send("Logged out");
+})
