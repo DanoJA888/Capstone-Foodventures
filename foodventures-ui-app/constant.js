@@ -19,3 +19,4 @@ const cuisines = {
   "South East Asian": "South%20East%20Asian"
 };
 
+export default cuisines;
