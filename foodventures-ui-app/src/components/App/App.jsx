@@ -13,7 +13,6 @@ import Signup from "../User/Signup/Signup"
 
 export default function App() {
   const [currUser, setUser] = useState(() => {
-    // Retrieve the user data from storage or set it to null if not found
     const storedUser = localStorage.getItem('currUser');
     return storedUser ? JSON.parse(storedUser) : null;
   });
@@ -23,7 +22,6 @@ export default function App() {
   };
 
   useEffect(() => {
-    // Save the user data to storage whenever the user state changes
     localStorage.setItem('user', JSON.stringify(currUser));
   }, [currUser]);
 

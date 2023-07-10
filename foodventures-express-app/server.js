@@ -7,7 +7,7 @@ import session from "express-session";
 import SequelizeStoreInit from 'connect-session-sequelize';
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
 app.use(cors({
     origin: 'http://localhost:3000',
@@ -21,7 +21,6 @@ const sessionStore = new SequelizeStore({
   db: sequelize
 });
 
-// Session middleware
 app.use(
     session({
         secret: "foodventures",
@@ -31,7 +30,7 @@ app.use(
         cookie: {
             sameSite: false,
             secure: false,
-            expires: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000) // 1 year in milliseconds
+            expires: new Date(Date.now() + 24 * 60 * 60 * 1000)
         }
     })
 );

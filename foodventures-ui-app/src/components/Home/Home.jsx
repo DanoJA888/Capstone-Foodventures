@@ -4,7 +4,7 @@ import "./Home.css";
 import axios from "axios";
 
 export default function Home() {
-  const { curUser, updateUser } = useContext(UserContext);
+  const { currUser, updateUser } = useContext(UserContext);
   const [users, setUsers] = useState([]);
   const [showUser, setShowUser] = useState(false);
   const [currForm, setForm] = useState({
@@ -44,22 +44,25 @@ export default function Home() {
     <div className="home">
       <p>Home</p>
       <div>
+        {currUser &&
+          <p>Welcome {currUser.username}</p>
+        }
+      </div>
+      <div>
         <button onClick={() => clickShow()}>Testing connection</button>
         <div>
-          {" "}
           {showUser && (
             <div>
-              {" "}
               {users &&
                 users.map((user) => (
-                  <div className="user" key={user.password}>
+                  <div key={user.password}>
                     <p> {user.username}</p>
                     <p> {user.email}</p>
                     <p> {user.password}</p>
                   </div>
-                ))}{" "}
+                ))}
             </div>
-          )}{" "}
+          )}
         </div>
       </div>
       <div>

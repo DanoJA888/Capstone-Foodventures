@@ -3,44 +3,5 @@
         "username": "JohnDoe",
         "email": "johndoe@example.com",
         "password": "password123"
-    },
-    {
-        "username": "JaneSmith",
-        "email": "janesmith@example.com",
-        "password": "securepass"
-    },
-    {
-        "username": "DavidWilson",
-        "email": "davidwilson@example.com",
-        "password": "secretword"
-    },
-    {
-        "username": "EmmaJohnson",
-        "email": "emmajohnson@example.com",
-        "password": "pass1234"
-    }, {
-        "username": "MichaelBrown",
-        "email": "michaelbrown@example.com",
-        "password": "12345678"
-    }, {
-        "username": "SarahDavis",
-        "email": "sarahdavis@example.com",
-        "password": "password987"
-    }, {
-        "username": "WilliamTaylor",
-        "email": "williamtaylor@example.com",
-        "password": "taylorpass"
-    }, {
-        "username": "OliviaClark",
-        "email": "oliviaclark@example.com",
-        "password": "clarkpass123"
-    }, {
-        "username": "JamesAnderson",
-        "email": "jamesanderson@example.com",
-        "password": "secureword"
-    }, {
-        "username": "SophiaHarris",
-        "email": "sophiaharris@example.com",
-        "password": "pass456"
     }
 ]

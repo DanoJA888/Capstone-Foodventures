@@ -10,9 +10,37 @@ export default function LoginForm(){
   const { updateUser } = useContext(UserContext);
 
   const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch(`http://localhost:3001/user/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username, password }),
+        credentials: 'include'
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        const loggedInUser = data.user;
+
+        updateUser(loggedInUser);
+        navigate('/');
+      } else {
+        alert('Login failed');
+      }
+    } catch (error) {
+      alert('Login failed: ' + error);
+    }
+  };
+
   return (
     <div>
-      <form>
+      <form onSubmit={handleLogin}>
         <h2>Login</h2>
         <div>
           <label htmlFor="username">Username:</label>
