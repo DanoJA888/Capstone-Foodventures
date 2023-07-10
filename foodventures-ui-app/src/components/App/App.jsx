@@ -16,7 +16,8 @@ export default function App() {
     const storedUser = localStorage.getItem('currUser');
     return storedUser ? JSON.parse(storedUser) : null;
   });
-
+  const [selectedCuisine, updateCuisine] = useState("");
+  console.log(currUser)
   const updateUser = (newUser) => {
     setUser(newUser);
   };
@@ -32,8 +33,8 @@ export default function App() {
         <main>
           <Navbar />
           <Routes>
-            <Route path = '/' element={<Home/>}></Route>
-            <Route path = '/search' element={<Search/>}></Route>
+            <Route path = '/' element={<Home chooseCuisine = {updateCuisine}/>}></Route>
+            <Route path = '/search' element={<Search cuisine = {selectedCuisine}/>}></Route>
             <Route path = '/mealplan' element={<MealPlan/>}></Route>
             <Route path = '/login' element={<Login/>}></Route>
             <Route path = '/signup' element={<Signup/>}></Route>

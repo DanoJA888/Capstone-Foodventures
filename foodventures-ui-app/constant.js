@@ -1,4 +1,4 @@
-const cuisines = {
+export const cuisines = {
   "American" : "American",
   "Asian": "Asian",
   "British" : "British",
@@ -18,5 +18,6 @@ const cuisines = {
   "South American": "South%20American",
   "South East Asian": "South%20East%20Asian"
 };
+export const API_ID = "305eeabe";
+export const API_KEY = "9e7c1459f48822c0c067d0077d3d3962";
 
-export default cuisines;
