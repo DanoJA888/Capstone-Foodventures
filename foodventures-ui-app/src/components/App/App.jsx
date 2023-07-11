@@ -10,6 +10,7 @@ import "./App.css"
 import MealPlan from "../MealPlan/MealPlan"
 import Login from "../User/Login/Login"
 import Signup from "../User/Signup/Signup"
+import RecipeInfo from "../RecipeInfo/RecipeInfo";
 
 export default function App() {
   const [currUser, setUser] = useState(() => {
@@ -35,6 +36,7 @@ export default function App() {
           <Routes>
             <Route path = '/' element={<Home chooseCuisine = {updateCuisine}/>}></Route>
             <Route path = '/search' element={<Search cuisine = {selectedCuisine}/>}></Route>
+            <Route path = '/search/:recipeId' element={<RecipeInfo/>}></Route>
             <Route path = '/mealplan' element={<MealPlan/>}></Route>
             <Route path = '/login' element={<Login/>}></Route>
             <Route path = '/signup' element={<Signup/>}></Route>
