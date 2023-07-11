@@ -1,5 +1,6 @@
 import React, {useState, useContext} from "react"
 import { UserContext } from '../UserContext';
+import { Link } from 'react-router-dom';
 import "./Navbar.css"
 
 export default function Navbar() {
@@ -12,9 +13,9 @@ export default function Navbar() {
     <nav className="navbar">
       <div className="navbar-content">
         <div className="navbar-links">
-          <a href="/">Home</a>
-          <a href="/search">Search</a> 
-          <a href="/mealplan">Meal Plan</a>
+          <Link to="/">Home</Link>
+          <Link to="/search">Search</Link>
+          <Link to="/mealplan">Meal Plan</Link>
           {!currUser &&
             <div className="navbar-links">
               <a href="/login">Login</a>
