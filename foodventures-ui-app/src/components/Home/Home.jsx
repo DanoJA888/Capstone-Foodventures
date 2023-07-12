@@ -5,11 +5,11 @@ import "./Home.css";
 import axios from "axios";
 import {cuisines} from "../../../constant.js";
 
-export default function Home({chooseCuisine}) {
+export default function Home({updateCuisine}) {
   const { currUser, updateUser } = useContext(UserContext);
   
   function handleCuisine(cuisine){
-    {chooseCuisine(cuisine)};
+    {updateCuisine(cuisine)};
   }
 
 

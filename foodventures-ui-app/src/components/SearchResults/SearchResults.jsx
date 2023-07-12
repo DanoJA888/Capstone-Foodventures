@@ -4,25 +4,29 @@ import {API_ID, API_KEY} from "../../../constant.js";
 import { Link, useParams } from 'react-router-dom';
 import SearchParams from "../SearchParams/SearchParams";
 
-export default function SearchResults({cuisine, search, chooseSearch}) {
+export default function SearchResults({cuisine, search, updateSearch}) {
     const {request} = useParams();
   const [currRecipes, updateRecipes] = useState([]);
 
 
   console.log(cuisine);
-  let url = `https://api.edamam.com/api/recipes/v2?type=public&app_id=${API_ID}&app_key=${API_KEY}`;
-
-  {if (cuisine){
-    url += `&cuisineType=${cuisine}`;
-  }}
-  {if (search){
-    url += `&q=${search}`;
-  }}
+  
 
   useEffect(() =>{
+    let url = `https://api.edamam.com/api/recipes/v2?type=public&app_id=${API_ID}&app_key=${API_KEY}`;
+    
+    {if (cuisine){
+        url += `&cuisineType=${cuisine}`;
+    }}
+  
+    {if (search){
+        url += `&q=${search}`;
+    }}
     const apiCall = async () =>{
+
         const response = await fetch(url);
         const data = await response.json();
+        console.log(url);
         console.log(data.hits[0].recipe.label);
         updateRecipes(data.hits);
     };
@@ -33,7 +37,7 @@ export default function SearchResults({cuisine, search, chooseSearch}) {
     <div>
         <h1>Search</h1>
         <div>
-          <SearchParams currSearch={search} setSearch={chooseSearch}/>
+          <SearchParams updateSearch={updateSearch}/>
         </div>
         {cuisine !== "" &&
           <h1>{cuisine}</h1>
