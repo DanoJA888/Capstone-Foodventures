@@ -4,11 +4,8 @@ import {API_ID, API_KEY} from "../../../constant.js";
 import { Link, useParams } from 'react-router-dom';
 import SearchParams from "../SearchParams/SearchParams";
 
-export default function SearchResults({cuisine}) {
+export default function SearchResults({cuisine, search, chooseSearch}) {
     const {request} = useParams();
-    const params = request.split('_');
-    const cuisineSelected = params[0];
-    const search = params[1];
   const [currRecipes, updateRecipes] = useState([]);
 
 
@@ -17,6 +14,9 @@ export default function SearchResults({cuisine}) {
 
   {if (cuisine){
     url += `&cuisineType=${cuisine}`;
+  }}
+  {if (search){
+    url += `&q=${search}`;
   }}
 
   useEffect(() =>{
@@ -33,7 +33,7 @@ export default function SearchResults({cuisine}) {
     <div>
         <h1>Search</h1>
         <div>
-          <SearchParams/>
+          <SearchParams currSearch={search} setSearch={chooseSearch}/>
         </div>
         {cuisine !== "" &&
           <h1>{cuisine}</h1>

@@ -1,10 +1,10 @@
 import * as React from "react"
-import "./SearchParams.css"
+import "./SearchParams.css";
+import { useNavigate } from 'react-router-dom';
 
-export default function SearchParams(){
-    function handleSearch(){
-        
-    }
+export default function SearchParams({currSearch, setSearch}){
+
+    const navigate = useNavigate();
     return(
         <div className="search">
             <div className="search-content">
@@ -12,8 +12,10 @@ export default function SearchParams(){
                     <input
                         id = "inputField"
                         type="text"
+                        value = {currSearch}
+                        onChange={(e) => {setSearch(e.target.value)}}
                     ></input>
-                    <button>Search</button>
+                    <button onClick={() => {navigate('/search_results')}}>Search</button>
                 </div>
             </div>
         </div>

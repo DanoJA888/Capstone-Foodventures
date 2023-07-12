@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { UserContext } from "../UserContext.js";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import "./Home.css";
 import axios from "axios";
 import {cuisines} from "../../../constant.js";
@@ -20,10 +20,9 @@ export default function Home({chooseCuisine}) {
 
       <div>
         {Object.entries(cuisines).map(([key, value])=> {
-          const request = value+"_";
           return (
           <div>
-            <Link to={`search/${request}`}><button onClick={() => handleCuisine(value)}>{key}</button></Link>
+            <Link to={`search_results`}><button onClick={() => handleCuisine(value)}>{key}</button></Link>
           </div>
           )
         })}
