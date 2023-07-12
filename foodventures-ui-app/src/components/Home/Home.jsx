@@ -19,12 +19,16 @@ export default function Home({chooseCuisine}) {
       <div>{currUser && <p>Welcome {currUser.username}</p>}</div>
 
       <div>
-        {Object.entries(cuisines).map(([key, value])=> (
+        {Object.entries(cuisines).map(([key, value])=> {
+          const request = value+"_";
+          return (
           <div>
-            <Link to='/search'><button onClick={() => handleCuisine(value)}>{key}</button></Link>
+            <Link to={`search/${request}`}><button onClick={() => handleCuisine(value)}>{key}</button></Link>
           </div>
-        ))}
+          )
+        })}
       </div>
     </div>
   );
 }
+

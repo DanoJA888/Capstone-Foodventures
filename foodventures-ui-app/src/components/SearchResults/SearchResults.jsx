@@ -1,10 +1,14 @@
 import React, { useEffect, useState, useContext } from "react";
 import "./SearchResults.css"
 import {API_ID, API_KEY} from "../../../constant.js";
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import SearchParams from "../SearchParams/SearchParams";
 
 export default function SearchResults({cuisine}) {
+    const {request} = useParams();
+    const params = request.split('_');
+    const cuisineSelected = params[0];
+    const search = params[1];
   const [currRecipes, updateRecipes] = useState([]);
 
 
@@ -40,7 +44,7 @@ export default function SearchResults({cuisine}) {
               console.log(recipeId)
               return (
                 <div>
-                  <Link to= {`/search/${recipeId}`}><h2>{recipe.recipe.label}</h2></Link>
+                  <Link to= {`/searched/${recipeId}`}><h2>{recipe.recipe.label}</h2></Link>
                 </div>
               )
           })}

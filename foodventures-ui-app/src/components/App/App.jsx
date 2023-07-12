@@ -38,8 +38,9 @@ export default function App() {
           <Navbar resetSearch = {updateCuisine}/>
           <Routes>
             <Route path = '/' element={<Home chooseCuisine = {updateCuisine}/>}></Route>
-            <Route path = '/search' element={<SearchResults cuisine = {selectedCuisine}/>}></Route>
-            <Route path = '/search/:recipeId' element={<RecipeInfo/>}></Route>
+            <Route path = '/search' element={<Search/>}></Route>
+            <Route path = '/search/:request' element={<SearchResults cuisine = {selectedCuisine}/>}></Route>
+            <Route path = '/searched/:recipeId' element={<RecipeInfo/>}></Route>
             <Route path = '/mealplan' element={<MealPlan/>}></Route>
             <Route path = '/login' element={<Login/>}></Route>
             <Route path = '/signup' element={<Signup/>}></Route>
