@@ -27,7 +27,7 @@ export default function SearchResults({cuisine, search, chooseSearch}) {
         updateRecipes(data.hits);
     };
     apiCall();
-  }, []);
+  }, [cuisine, search]);
 
   return (
     <div>

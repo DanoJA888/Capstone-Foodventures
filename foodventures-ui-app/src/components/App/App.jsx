@@ -35,7 +35,7 @@ export default function App() {
       <UserContext.Provider value={{ currUser, updateUser }}>
       <BrowserRouter>
         <main>
-          <Navbar resetSearch = {updateCuisine}/>
+          <Navbar resetCuisine = {updateCuisine} resetSearch = {updateSearch}/>
           <Routes>
             <Route path = '/' element={<Home chooseCuisine = {updateCuisine}/>}></Route>
             <Route path = '/search' element={<Search currSearch = {currSearch} chooseSearch  = {updateSearch}/>}></Route>
