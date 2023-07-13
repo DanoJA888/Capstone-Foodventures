@@ -3,7 +3,7 @@ import { UserContext } from '../UserContext';
 import { Link } from 'react-router-dom';
 import "./Navbar.css"
 
-export default function Navbar({resetSearch}) {
+export default function Navbar({resetCuisine, resetSearch}) {
   const { currUser, updateUser } = useContext(UserContext);
   const handleLogout = () =>{
     updateUser(null);
@@ -13,13 +13,13 @@ export default function Navbar({resetSearch}) {
     <nav className="navbar">
       <div className="navbar-content">
         <div className="navbar-links">
-          <Link to="/" onClick={() => resetSearch("")}>Home</Link>
+          <Link to="/" onClick={() => {resetSearch(""); resetCuisine("")}}>Home</Link>
           <Link to="/search">Search</Link>
-          <Link to="/mealplan" onClick={() => resetSearch("")}>Meal Plan</Link>
+          <Link to="/mealplan" onClick={() => {resetSearch(""); resetCuisine("")}}>Meal Plan</Link>
           {!currUser &&
             <div className="navbar-links">
-              <a href="/login" onClick={() => resetSearch("")}>Login</a>
-              <a href="/signup" onClick={() => resetSearch("")}>Signup</a>
+              <a href="/login" onClick={() => {resetSearch(""); resetCuisine("")}}>Login</a>
+              <a href="/signup" onClick={() => {resetSearch(""); resetCuisine("")}}>Signup</a>
             </div>
           }
           {currUser &&
