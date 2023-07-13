@@ -11,6 +11,7 @@ import Login from "../User/Login/Login"
 import Signup from "../User/Signup/Signup"
 import RecipeInfo from "../RecipeInfo/RecipeInfo";
 import SearchResults from "../SearchResults/SearchResults";
+import Profile from "../User/Profile/Profile";
 
 export default function App() {
   const [currUser, setUser] = useState(() => {
@@ -43,6 +44,7 @@ export default function App() {
             <Route path = '/mealplan' element={<MealPlan/>}></Route>
             <Route path = '/login' element={<Login/>}></Route>
             <Route path = '/signup' element={<Signup/>}></Route>
+            <Route path = '/profile' element = {<Profile/>}></Route>
           </Routes>
           
         </main>
