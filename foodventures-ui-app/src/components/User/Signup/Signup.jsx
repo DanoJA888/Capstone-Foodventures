@@ -8,7 +8,13 @@ export default function Signup() {
     username: "",
     email: "",
     password: "",
+    first_name: "",
+    last_name: "",
+    height_ft: 0,
+    height_in: 0,
+    weight: 0,
   });
+
 
   const { updateUser } = useContext(UserContext);
   const navigate = useNavigate();
@@ -29,7 +35,13 @@ export default function Signup() {
         username: "",
         email: "",
         password: "",
+        first_name: "",
+        last_name: "",
+        height_ft: 0,
+        height_in: 0,
+        weight: 0,
       });
+    
 
       const user = response.data.user;
       updateUser(user);
@@ -76,6 +88,59 @@ export default function Signup() {
             required
           />
         </div>
+        <div>
+          <label htmlFor="first_name">First Name:</label>
+          <input
+            type="text"
+            id="first_name"
+            name="first_name"
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div>
+          <label htmlFor="last_name">Last Name:</label>
+          <input
+            type="text"
+            id="last_name"
+            name="last_name"
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div>
+          <label htmlFor="height_ft">Height(ft):</label>
+          <input
+          type="number"
+          step={1}
+          id="height_ft"
+          name="height_ft"
+          onChange={handleChange}
+          required
+          />
+        </div>
+        <div>
+          <label htmlFor="height_in">Height(in):</label>
+          <input
+          type="number"
+          step={1}
+          id="height_in"
+          name="height_in"
+          onChange={handleChange}
+          required
+          />
+        </div>
+        <div>
+          <label htmlFor="weight">Weight(lbs):</label>
+          <input
+          type="number"
+          step={1}
+          id="weight"
+          name="weight"
+          onChange={handleChange}
+          required
+          />
+        </div>
         <button type="submit">Sign Up</button>
         <p>
           Already have an account?
@@ -85,3 +150,8 @@ export default function Signup() {
     </div>
   );
 }
+
+
+/* 
+        
+*/

@@ -10,8 +10,11 @@ export default function Profile() {
       <div>
         {currUser && (
           <div>
-            <p>{currUser.username}</p>
-            <p>{currUser.email}</p>
+            <p>USERNAME {currUser.username}</p>
+            <p>EMAIL {currUser.email}</p>
+            <p>NAME {currUser.first_name} {currUser.last_name}</p>
+            <p>HEIGHT {currUser.height_ft}'{currUser.height_in}</p>
+            <p>WEIGHT {currUser.weight} lbs</p>
           </div>
         )}
       </div>

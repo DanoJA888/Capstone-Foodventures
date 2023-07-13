@@ -15,7 +15,7 @@ router.get("/user", async (req, res) => {
 });
 
 router.post("/user", async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, first_name, last_name, height_ft, height_in, weight} = req.body;
 
   try {
     const userAlreadyExists = await User.findOne({
@@ -34,6 +34,11 @@ router.post("/user", async (req, res) => {
       username,
       password: hashedPassword,
       email,
+      first_name,
+      last_name,
+      height_ft,
+      height_in,
+      weight
     });
 
     req.session.user = newUser;
