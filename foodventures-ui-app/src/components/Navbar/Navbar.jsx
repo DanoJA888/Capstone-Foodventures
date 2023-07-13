@@ -23,7 +23,10 @@ export default function Navbar({resetCuisine, resetSearch}) {
             </div>
           }
           {currUser &&
-            <button onClick={()=> {handleLogout()}}>Logout</button>
+            <div>
+              <button onClick={()=> {handleLogout()}}>Logout</button>
+              <Link to="/profile">Profile</Link>
+            </div>
           }
           
         </div>
