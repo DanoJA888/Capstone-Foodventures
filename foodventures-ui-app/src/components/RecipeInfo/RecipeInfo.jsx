@@ -8,6 +8,7 @@ export default function RecipeInfo() {
   const [recipe, setRecipe] = useState({
     ingredientLines: []
   });
+  
 
   useEffect(() => {
     const apiCall = async () => {
@@ -22,17 +23,22 @@ export default function RecipeInfo() {
 
   return (
     <div>
-        
-        <img src={recipe.image} alt={recipe.label} />
-        <h1>{recipe.label}</h1>
-        <h2>{recipe.source}</h2>
+        <div>
+            <img src={recipe.image} alt={recipe.label} />
+            <h1>{recipe.label}</h1>
+            <h2>{recipe.source}</h2>
 
-        {
-            recipe.ingredientLines.map(ingredient=>
-            <p>{ingredient}</p>
-            )
-        }
-        
+            {
+                recipe.ingredientLines.map(ingredient=>
+                <p>{ingredient}</p>
+                )
+            }
+
+            <a href={recipe.url} target="_blank">Recipe</a>
+        </div>
+        <div>
+            <button>Add To Favorites</button>
+        </div>
     </div>
   );
 }
