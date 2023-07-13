@@ -6,12 +6,12 @@ import { Link } from 'react-router-dom';
 import RecipeInfo from "../RecipeInfo/RecipeInfo";
 import SearchParams from "../SearchParams/SearchParams";
 
-export default function Search({currSearch, updateSearch}) {
+export default function Search({updateSearch}) {
   return (
     <div>
         <h1>Search</h1>
         <div>
-          <SearchParams currSearch={currSearch} updateSearch={updateSearch}/>
+          <SearchParams updateSearch={updateSearch}/>
         </div>
     </div>
   )
