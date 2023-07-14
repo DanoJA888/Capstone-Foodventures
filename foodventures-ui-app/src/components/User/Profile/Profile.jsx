@@ -3,22 +3,22 @@ import { UserContext } from "../../UserContext.js";
 import "./Profile.css";
 
 export default function Profile() {
-  const { currUser, updateUser } = useContext(UserContext);
+  const { currUser } = useContext(UserContext);
   const [currFavs, setFavs] = useState([]);
-  const fetchFavorites = async () => {
-    const response = await fetch("http://localhost:3001/get_favorites", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    });
-    const data = await response.json();
-    setFavs(data);
-  };
+  
     
   useEffect(() => {
-    
+    const fetchFavorites = async () => {
+        const response = await fetch("http://localhost:3001/get_favorites", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+        const data = await response.json();
+        setFavs(data);
+      };
     fetchFavorites();
   }, []);
   console.log(currFavs);
