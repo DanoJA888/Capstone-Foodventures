@@ -1,12 +1,15 @@
 import React, {useState, useContext} from "react"
 import { UserContext } from '../UserContext';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate} from 'react-router-dom';
 import "./Navbar.css"
 
 export default function Navbar({resetCuisine, resetSearch}) {
   const { currUser, updateUser } = useContext(UserContext);
+
+  const navigate = useNavigate();
   const handleLogout = () =>{
     updateUser(null);
+    navigate('/');
     console.log(currUser);
   }
   return (

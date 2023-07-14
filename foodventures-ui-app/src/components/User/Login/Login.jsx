@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { createContext } from 'react';
 import { UserContext } from '../../UserContext.js';
+import axios from 'axios';
 
 
 export default function LoginForm(){
@@ -27,7 +28,7 @@ export default function LoginForm(){
       if (response.ok) {
         const data = await response.json();
         const loggedInUser = data.user;
-
+        console.log(loggedInUser);
         updateUser(loggedInUser);
         navigate('/');
       } else {
