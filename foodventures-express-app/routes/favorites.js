@@ -56,4 +56,21 @@ router.post("/add_favorites", async (req, res) =>{
     }
 })
 
+router.delete("/remove_favorites", async (req, res) =>{
+    
+    try{
+        const user = req.session.user;
+        const {recipeId, recipeName} = req.body;
+        if (!user) {
+            throw new Error('User not authenticated'); 
+        }
+        const favorite = await Favorite.findOne({ where: { userId: user.id, recipeId: recipeId} });
+        await favorite.destroy();
+        res.status(200).json({favorite: favorite});
+    }
+    catch(error){
+        res.status(500).json({error: "Server Error"});
+    }
+})
+
 export default router;
