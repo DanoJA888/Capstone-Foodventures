@@ -5,21 +5,23 @@ import "./Profile.css";
 export default function Profile() {
   const { currUser, updateUser } = useContext(UserContext);
   const [currFavs, setFavs] = useState([]);
-
+  const fetchFavorites = async () => {
+    const response = await fetch("http://localhost:3001/get_favorites", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+    const data = await response.json();
+    setFavs(data);
+  };
+    
   useEffect(() => {
-    const fetchFavorites = async () => {
-      const response = await fetch("http://localhost:3001/get_favorites", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
-      const data = await response.json();
-      setFavs(data);
-    };
+    
     fetchFavorites();
   }, []);
+  console.log(currFavs);
 
   return (
     <div>
@@ -37,7 +39,7 @@ export default function Profile() {
           <p>WEIGHT {currUser.weight} lbs</p>
         </div>
         <div>
-          {!currFavs && (
+          {currFavs.length === 0 && (
             <div>
               <p>No Favorites</p>
             </div>
