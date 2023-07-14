@@ -21,6 +21,19 @@ router.get("/get_favorites", async (req, res) => {
     }
   });
 
+  router.post("/check_favorite", async (req, res) => {
+    try {
+        const {recipeId} = req.body;
+      const user = req.session.user;
+      if (!user) {
+        throw new Error('User not authenticated'); 
+      }
+      const favorites = await Favorite.findOne({ where: { userId: user.id, recipeId: recipeId} });
+      res.json(favorites);
+    } catch (error) {
+      res.status(500).json({ error: "Server Error" });
+    }
+  });
 
 router.post("/add_favorites", async (req, res) =>{
     

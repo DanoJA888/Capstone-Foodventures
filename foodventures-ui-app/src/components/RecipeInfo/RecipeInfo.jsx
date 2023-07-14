@@ -7,6 +7,7 @@ import axios from 'axios';
 export default function RecipeInfo() {
   const { recipeId } = useParams();
   const { currUser } = useContext(UserContext);
+  const [favorited, setFavorited] = useState(false);
   console.log(recipeId)
   const [recipe, setRecipe] = useState({
     ingredientLines: []
@@ -31,15 +32,30 @@ export default function RecipeInfo() {
     }
   }
 
-  useEffect(() => {
-    const apiCall = async () => {
-        console.log(recipeId)
-      const response = await fetch(`https://api.edamam.com/api/recipes/v2/${recipeId}?type=public&app_id=${API_ID}&app_key=${API_KEY}`);
-      const data = await response.json();
-      console.log(data.recipe);
-      setRecipe(data.recipe);
+  const apiCall = async () => {
+    console.log(recipeId)
+    const response = await fetch(`https://api.edamam.com/api/recipes/v2/${recipeId}?type=public&app_id=${API_ID}&app_key=${API_KEY}`);
+    const data = await response.json();
+    console.log(data.recipe);
+    setRecipe(data.recipe);
     };
+   
+    const checkInFavs = async () => {
+        const response = await fetch("http://localhost:3001/check_favorite", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({recipeId: recipeId}),
+          credentials: "include",
+        });
+        const data = await response.json();
+        setFavorited(Object.keys(data).length !== 0); 
+    };
+
+  useEffect(() => {
     apiCall();
+    checkInFavs();
   }, [recipeId]);
 
   return (
@@ -57,9 +73,14 @@ export default function RecipeInfo() {
 
             <a href={recipe.url} target="_blank">Recipe</a>
         </div>
-        {currUser && 
+        {currUser && !favorited &&
             <div>
                 <button onClick={(event) => addToFavs(event)}>Add To Favorites</button>
+            </div>
+        }
+        {currUser && favorited &&
+            <div>
+                <button onClick={(event) => removeFromFavs(event)}>Remove From Favorites</button>
             </div>
         }
     </div>
