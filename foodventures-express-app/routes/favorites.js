@@ -1,6 +1,5 @@
 import express from "express";
 import { Favorite } from "../models/favorites.js";
-import { Op } from "sequelize";
 
 const router = express.Router();
 
