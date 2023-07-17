@@ -1,4 +1,4 @@
-import React, {useState, useContext} from "react"
+import React, {useContext} from "react"
 import { UserContext } from '../UserContext';
 import { Link, useNavigate} from 'react-router-dom';
 import "./Navbar.css"
@@ -22,9 +22,10 @@ export default function Navbar({resetCuisine, resetSearch}) {
           <div>
             {
               currUser ? (
-                <div>
+                <div className="navbar-links">
                   <button onClick={()=> {handleLogout()}}>Logout</button>
                   <Link to="/profile">Profile</Link>
+                  <Link to="/upload">Upload a Recipe!</Link>
                 </div>
             ) : (
                 <div className="navbar-links">
