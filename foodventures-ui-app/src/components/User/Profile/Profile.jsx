@@ -1,22 +1,64 @@
-import React, { useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { UserContext } from "../../UserContext.js";
+import { Link } from 'react-router-dom';
 import "./Profile.css";
 
 export default function Profile() {
-  const { currUser, updateUser } = useContext(UserContext);
+  const { currUser } = useContext(UserContext);
+  const [currFavs, setFavs] = useState([]);
+  
+  const fetchFavorites = async () => {
+    const response = await fetch("http://localhost:3001/get_favorites", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+    const data = await response.json();
+    setFavs(data);
+  };
+    
+  useEffect(() => {
+    fetchFavorites();
+  }, []);
+  console.log(currFavs);
+
   return (
     <div>
       <p>Profile</p>
       <div>
-        {currUser && (
-          <div>
-            <p>USERNAME {currUser.username}</p>
-            <p>EMAIL {currUser.email}</p>
-            <p>NAME {currUser.first_name} {currUser.last_name}</p>
-            <p>HEIGHT {currUser.height_ft}'{currUser.height_in}</p>
-            <p>WEIGHT {currUser.weight} lbs</p>
-          </div>
-        )}
+        <div>
+          <p>USERNAME {currUser.username}</p>
+          <p>EMAIL {currUser.email}</p>
+          <p>
+            NAME {currUser.first_name} {currUser.last_name}
+          </p>
+          <p>
+            HEIGHT {currUser.height_ft}'{currUser.height_in}
+          </p>
+          <p>WEIGHT {currUser.weight} lbs</p>
+        </div>
+        <div>
+            <h1>Favorites</h1>
+          {currFavs.length === 0 && (
+            <div>
+              <p>No Favorites</p>
+            </div>
+          )}
+          {currFavs && (
+            <div>
+              {currFavs.map((fav) => {
+                const recipeId = fav.recipeId;
+                return (
+                  <div>
+                    <p><Link to= {`/searched/${recipeId}`}><h2>{fav.recipeName}</h2></Link></p>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
