@@ -1,6 +1,6 @@
 import React , { useEffect, useState } from "react"
 import { BrowserRouter, Routes, Route} from 'react-router-dom'
-
+import "bootstrap/dist/css/bootstrap.min.css";
 import { UserContext } from '../UserContext';
 import Navbar from "../Navbar/Navbar"
 import Home from "../Home/Home"
@@ -15,7 +15,7 @@ import Profile from "../User/Profile/Profile";
 
 export default function App() {
   const [currUser, setUser] = useState(() => {
-    const storedUser = localStorage.getItem('currUser');
+    const storedUser = localStorage.getItem('user');
     return storedUser ? JSON.parse(storedUser) : null;
   });
 

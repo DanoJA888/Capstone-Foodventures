@@ -13,8 +13,7 @@ export default function RecipeInfo() {
     ingredientLines: [],
   });
 
-  async function addToFavs(event) {
-    event.preventDefault();
+  async function addToFavs() {
 
     try {
       const response = await fetch(`http://localhost:3001/add_favorites`, {
@@ -25,13 +24,13 @@ export default function RecipeInfo() {
         body: JSON.stringify({ recipeId, recipeName: recipe.label }),
         credentials: "include",
       });
+      setFavorited(true);
       alert("Added to Favorites");
     } catch (error) {
       alert({ error });
     }
   }
-  async function removeFromFavs(event) {
-    event.preventDefault();
+  async function removeFromFavs() {
 
     try {
       const response = await fetch(`http://localhost:3001/remove_favorites`, {
@@ -42,6 +41,7 @@ export default function RecipeInfo() {
         body: JSON.stringify({ recipeId, recipeName: recipe.label }),
         credentials: "include",
       });
+      setFavorited(false);
       alert("Removed from Favorites");
     } catch (error) {
       alert({ error });
@@ -78,33 +78,28 @@ export default function RecipeInfo() {
 
   return (
     <div>
-      <div>
-        <img src={recipe.image} alt={recipe.label} />
-        <h1>{recipe.label}</h1>
-        <h2>{recipe.source}</h2>
-
-        {recipe.ingredientLines.map((ingredient) => (
-          <p>{ingredient}</p>
-        ))}
-
-        <a href={recipe.url} target="_blank">
-          Recipe
-        </a>
-      </div>
-      {currUser && !favorited && (
         <div>
-          <button onClick={(event) => addToFavs(event)}>
-            Add To Favorites
-          </button>
+            <img src={recipe.image} alt={recipe.label} />
+            <h1>{recipe.label}</h1>
+            <h2>{recipe.source}</h2>
+
+            {recipe.ingredientLines.map((ingredient) => (
+            <p>{ingredient}</p>
+            ))}
+
+            <a href={recipe.url} target="_blank">
+            Recipe
+            </a>
         </div>
-      )}
-      {currUser && favorited && (
-        <div>
-          <button onClick={(event) => removeFromFavs(event)}>
-            Remove From Favorites
-          </button>
-        </div>
-      )}
+        {currUser && 
+            <div>
+                {favorited ? (
+                    <button onClick={() => removeFromFavs()}>Remove From Favorites</button>
+                ) : (
+                    <button onClick={() => addToFavs()}>Add To Favorites</button>
+                )}
+            </div>
+        }
     </div>
   );
 }

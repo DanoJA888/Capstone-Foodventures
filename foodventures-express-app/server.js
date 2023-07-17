@@ -31,7 +31,7 @@ app.use(
         cookie: {
             sameSite: false,
             secure: false,
-            expires: new Date(Date.now() + 24 * 60 * 60 * 1000)
+            expires: new Date(Date.now() + (365 * 24 * 60 * 60 * 1000))
         }
     })
 );
