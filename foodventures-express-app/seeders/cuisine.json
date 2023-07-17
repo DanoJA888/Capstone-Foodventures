@@ -1,0 +1,74 @@
+[
+    {
+      "cuisineName": "American",
+      "cusineCode": "American"
+    },
+    {
+      "cuisineName": "Asian",
+      "cusineCode": "Asian"
+    },
+    {
+      "cuisineName": "British",
+      "cusineCode": "British"
+    },
+    {
+      "cuisineName": "Caribbean",
+      "cusineCode": "Caribbean"
+    },
+    {
+      "cuisineName": "Central Europe",
+      "cusineCode": "Central%20Europe"
+    },
+    {
+      "cuisineName": "Chinese",
+      "cusineCode": "Chinese"
+    },
+    {
+      "cuisineName": "Eastern Europe",
+      "cusineCode": "Eastern%20Europe"
+    },
+    {
+      "cuisineName": "French",
+      "cusineCode": "French"
+    },
+    {
+      "cuisineName": "Indian",
+      "cusineCode": "Indian"
+    },
+    {
+      "cuisineName": "Italian",
+      "cusineCode": "Italian"
+    },
+    {
+      "cuisineName": "Japanese",
+      "cusineCode": "Japanese"
+    },
+    {
+      "cuisineName": "Kosher",
+      "cusineCode": "Kosher"
+    },
+    {
+      "cuisineName": "Mediterranean",
+      "cusineCode": "Mediterranean"
+    },
+    {
+      "cuisineName": "Mexican",
+      "cusineCode": "Mexican"
+    },
+    {
+      "cuisineName": "Middle Eastern",
+      "cusineCode": "Middle%20Eastern"
+    },
+    {
+      "cuisineName": "Nordic",
+      "cusineCode": "Nordic"
+    },
+    {
+      "cuisineName": "South American",
+      "cusineCode": "South%20American"
+    },
+    {
+      "cuisineName": "South East Asian",
+      "cusineCode": "South%20East%20Asian"
+    }
+  ]

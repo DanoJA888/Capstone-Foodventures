@@ -1,13 +1,13 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { User } from './models/user.js';
 import { sequelize } from './database.js';
+import { Cuisine } from './models/cuisine.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const userData = JSON.parse(fs.readFileSync(path.resolve(__dirname, './seeders/users.json'), 'utf8'));
+const cuisineData = JSON.parse(fs.readFileSync(path.resolve(__dirname, './seeders/cuisine.json'), 'utf8'));
 
 const seedDatabase = async () => {
   try {
@@ -15,8 +15,8 @@ const seedDatabase = async () => {
     await sequelize.sync({ alter: true });
 
     // Then seed the User and Post data
-    await User.bulkCreate(userData);
-    console.log('User data has been seeded!');
+    await Cuisine.bulkCreate(cuisineData);
+    console.log('Cuisine data has been seeded!');
 
   } catch (error) {
     console.error('Error seeding data:', error);
