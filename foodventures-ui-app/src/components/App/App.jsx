@@ -1,6 +1,6 @@
 import React , { useEffect, useState } from "react"
 import { BrowserRouter, Routes, Route} from 'react-router-dom'
-
+import "bootstrap/dist/css/bootstrap.min.css";
 import { UserContext } from '../UserContext';
 import Navbar from "../Navbar/Navbar"
 import Home from "../Home/Home"
