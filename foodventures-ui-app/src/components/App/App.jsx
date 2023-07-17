@@ -15,7 +15,7 @@ import Profile from "../User/Profile/Profile";
 
 export default function App() {
   const [currUser, setUser] = useState(() => {
-    const storedUser = localStorage.getItem('currUser');
+    const storedUser = localStorage.getItem('user');
     return storedUser ? JSON.parse(storedUser) : null;
   });
 
