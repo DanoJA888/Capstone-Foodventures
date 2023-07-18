@@ -12,6 +12,7 @@ import Signup from "../User/Signup/Signup"
 import RecipeInfo from "../RecipeInfo/RecipeInfo";
 import SearchResults from "../SearchResults/SearchResults";
 import Profile from "../User/Profile/Profile";
+import UploadRecipe from "../User/UploadRecipe/UploadRecipe"
 
 export default function App() {
   const [currUser, setUser] = useState(() => {
@@ -45,6 +46,7 @@ export default function App() {
             <Route path = '/login' element={<Login/>}></Route>
             <Route path = '/signup' element={<Signup/>}></Route>
             <Route path = '/profile' element = {<Profile/>}></Route>
+            <Route path = '/upload' element = {<UploadRecipe/>}></Route>
           </Routes>
           
         </main>

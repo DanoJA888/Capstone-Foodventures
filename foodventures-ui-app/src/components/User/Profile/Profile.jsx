@@ -52,7 +52,7 @@ export default function Profile() {
                 const recipeId = fav.recipeId;
                 return (
                   <div>
-                    <p><Link to= {`/searched/${recipeId}`}><h2>{fav.recipeName}</h2></Link></p>
+                    <Link to= {`/searched/${recipeId}`}><h2>{fav.recipeName}</h2></Link>
                   </div>
                 );
               })}
