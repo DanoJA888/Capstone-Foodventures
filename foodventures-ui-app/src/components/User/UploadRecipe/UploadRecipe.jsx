@@ -19,8 +19,8 @@ export default function Navbar({ resetCuisine, resetSearch }) {
     });
 
 
-    async function uploadRecipe() {
-
+    async function uploadRecipe(event) {
+        event.preventDefault();
         try {
           const response = await fetch(`http://localhost:3001/add_recipe`, {
             method: "POST",
@@ -30,8 +30,7 @@ export default function Navbar({ resetCuisine, resetSearch }) {
             body: JSON.stringify(recipe),
             credentials: "include",
           });
-          setFavorited(true);
-          alert("Added to Favorites");
+          alert("Recipe Added");
         } catch (error) {
           alert({ error });
         }
@@ -77,13 +76,14 @@ export default function Navbar({ resetCuisine, resetSearch }) {
             ...recipe,
             [name]: directionsRef.current.value
         });
+        directionsRef.current.value = "";
     }
 
     console.log(recipe);
     return (
         <div>
             <h1>Upload A Recipe!</h1>
-            <form onSubmit={(event) => event.preventDefault()}>
+            <form onSubmit={uploadRecipe}>
                 <div>
                     <input
                         type="text"
@@ -101,7 +101,7 @@ export default function Navbar({ resetCuisine, resetSearch }) {
                         name="ingredientQuantity"
                         placeholder="Add Quantity..."
                         ref={ingQuant}
-                        required
+
                     />
                     <input
                         type="text"
@@ -109,7 +109,7 @@ export default function Navbar({ resetCuisine, resetSearch }) {
                         name="ingredientLines"
                         placeholder="Add Ingredient..."
                         ref={ingRef}
-                        required
+
                     />
                     <button
                         onClick={(event) => addIng(event, "ingredientLines")}
