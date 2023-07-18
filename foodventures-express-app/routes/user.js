@@ -19,10 +19,10 @@ router.post("/user", async (req, res) => {
     username,
     email,
     password,
-    first_name,
-    last_name,
-    height_ft,
-    height_in,
+    firstName,
+    lastName,
+    heightFt,
+    heightIn,
     weight,
   } = req.body;
 
@@ -43,11 +43,12 @@ router.post("/user", async (req, res) => {
       username,
       password: hashedPassword,
       email,
-      first_name,
-      last_name,
-      height_ft,
-      height_in,
+      firstName,
+      lastName,
+      heightFt,
+      heightIn,
       weight,
+      favCuisines: {}
     });
 
     req.session.user = newUser;
@@ -79,7 +80,7 @@ router.post("/user/login", async (req, res) => {
 
     res.status(200).json({ user });
   } catch (error) {
-    res.status(500).json({ error });
+    res.status(500).json({error: "Server Error: " + error});
   }
 });
 export default router;
