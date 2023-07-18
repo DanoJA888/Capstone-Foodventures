@@ -7,6 +7,7 @@ import session from "express-session";
 import SequelizeStoreInit from 'connect-session-sequelize';
 import favoritesRouter from "./routes/favorites.js"
 import cusineRouter from "./routes/cuisine.js"
+import recipeRouter from "./routes/recipe.js"
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -44,6 +45,7 @@ app.get("/", async (req, res) => {
 app.use(userRouter);
 app.use(favoritesRouter);
 app.use(cusineRouter);
+app.use(recipeRouter);
 
 app.listen(port, () => {
   console.log(`App is listening on port ${port}`);

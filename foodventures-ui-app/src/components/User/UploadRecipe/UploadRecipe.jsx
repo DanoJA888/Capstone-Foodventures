@@ -19,6 +19,23 @@ export default function Navbar({ resetCuisine, resetSearch }) {
     });
 
 
+    async function uploadRecipe() {
+
+        try {
+          const response = await fetch(`http://localhost:3001/add_recipe`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(recipe),
+            credentials: "include",
+          });
+          setFavorited(true);
+          alert("Added to Favorites");
+        } catch (error) {
+          alert({ error });
+        }
+    }
 
     const handleChange = (event) => {
         const { name, value } = event.target;

@@ -1,7 +1,21 @@
 import { DataTypes } from 'sequelize';
 import { sequelize } from '../database.js';
+import { User } from './user.js';
 
 export const Recipe = sequelize.define('Recipe', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
+  userId: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  recipeId: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
   recipeName: {
     type: DataTypes.STRING,
     allowNull: false
@@ -11,7 +25,7 @@ export const Recipe = sequelize.define('Recipe', {
     allowNull: false,
   },
   ingredientLines: {
-    type: DataTypes.ARRAY,
+    type: DataTypes.ARRAY(DataTypes.JSONB),
     allowNull: false,
   },
   directions: {
@@ -35,3 +49,6 @@ export const Recipe = sequelize.define('Recipe', {
     allowNull: false,
   }
 });
+
+Recipe.belongsTo(User, { foreignKey: 'userId' });
+User.hasMany(Recipe, { foreignKey: 'userId' });
