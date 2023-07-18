@@ -15,7 +15,7 @@ export const Recipe = sequelize.define('Recipe', {
     allowNull: false,
   },
   directions: {
-    type: DataTypes.ARRAY,
+    type: DataTypes.STRING,
     allowNull: false,
   },
   url: {

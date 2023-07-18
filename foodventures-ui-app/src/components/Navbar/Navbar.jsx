@@ -23,9 +23,9 @@ export default function Navbar({resetCuisine, resetSearch}) {
             {
               currUser ? (
                 <div className="navbar-links">
-                  <button onClick={()=> {handleLogout()}}>Logout</button>
                   <Link to="/profile">Profile</Link>
                   <Link to="/upload">Upload a Recipe!</Link>
+                  <button onClick={()=> {handleLogout()}}>Logout</button>
                 </div>
             ) : (
                 <div className="navbar-links">
