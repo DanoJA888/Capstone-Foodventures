@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect } from "react";
 import { UserContext } from "../UserContext.js";
 import { Link } from 'react-router-dom';
 import "./Home.css";
-import axios from "axios";
 
 export default function Home({updateCuisine}) {
   const { currUser, updateUser } = useContext(UserContext);

@@ -3,7 +3,7 @@ import { UserContext } from "../../UserContext.js";
 import "./UploadRecipe.css";
 
 export default function Navbar({ resetCuisine, resetSearch }) {
-    const { currUser, updateUser } = useContext(UserContext);
+    const { currUser } = useContext(UserContext);
     const ingRef = useRef(null);
     const ingQuant = useRef(null);
     const directionsRef = useRef(null);
@@ -17,7 +17,7 @@ export default function Navbar({ resetCuisine, resetSearch }) {
         servings: 0,
         cuisine: "",
     });
-    const [ingredient, setIngredient] = useState("");
+
 
 
     const handleChange = (event) => {
@@ -32,13 +32,27 @@ export default function Navbar({ resetCuisine, resetSearch }) {
     const addIng = (event, name) =>{
         event.preventDefault();
         const updatedList = [...recipe[name]];
-        updatedList.push({[ingQuant.current.value] : ingRef.current.value});
+        updatedList.push({ 
+            "text": ingQuant.current.value + " " + ingRef.current.value,
+            "quantity" : ingQuant.current.value,
+            "food" : ingRef.current.value
+        });
         setRecipe({
             ...recipe,
             [name]: updatedList,
         });
         ingQuant.current.value = "";
         ingRef.current.value = "";
+    }
+    const removeIng = (event, ingredient) => {
+        event.preventDefault();
+        const updatedList = [...recipe["ingredientLines"]];
+        const index = updatedList.indexOf(ingredient);
+        updatedList.splice(index, 1);
+        setRecipe({
+            ...recipe,
+            ["ingredientLines"]: updatedList,
+        });
     }
     const addDirections = (event, name) =>{
         event.preventDefault();
@@ -81,7 +95,7 @@ export default function Navbar({ resetCuisine, resetSearch }) {
                         required
                     />
                     <button
-                        onClick={(event) => {addIng(event, "ingredientLines")}}
+                        onClick={(event) => addIng(event, "ingredientLines")}
                     >
                         Add
                     </button>
@@ -131,7 +145,7 @@ export default function Navbar({ resetCuisine, resetSearch }) {
 
                     </textarea>
                     <button
-                        onClick={(event) => {addDirections(event, "directions")}}
+                        onClick={(event) => addDirections(event, "directions")}
                     >
                         Add
                     </button>
@@ -145,11 +159,11 @@ export default function Navbar({ resetCuisine, resetSearch }) {
             <h4>Ingredients</h4>
             {
                 recipe.ingredientLines.map((ingredient) => (
-
-                Object.entries(ingredient).map(([quantity, name])=> (
-                    <p>{quantity} {name}</p>
+                    <div>
+                    <p>{ingredient.text}</p> <button onClick={(event) => removeIng(event, ingredient)}>x</button>
+                    </div>      
                 ))
-            ))}
+            }
             <h4>Servings: </h4> <p>{recipe.servings}</p>
             <h4>Calories: </h4> <p>{recipe.calories}</p>
             <h4>Cuisine: </h4> <p>{recipe.cuisine}</p>
