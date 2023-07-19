@@ -83,4 +83,22 @@ router.post("/user/login", async (req, res) => {
     res.status(500).json({error: "Server Error: " + error});
   }
 });
+
+router.put("/update_cuisine", async (req, res) => {
+  const user = req.session.user;
+  const changeUser = await User.findByPk(user.id);
+  const {recipeId, recipeName, recipeCuisine} = req.body;
+  try{
+    {changeUser.favCuisines[recipeCuisine] ? 
+      (changeUser.favCuisines[recipeCuisine] +=1) 
+      : 
+      (changeUser.favCuisines[recipeCuisine] =1)
+    }
+    await changeUser.save();
+    res.status(200).json({user: changeUser})
+  }
+  catch(error){
+    res.status(500).json({error: "Server Error: " + error});
+  }
+})
 export default router;

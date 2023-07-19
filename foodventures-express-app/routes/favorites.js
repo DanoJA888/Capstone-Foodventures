@@ -1,5 +1,6 @@
 import express from "express";
 import { Favorite } from "../models/favorites.js";
+import { User } from "../models/user.js";
 
 const router = express.Router();
 
@@ -38,20 +39,35 @@ router.post("/add_favorites", async (req, res) =>{
     
     try{
         const user = req.session.user;
-        const {recipeId, recipeName} = req.body;
+        let userCuisines = user.favCuisines;
+        
+        const {recipeId, recipeName, recipeCuisine} = req.body;
         if (!user) {
             throw new Error('User not authenticated'); 
         }
+        {userCuisines[recipeCuisine] ? 
+          (userCuisines[recipeCuisine] +=1) 
+          : 
+          (userCuisines[recipeCuisine] =1)
+        }
+        const updatedCount = await User.update(
+          {
+            favCuisines: userCuisines,
+          },
+          {
+            where: { id: user.id },
+          }
+        );
         const followData = {
             userId: user.id,
             recipeId: recipeId,
             recipeName: recipeName,
         };
         const newFav = await Favorite.create(followData);
-        res.status(200).json({recipe: recipeName})
+        res.status(200).json({updatedCount: updatedCount})
     }
     catch(error){
-        res.status(500).json({error: "Server Error"});
+        res.status(500).json({error: "Server Error: " + error});
     }
 })
 
@@ -59,16 +75,30 @@ router.delete("/remove_favorites", async (req, res) =>{
     
     try{
         const user = req.session.user;
-        const {recipeId, recipeName} = req.body;
+        let userCuisines = user.favCuisines;
+        const {recipeId, recipeCuisine} = req.body;
         if (!user) {
             throw new Error('User not authenticated'); 
         }
+        {userCuisines[recipeCuisine] === 1 ? 
+          (delete userCuisines[recipeCuisine]) 
+          : 
+          (userCuisines[recipeCuisine] -=1)
+        }
+        const updatedCount = await User.update(
+          {
+            favCuisines: userCuisines,
+          },
+          {
+            where: { id: user.id },
+          }
+        );
         const favorite = await Favorite.findOne({ where: { userId: user.id, recipeId: recipeId} });
         await favorite.destroy();
         res.status(200).json({favorite: favorite});
     }
     catch(error){
-        res.status(500).json({error: "Server Error"});
+        res.status(500).json({error: "Server Error: " + error});
     }
 })
 
