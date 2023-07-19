@@ -112,7 +112,7 @@ router.get("/user_cuisines", async (req, res) =>{
       ]
     }
     console.log(topCuisines)
-    res.status(200).json({ping: "pong"});
+    res.status(200).json({topCuisines});
   }
   catch(error){
     res.status(500).json({error: "server error: " + error})
