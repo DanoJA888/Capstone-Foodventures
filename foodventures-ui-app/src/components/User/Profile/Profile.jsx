@@ -108,21 +108,25 @@ export default function Profile() {
             </div>
           )}
           <div>
-          {isLoading ? (
-            <p>Loading recommendations...</p>
-          ) : (
+          {currFavs.length !== 0 &&
             <div>
-              <h1>Recipes You Might Like</h1>
-              {reccomendations.map((rec) => {
-                const recipeId = rec._links.self.href.substring(38, 71);
-                return (
-                  <div>
-                    <Link to= {`/searched/${recipeId}`}><h2>{rec.recipe.label}</h2></Link>
-                  </div>
-                );
-              })}
+              {isLoading ? (
+                <p>Loading recommendations...</p>
+              ) : (
+                <div>
+                  <h1>Recipes You Might Like</h1>
+                  {reccomendations.map((rec) => {
+                    const recipeId = rec._links.self.href.substring(38, 71);
+                    return (
+                      <div>
+                        <Link to= {`/searched/${recipeId}`}><h2>{rec.recipe.label}</h2></Link>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
-          )}
+          }
           </div>
         </div>
       </div>
