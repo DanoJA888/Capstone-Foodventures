@@ -32,10 +32,10 @@ export default function Profile() {
           <p>USERNAME {currUser.username}</p>
           <p>EMAIL {currUser.email}</p>
           <p>
-            NAME {currUser.first_name} {currUser.last_name}
+            NAME {currUser.firstName} {currUser.lastName}
           </p>
           <p>
-            HEIGHT {currUser.height_ft}'{currUser.height_in}
+            HEIGHT {currUser.heightFt}'{currUser.heightIn}
           </p>
           <p>WEIGHT {currUser.weight} lbs</p>
         </div>

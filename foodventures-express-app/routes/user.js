@@ -5,6 +5,11 @@ import { Op } from "sequelize";
 
 const router = express.Router();
 
+//
+function compareOcurrance(c1, c2) {
+  return c2 - c1;
+}
+
 router.get("/user", async (req, res) => {
   try {
     const users = await User.findAll();
@@ -84,21 +89,33 @@ router.post("/user/login", async (req, res) => {
   }
 });
 
-router.put("/update_cuisine", async (req, res) => {
-  const user = req.session.user;
-  const changeUser = await User.findByPk(user.id);
-  const {recipeId, recipeName, recipeCuisine} = req.body;
+router.get("/user_cuisines", async (req, res) =>{
   try{
-    {changeUser.favCuisines[recipeCuisine] ? 
-      (changeUser.favCuisines[recipeCuisine] +=1) 
-      : 
-      (changeUser.favCuisines[recipeCuisine] =1)
+    const user = req.session.user;
+    const cuisineArr = Object.keys(user.favCuisines).map((cuisine) => ({
+      name: cuisine,
+      occurrence: user.favCuisines[cuisine]
+    }));
+    cuisineArr.sort((c1, c2) => compareOcurrance(c1.occurrence, c2.occurrence));
+    console.log(cuisineArr);
+    let topCuisines = [];
+    if (cuisineArr.length < 3){
+      for(let i = 0; i < cuisineArr.length; i++){
+        topCuisines.push(cuisineArr[i].name);
+      }
     }
-    await changeUser.save();
-    res.status(200).json({user: changeUser})
+    else{
+      topCuisines = [
+        cuisineArr[0].name,
+        cuisineArr[1].name,
+        cuisineArr[2].name
+      ]
+    }
+    console.log(topCuisines)
+    res.status(200).json({ping: "pong"});
   }
   catch(error){
-    res.status(500).json({error: "Server Error: " + error});
+    res.status(500).json({error: "server error: " + error})
   }
 })
 export default router;
