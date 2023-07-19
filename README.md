@@ -24,3 +24,15 @@ Users who would like to discover new recipes and would be interested in generati
 
 ## WireFrames
 https://drive.google.com/drive/folders/1eA5ESOsPvgn8-0hulkr70zGWfNW652jQ?usp=sharing
+
+## Demo
+
+Week 1
+<a href="https://www.loom.com/share/6d976df7509441ff84e87fe92fdd34f8">
+  <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/6d976df7509441ff84e87fe92fdd34f8-with-play.gif">
+</a>
+
+Week 2
+<a href="https://www.loom.com/share/2cfaf8c353d244cbaee96ff382e6f446">
+  <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/2cfaf8c353d244cbaee96ff382e6f446-with-play.gif">
+</a>

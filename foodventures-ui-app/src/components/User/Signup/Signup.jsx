@@ -8,10 +8,10 @@ export default function Signup() {
     username: "",
     email: "",
     password: "",
-    first_name: "",
-    last_name: "",
-    height_ft: 0,
-    height_in: 0,
+    firstName: "",
+    lastName: "",
+    heightFt: 0,
+    heightIn: 0,
     weight: 0,
   });
 
@@ -35,10 +35,10 @@ export default function Signup() {
         username: "",
         email: "",
         password: "",
-        first_name: "",
-        last_name: "",
-        height_ft: 0,
-        height_in: 0,
+        firstName: "",
+        lastName: "",
+        heightFt: 0,
+        heightIn: 0,
         weight: 0,
       });
     
@@ -89,43 +89,43 @@ export default function Signup() {
           />
         </div>
         <div>
-          <label htmlFor="first_name">First Name:</label>
+          <label htmlFor="firstName">First Name:</label>
           <input
             type="text"
-            id="first_name"
-            name="first_name"
+            id="firstName"
+            name="firstName"
             onChange={handleChange}
             required
           />
         </div>
         <div>
-          <label htmlFor="last_name">Last Name:</label>
+          <label htmlFor="lastName">Last Name:</label>
           <input
             type="text"
-            id="last_name"
-            name="last_name"
+            id="lastName"
+            name="lastName"
             onChange={handleChange}
             required
           />
         </div>
         <div>
-          <label htmlFor="height_ft">Height(ft):</label>
+          <label htmlFor="heightFt">Height(ft):</label>
           <input
           type="number"
           step={1}
-          id="height_ft"
-          name="height_ft"
+          id="heightFt"
+          name="heightFt"
           onChange={handleChange}
           required
           />
         </div>
         <div>
-          <label htmlFor="height_in">Height(in):</label>
+          <label htmlFor="heightIn">Height(in):</label>
           <input
           type="number"
           step={1}
-          id="height_in"
-          name="height_in"
+          id="heightIn"
+          name="heightIn"
           onChange={handleChange}
           required
           />

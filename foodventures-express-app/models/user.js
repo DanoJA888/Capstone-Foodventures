@@ -16,24 +16,28 @@ export const User = sequelize.define('User', {
     allowNull: false
   }
   ,
-  first_name: {
+  firstName: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  last_name: {
+  lastName: {
     type: DataTypes.STRING,
     allowNull: false
   },
-  height_ft: {
+  heightFt: {
     type: DataTypes.INTEGER,
     allowNull: false
   },
-  height_in: {
+  heightIn: {
     type: DataTypes.INTEGER,
     allowNull: false
   },
   weight: {
     type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  favCuisines: {
+    type: DataTypes.JSONB,
     allowNull: false
   }
   

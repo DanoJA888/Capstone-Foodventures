@@ -6,6 +6,7 @@ import "./Profile.css";
 export default function Profile() {
   const { currUser } = useContext(UserContext);
   const [currFavs, setFavs] = useState([]);
+  const [cuisines, setCuisines] = useState([]);
   
   const fetchFavorites = async () => {
     const response = await fetch("http://localhost:3001/get_favorites", {
@@ -18,11 +19,22 @@ export default function Profile() {
     const data = await response.json();
     setFavs(data);
   };
-    
+  const topCuisines = async () => {
+    const response = await fetch("http://localhost:3001/user_cuisines", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+    const data = await response.json();
+    setCuisines(data.topCuisines);
+  };
   useEffect(() => {
     fetchFavorites();
+    topCuisines();
   }, []);
-  console.log(currFavs);
+  console.log(cuisines);
 
   return (
     <div>
@@ -32,10 +44,10 @@ export default function Profile() {
           <p>USERNAME {currUser.username}</p>
           <p>EMAIL {currUser.email}</p>
           <p>
-            NAME {currUser.first_name} {currUser.last_name}
+            NAME {currUser.firstName} {currUser.lastName}
           </p>
           <p>
-            HEIGHT {currUser.height_ft}'{currUser.height_in}
+            HEIGHT {currUser.heightFt}'{currUser.heightIn}
           </p>
           <p>WEIGHT {currUser.weight} lbs</p>
         </div>
@@ -58,6 +70,17 @@ export default function Profile() {
               })}
             </div>
           )}
+          <div>
+            {cuisines &&
+              <div>
+                {cuisines.map((cuisine) => {
+                  return(
+                    <p>{cuisine}</p>
+                  )
+                })}
+              </div>
+            }
+          </div>
         </div>
       </div>
     </div>

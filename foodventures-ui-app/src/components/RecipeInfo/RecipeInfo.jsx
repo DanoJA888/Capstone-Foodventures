@@ -21,7 +21,7 @@ export default function RecipeInfo() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ recipeId, recipeName: recipe.label }),
+        body: JSON.stringify({ recipeId, recipeName: recipe.label, recipeCuisine: recipe.cuisineType[0]}),
         credentials: "include",
       });
       setFavorited(true);
@@ -38,7 +38,7 @@ export default function RecipeInfo() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ recipeId, recipeName: recipe.label }),
+        body: JSON.stringify({ recipeId, recipeCuisine: recipe.cuisineType[0]}),
         credentials: "include",
       });
       setFavorited(false);
