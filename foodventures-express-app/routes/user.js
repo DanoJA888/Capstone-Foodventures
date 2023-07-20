@@ -53,14 +53,15 @@ router.post("/user", async (req, res) => {
       heightFt,
       heightIn,
       weight,
-      favCuisines: {}
+      favCuisines: {},
+      favIngs: {}
     });
 
     req.session.user = newUser;
 
     res.status(200).json({ user: newUser });
   } catch (error) {
-    res.status(500).json({ error: "Server error." });
+    res.status(500).json({ error: "Server error" +error });
   }
 });
 
