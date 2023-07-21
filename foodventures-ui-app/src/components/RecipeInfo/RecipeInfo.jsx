@@ -1,14 +1,12 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { UserContext } from "../UserContext.js";
-import { API_ID, API_KEY } from "../../../constant.js";
-import axios from "axios";
+import { url } from "../../../constant.js";
 
 export default function RecipeInfo() {
   const { recipeId } = useParams();
   const { currUser } = useContext(UserContext);
   const [favorited, setFavorited] = useState(false);
-  console.log(recipeId);
   const [recipe, setRecipe] = useState({
     ingredientLines: [],
   });
@@ -71,21 +69,17 @@ export default function RecipeInfo() {
   const apiCall = async () => {
     console.log(recipeId);
     const response = await fetch(
-      `https://api.edamam.com/api/recipes/v2/${recipeId}?type=public&app_id=${API_ID}&app_key=${API_KEY}`
+      url(recipeId, null, null)
     );
     const data = await response.json();
-    console.log(data.recipe);
     setRecipe(data.recipe);
     let currHighestWeight = { weight: 0 };
     data.recipe.ingredients.forEach(ingredient => {
-      console.log(ingredient.weight);
       if (ingredient.weight >currHighestWeight.weight ){
         currHighestWeight = ingredient
       }
     });
-    console.log(currHighestWeight);
     setHighestWeight(currHighestWeight);
-    console.log(highestWeight);
   };
 
 
@@ -135,11 +129,3 @@ export default function RecipeInfo() {
     </div>
   );
 }
-
-/*    data.recipe.ingredients.forEach(ingredient => {
-      if (ingredient.weight >highestWeight.weight ){
-        highestWeight = ingredient;
-      }
-    });
-    
-*/

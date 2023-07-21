@@ -1,6 +1,7 @@
 import express from "express";
 import { Recipe } from "../models/recipe.js";
 import { Cuisine } from "../models/cuisine.js";
+import { uuid } from "uuidv4";
 
 
 const router = express.Router();
@@ -19,13 +20,9 @@ router.post("/add_recipe", async (req, res) => {
     
     try {
         const characters = "abcdefghijklmnopqrstuvwxyz0123456789";
-        let recipeId = "";
+        let recipeId = uuid();
         const code = cuisine.replaceAll(" ", "%20");
-    
-        for (let i = 0; i < 31; i++) {
-            const randomIndex = Math.floor(Math.random() * characters.length);
-            recipeId += characters.charAt(randomIndex);
-        }
+
         const user = req.session.user;
         const checkCuisine = await Cuisine.findOne({where: {cuisineName : cuisine}});
         if(!checkCuisine){
