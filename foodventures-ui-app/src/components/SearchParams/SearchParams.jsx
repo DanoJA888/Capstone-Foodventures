@@ -5,14 +5,16 @@ import { useNavigate } from 'react-router-dom';
 export default function SearchParams({updateSearch}){
     const navigate = useNavigate();
     const [currentSearchField, updateSearchField] = useState("");
-    function enterSearch(){
+    function enterSearch(event){
+        event.preventDefault();
         updateSearch(currentSearchField);
+        navigate('/search_results');
     }
     return(
         <div className="search">
             <div className="search-content">
                 <div className="search-section">
-                    <form onSubmit={(event) => {event.preventDefault(); enterSearch(); navigate('/search_results') }}>
+                    <form onSubmit={(event) => enterSearch(event)}>
                         <input
                             id = "inputField"
                             type="text"

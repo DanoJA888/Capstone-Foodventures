@@ -19,8 +19,7 @@ router.post("/add_recipe", async (req, res) => {
         } = req.body;
     
     try {
-        const characters = "abcdefghijklmnopqrstuvwxyz0123456789";
-        let recipeId = uuid();
+        const recipeId = uuid();
         const code = cuisine.replaceAll(" ", "%20");
 
         const user = req.session.user;
