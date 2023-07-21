@@ -20,8 +20,8 @@ export default function App() {
     return storedUser ? JSON.parse(storedUser) : null;
   });
 
-  const [selectedCuisine, updateCuisine] = useState("");
-  const [currSearch, updateSearch] = useState("");
+  const [selectedCuisine, updateCuisine] = useState(null);
+  const [currSearch, updateSearch] = useState(null);
   const updateUser = (newUser) => {
     setUser(newUser);
   };

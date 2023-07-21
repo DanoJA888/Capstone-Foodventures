@@ -3,21 +3,15 @@ import "./SearchResults.css";
 import {API_ID, API_KEY} from "../../../constant.js";
 import { Link, useParams } from 'react-router-dom';
 import SearchParams from "../SearchParams/SearchParams";
+import { url } from "../../../constant.js";
 
 export default function SearchResults({cuisine, search, updateSearch}) {
   const {request} = useParams();
   const [currRecipes, updateRecipes] = useState([]);
 
-  let url = `https://api.edamam.com/api/recipes/v2?type=public&app_id=${API_ID}&app_key=${API_KEY}`;
-    
-  {if (cuisine){
-      url += `&cuisineType=${cuisine}`;
-  }}
-  {if (search){
-      url += `&q=${search}`;
-  }}
   const apiCall = async () =>{
-      const response = await fetch(url);
+      console.log(url(null, cuisine, search));
+      const response = await fetch(url(null, cuisine, search));
       const data = await response.json();
       updateRecipes(data.hits);
   };
