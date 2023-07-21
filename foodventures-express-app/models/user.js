@@ -39,6 +39,9 @@ export const User = sequelize.define('User', {
   favCuisines: {
     type: DataTypes.JSONB,
     allowNull: false
+  },
+  favIngs: {
+    type: DataTypes.JSONB,
+    allowNull: false
   }
-  
 });

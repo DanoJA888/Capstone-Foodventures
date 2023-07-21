@@ -12,6 +12,17 @@ export default function RecipeInfo() {
   const [recipe, setRecipe] = useState({
     ingredientLines: [],
   });
+  const [highestWeight, setHighestWeight] = useState({
+    food: "",
+    foodCategory: "",
+    foodId: "",
+    image: "",
+    measure: "",
+    quantity: 0,
+    text: "",
+    weight: 0
+  });
+
 
   async function addToFavs() {
 
@@ -21,7 +32,12 @@ export default function RecipeInfo() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ recipeId, recipeName: recipe.label, recipeCuisine: recipe.cuisineType[0]}),
+        body: JSON.stringify({ 
+          recipeId, 
+          recipeName: recipe.label, 
+          recipeCuisine: recipe.cuisineType[0],
+          highestWeight: highestWeight,
+        }),
         credentials: "include",
       });
       setFavorited(true);
@@ -38,7 +54,11 @@ export default function RecipeInfo() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ recipeId, recipeCuisine: recipe.cuisineType[0]}),
+        body: JSON.stringify({ 
+          recipeId, 
+          recipeCuisine: recipe.cuisineType[0],
+          highestWeight:highestWeight,
+        }),
         credentials: "include",
       });
       setFavorited(false);
@@ -56,7 +76,18 @@ export default function RecipeInfo() {
     const data = await response.json();
     console.log(data.recipe);
     setRecipe(data.recipe);
+    let currHighestWeight = { weight: 0 };
+    data.recipe.ingredients.forEach(ingredient => {
+      console.log(ingredient.weight);
+      if (ingredient.weight >currHighestWeight.weight ){
+        currHighestWeight = ingredient
+      }
+    });
+    console.log(currHighestWeight);
+    setHighestWeight(currHighestWeight);
+    console.log(highestWeight);
   };
+
 
   const checkInFavs = async () => {
     const response = await fetch("http://localhost:3001/check_favorite", {
@@ -69,6 +100,7 @@ export default function RecipeInfo() {
     });
     const data = await response.json();
     setFavorited(Object.keys(data).length !== 0);
+    
   };
 
   useEffect(() => {
@@ -103,3 +135,11 @@ export default function RecipeInfo() {
     </div>
   );
 }
+
+/*    data.recipe.ingredients.forEach(ingredient => {
+      if (ingredient.weight >highestWeight.weight ){
+        highestWeight = ingredient;
+      }
+    });
+    
+*/

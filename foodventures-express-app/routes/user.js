@@ -53,14 +53,15 @@ router.post("/user", async (req, res) => {
       heightFt,
       heightIn,
       weight,
-      favCuisines: {}
+      favCuisines: {},
+      favIngs: {}
     });
 
     req.session.user = newUser;
 
     res.status(200).json({ user: newUser });
   } catch (error) {
-    res.status(500).json({ error: "Server error." });
+    res.status(500).json({ error: "Server error" +error });
   }
 });
 
@@ -113,6 +114,35 @@ router.get("/user_cuisines", async (req, res) =>{
     }
     console.log(topCuisines)
     res.status(200).json({topCuisines});
+  }
+  catch(error){
+    res.status(500).json({error: "server error: " + error})
+  }
+})
+router.get("/user_ings", async (req, res) =>{
+  try{
+    const user = req.session.user;
+    const ingArr = Object.keys(user.favIngs).map((ingredient) => ({
+      name: ingredient,
+      occurrence: user.favIngs[ingredient] 
+    })
+    )
+    ingArr.sort((i1, i2) => compareOcurrance(i1.occurrence, i2.occurrence));
+    let topIngs = [];
+    if (ingArr.length < 3){
+      for(let i = 0; i < ingArr.length; i++){
+        topIngs.push(ingArr[i].name);
+      }
+    }
+    else{
+      topIngs = [
+        ingArr[0].name,
+        ingArr[1].name,
+        ingArr[2].name
+      ]
+    }
+    console.log(topIngs);
+    res.status(200).json({topIngs});
   }
   catch(error){
     res.status(500).json({error: "server error: " + error})

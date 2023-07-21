@@ -8,8 +8,10 @@ export default function Profile() {
   const { currUser } = useContext(UserContext);
   const [currFavs, setFavs] = useState([]);
   const [cuisines, setCuisines] = useState([]);
+  const [ingredients, setIngredients] = useState([]);
   const [reccomendations, setReccs] = useState([]);
   const [cuisinesFetched, setCuisinesFetched] = useState(false);
+  const [ingredientsFetched, setIngredientsFetched] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   
@@ -36,17 +38,36 @@ export default function Profile() {
     const data = await response.json();
     console.log(data.topCuisines)
     setCuisines(data.topCuisines);
-    setCuisinesFetched(true)
+    setCuisinesFetched(true);
   };
+  
+  const topIngs = async () => {
+    const response = await fetch("http://localhost:3001/user_ings", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+    const data = await response.json();
+    console.log(data.topIngs);
+    setIngredients(data.topIngs);
+    setIngredientsFetched(true);
+  };
+  
 
   const showReccs = async () =>{
     let url = `https://api.edamam.com/api/recipes/v2?type=public&app_id=${API_ID}&app_key=${API_KEY}`;
     let possibleReccs = [];
     // for loop to fetch recipes from differen cuisines and concats them to an array, where i can hold 60 recipes (important for random cuisine pull)
     for(let i = 0; i < cuisines.length; i++){
-      const response = await fetch(url+`&cuisineType=${cuisines[i]}`);
-      const data = await response.json();
-      possibleReccs = possibleReccs.concat(data.hits);
+      const responseCuisine = await fetch(url+`&cuisineType=${cuisines[i]}`);
+      console.log(ingredients[i]);
+      const responseIngs = await fetch(url+`&q=${ingredients[i]}`);
+      const dataCuisine = await responseCuisine.json();
+      const dataIngs = await responseIngs.json();
+      possibleReccs = possibleReccs.concat(dataCuisine.hits);
+      possibleReccs = possibleReccs.concat(dataIngs.hits);
     }
     let reccs = [];
     //randomly select 8 recipes from my pool of recipes
@@ -61,16 +82,16 @@ export default function Profile() {
   useEffect(() => {
     fetchFavorites();
     topCuisines();
-    
+    topIngs(); 
   },[]);
   // since i have an awaiting expression to fetch the users favorite cuisines and the showReccs function is an async function, 
   // I have to wait for the cuisines to update in the state in order to make the external api calls.
   useEffect(() => {
-    if (cuisinesFetched && reccomendations.length === 0) {
+    if (cuisinesFetched && ingredientsFetched && reccomendations.length === 0) {
       console.log(reccomendations);
       showReccs();
     }
-  }, [cuisinesFetched])
+  }, [cuisinesFetched, ingredientsFetched])
 
 
   return (

@@ -40,23 +40,34 @@ router.post("/add_favorites", async (req, res) =>{
     try{
         const user = req.session.user;
         let userCuisines = user.favCuisines;
+        let userIngs = user.favIngs;
+
         
-        const {recipeId, recipeName, recipeCuisine} = req.body;
+        const {recipeId, recipeName, recipeCuisine, highestWeight} = req.body;
         if (!user) {
             throw new Error('User not authenticated'); 
         }
+        
         {userCuisines[recipeCuisine] ? 
           (userCuisines[recipeCuisine] +=1) 
           : 
           (userCuisines[recipeCuisine] =1)
         }
+        
+        {userIngs[highestWeight.food] ? 
+          (userIngs[highestWeight.food] +=1) 
+          : 
+          (userIngs[highestWeight.food] =1)
+        }
+        console.log(JSON.stringify(highestWeight) + " hi");
+        console.log(highestWeight.food + " ho");
+        
         const updatedCount = await User.update(
           {
             favCuisines: userCuisines,
+            favIngs: userIngs
           },
-          {
-            where: { id: user.id },
-          }
+          {where: { id: user.id }}
         );
         const followData = {
             userId: user.id,
@@ -64,7 +75,9 @@ router.post("/add_favorites", async (req, res) =>{
             recipeName: recipeName,
         };
         const newFav = await Favorite.create(followData);
-        res.status(200).json({updatedCount: updatedCount})
+        
+        res.status(200).json({userIngs: highestWeight.food})
+
     }
     catch(error){
         res.status(500).json({error: "Server Error: " + error});
@@ -76,7 +89,9 @@ router.delete("/remove_favorites", async (req, res) =>{
     try{
         const user = req.session.user;
         let userCuisines = user.favCuisines;
-        const {recipeId, recipeCuisine} = req.body;
+        let userIngs = user.favIngs;
+        
+        const {recipeId, recipeCuisine, highestWeight} = req.body;
         if (!user) {
             throw new Error('User not authenticated'); 
         }
@@ -85,17 +100,23 @@ router.delete("/remove_favorites", async (req, res) =>{
           : 
           (userCuisines[recipeCuisine] -=1)
         }
+        {userIngs[highestWeight.food] === 1 ? 
+          (delete userIngs[highestWeight.food]) 
+          : 
+          (userIngs[highestWeight.food] -=1)
+        }
+
         const updatedCount = await User.update(
           {
             favCuisines: userCuisines,
+            favIngs: userIngs,
           },
-          {
-            where: { id: user.id },
-          }
+          {where: { id: user.id }}
         );
         const favorite = await Favorite.findOne({ where: { userId: user.id, recipeId: recipeId} });
         await favorite.destroy();
         res.status(200).json({favorite: favorite});
+
     }
     catch(error){
         res.status(500).json({error: "Server Error: " + error});
