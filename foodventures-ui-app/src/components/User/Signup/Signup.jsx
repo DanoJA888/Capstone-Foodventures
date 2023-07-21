@@ -52,8 +52,6 @@ export default function Signup() {
     }
   }
 
-  console.log(currInfo);
-
   return (
     <div>
       <form onSubmit={uploadNewUser}>
@@ -111,34 +109,34 @@ export default function Signup() {
         <div>
           <label htmlFor="heightFt">Height(ft):</label>
           <input
-          type="number"
-          step={1}
-          id="heightFt"
-          name="heightFt"
-          onChange={handleChange}
-          required
+            type="number"
+            step={1}
+            id="heightFt"
+            name="heightFt"
+            onChange={handleChange}
+            required
           />
         </div>
         <div>
           <label htmlFor="heightIn">Height(in):</label>
           <input
-          type="number"
-          step={1}
-          id="heightIn"
-          name="heightIn"
-          onChange={handleChange}
-          required
+            type="number"
+            step={1}
+            id="heightIn"
+            name="heightIn"
+            onChange={handleChange}
+            required
           />
         </div>
         <div>
           <label htmlFor="weight">Weight(lbs):</label>
           <input
-          type="number"
-          step={1}
-          id="weight"
-          name="weight"
-          onChange={handleChange}
-          required
+            type="number"
+            step={1}
+            id="weight"
+            name="weight"
+            onChange={handleChange}
+            required
           />
         </div>
         <button type="submit">Sign Up</button>

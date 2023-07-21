@@ -2,7 +2,7 @@ import React, { useRef, useContext, useState } from "react";
 import { UserContext } from "../../UserContext.js";
 import "./UploadRecipe.css";
 
-export default function Navbar({ resetCuisine, resetSearch }) {
+export default function UploadRecipe({ resetCuisine, resetSearch }) {
     const { currUser } = useContext(UserContext);
     const ingRef = useRef(null);
     const ingQuant = useRef(null);

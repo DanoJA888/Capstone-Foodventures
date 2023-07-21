@@ -14,13 +14,8 @@ export default function Home({updateCuisine}) {
       },
     });
     const data = await response.json();
-    console.log(data);
     setCuisines(data);
   };
-  
-  function handleCuisine(cuisine){
-    {updateCuisine(cuisine)};
-  }
 
   useEffect(() => {
     fetchCuisines();
@@ -34,9 +29,8 @@ export default function Home({updateCuisine}) {
       <div>
         {
           cuisines.map((cuisine) => {
-            console.log(cuisine.cusineCode);
             return(
-              <Link to={`search_results`}><button onClick={() => handleCuisine(cuisine.cusineCode)}>{cuisine.cuisineName}</button></Link>
+              <Link to={`search_results`}><button onClick={() =>updateCuisine(cuisine.cusineCode)}>{cuisine.cuisineName}</button></Link>
             )
           })
         }

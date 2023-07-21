@@ -1,7 +1,7 @@
 import React, {useContext} from "react"
 import { UserContext } from '../UserContext';
 import { Link, useNavigate} from 'react-router-dom';
-import "./Navbar.css"
+import "./Navbar.css";
 
 export default function Navbar({resetCuisine, resetSearch}) {
   const { currUser, updateUser } = useContext(UserContext);
@@ -10,7 +10,6 @@ export default function Navbar({resetCuisine, resetSearch}) {
   const handleLogout = () =>{
     updateUser(null);
     navigate('/');
-    console.log(currUser);
   }
   return (
     <nav className="navbar">

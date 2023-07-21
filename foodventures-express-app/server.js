@@ -5,9 +5,9 @@ import { sequelize } from "./database.js";
 import userRouter from "./routes/user.js";
 import session from "express-session";
 import SequelizeStoreInit from 'connect-session-sequelize';
-import favoritesRouter from "./routes/favorites.js"
-import cusineRouter from "./routes/cuisine.js"
-import recipeRouter from "./routes/recipe.js"
+import favoritesRouter from "./routes/favorites.js";
+import cusineRouter from "./routes/cuisine.js";
+import recipeRouter from "./routes/recipe.js";
 
 const app = express();
 const port = process.env.PORT || 3001;
