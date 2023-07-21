@@ -29,7 +29,7 @@ export default function Signup() {
     event.preventDefault();
 
     try {
-      const response = await axios.post("http://localhost:3001/user", currInfo, { withCredentials: true });
+      const response = await axios.post("http://localhost:3001/user/signup", currInfo, { withCredentials: true });
 
       setInfo({
         username: "",
