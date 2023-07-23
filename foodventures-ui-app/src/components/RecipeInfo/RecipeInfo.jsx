@@ -2,11 +2,15 @@ import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { UserContext } from "../UserContext.js";
 import { url } from "../../../constant.js";
+import cheerio from "cheerio";
+import axios from "axios";
+import { CORS_ANYWHERE } from "../../../constant.js";
 
 export default function RecipeInfo() {
   const { recipeId } = useParams();
   const { currUser } = useContext(UserContext);
   const [favorited, setFavorited] = useState(false);
+  const [recipeFetched, setRecipeFetched] = useState(false);
   const [recipe, setRecipe] = useState({
     ingredientLines: [],
   });
@@ -21,6 +25,23 @@ export default function RecipeInfo() {
     weight: 0
   });
 
+  const scrape = async () =>{
+    try {
+      const response = await fetch(`http://localhost:3001/scrape_recipe`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ 
+          recipeLink: recipe.url,
+        })
+      });
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error('Error fetching the website:', error);
+    }
+  }
 
   async function addToFavs() {
 
@@ -80,6 +101,7 @@ export default function RecipeInfo() {
       }
     });
     setHighestWeight(currHighestWeight);
+    setRecipeFetched(true);
   };
 
 
@@ -101,6 +123,12 @@ export default function RecipeInfo() {
     apiCall();
     checkInFavs();
   }, [recipeId, favorited]);
+
+  useEffect(() =>{
+    if(recipeFetched){
+      scrape();
+    }
+  }, [recipeFetched]);
 
   return (
     <div>
