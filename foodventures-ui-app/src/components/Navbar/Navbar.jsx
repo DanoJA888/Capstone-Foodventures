@@ -12,24 +12,27 @@ export default function Navbar({resetCuisine, resetSearch}) {
     navigate('/');
   }
   return (
-    <nav className="navbar">
+    <nav className="navbar green-bg ">
       <div className="navbar-content">
-        <div className="navbar-links">
-          <Link to="/" onClick={() => {resetSearch(""); resetCuisine("")}}>Home</Link>
-          <Link to="/search">Search</Link>
-          <Link to="/mealplan" onClick={() => {resetSearch(""); resetCuisine("")}}>Meal Plan</Link>
+        <div>
+          <h1>Foodventures</h1>
+        </div>
+        <div className="d-flex align-items-center">
+          <Link to="/" onClick={() => {resetSearch(""); resetCuisine("")}} className="btn btn-outline-light m-1">Home</Link>
+          <Link to="/search" className="btn btn-outline-light m-1">Search</Link>
+          <Link to="/mealplan" onClick={() => {resetSearch(""); resetCuisine("")}} className="btn btn-outline-light m-1" >Meal Plan</Link>
           <div>
             {
               currUser ? (
-                <div className="navbar-links">
-                  <Link to="/profile">Profile</Link>
-                  <Link to="/upload">Upload a Recipe!</Link>
-                  <button onClick={()=> {handleLogout()}}>Logout</button>
+                <div className="d-flex align-items-center">
+                  <Link to="/profile" className="btn btn-outline-light m-1">Profile</Link>
+                  <Link to="/upload" className="btn btn-outline-light m-1">Upload a Recipe!</Link>
+                  <button className="btn btn-danger text-light m-1" onClick={()=> {handleLogout()}}>Logout</button>
                 </div>
             ) : (
-                <div className="navbar-links">
-                  <a href="/login" onClick={() => {resetSearch(""); resetCuisine("")}}>Login</a>
-                  <a href="/signup" onClick={() => {resetSearch(""); resetCuisine("")}}>Signup</a>
+                <div className="d-flex align-items-center">
+                  <Link to="/login" className="btn btn-outline-light m-1">Login</Link>
+                  <Link to="/signup" className="btn btn-outline-light m-1">Sign Up</Link>
                 </div>
             )}
           </div>

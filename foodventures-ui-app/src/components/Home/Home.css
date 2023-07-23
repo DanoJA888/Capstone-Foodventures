@@ -1,8 +1,20 @@
-.home {
-  width: 100%;
-  max-width: 100vw;
-  height: 100%;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+.title{
+  text-align: center;
+  padding: 15px;
 }
+.btn-cuisine {
+  width : 100%;
+  display: flex;
+
+  justify-content: center;
+  word-wrap: break-word;
+  transition: background-color 0.3s ease;
+}
+.btn-cuisine:hover {
+  color: #fff !important;
+  background-color: #3fa544;
+}
+
+.col-md-4 {
+    padding: 5px;
+  }

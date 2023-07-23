@@ -13,6 +13,7 @@ import RecipeInfo from "../RecipeInfo/RecipeInfo";
 import SearchResults from "../SearchResults/SearchResults";
 import Profile from "../User/Profile/Profile";
 import UploadRecipe from "../User/UploadRecipe/UploadRecipe";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function App() {
   const [currUser, setUser] = useState(() => {
