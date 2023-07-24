@@ -22,23 +22,30 @@ export default function SearchResults({cuisine, search, updateSearch}) {
 
   return (
     <div>
-        <h1>Search</h1>
+        <h1 className="title">Search</h1>
         <div>
           <SearchParams updateSearch={updateSearch}/>
         </div>
         {cuisine !== "" &&
-          <h1>{cuisine}</h1>
+          <h1 className="title">{cuisine}</h1>
         }
-        <div>
-          {currRecipes.map((recipe) =>{
-            //using substring method to extract recipeId
+        <div className="container mt-3 mr-1">
+          <div className="row">
+            {currRecipes.map((recipe) => {
+              // using substring method to extract recipeId
               const recipeId = recipe._links.self.href.substring(38, 71);
               return (
-                <div>
-                  <Link to= {`/searched/${recipeId}`}><h2>{recipe.recipe.label}</h2></Link>
+                <div className="col-md-3">
+                  <div className="border p-4 text-center">
+                    <img src={recipe.recipe.image} alt={recipe.recipe.label} className="img-fluid" />
+                    <Link to={`/searched/${recipeId}`}>
+                      <h2>{recipe.recipe.label}</h2>
+                    </Link>
+                  </div>
                 </div>
-              )
-          })}
+              );
+            })}
+          </div>
         </div>
     </div>
   )

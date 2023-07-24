@@ -1,19 +1,10 @@
-.navbar {
-    background: #2f97229a;
-    
-}
+
+.green-bg {
+    background-color: #3fa544;
+  }
 
 .navbar-content {
     color: #fff;
-    max-width: 1100px;
     margin: 0 auto;
     text-align: center;
-}
-
-.navbar-links{
-    display:flex;
-    text-align: center;
-    gap: 10%;
-    
-    flex: 1;
 }

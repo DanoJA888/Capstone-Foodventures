@@ -22,19 +22,21 @@ export default function Home({updateCuisine}) {
   }, []);
 
   return (
-    <div className="home">
-      <p>Home</p>
-      <div>{currUser && <p>Welcome {currUser.username}</p>}</div>
-
-      <div>
-        {
-          cuisines.map((cuisine) => {
-            return(
-              <Link to={`search_results`}><button onClick={() =>updateCuisine(cuisine.cusineCode)}>{cuisine.cuisineName}</button></Link>
-            )
-          })
-        }
+  <div >
+    <h1 className="title">Discover Dishes From Around the World!</h1>
+    <div className="row mt-3 mx-4 justify-content-center">
+      {cuisines.map((cuisine) => (
+        <div className="col-md-4 d-flex justify-content-center">
+          <Link to={`search_results`} className="text-decoration-none text-dark link-cuisine">
+              <button
+                className="btn btn-outline-dark btn-cuisine"
+                onClick={() => updateCuisine(cuisine.cusineCode)}
+              >
+                {cuisine.cuisineName}
+              </button>
+            </Link>
       </div>
+      ))}
     </div>
-  );
-}
+  </div>
+);}

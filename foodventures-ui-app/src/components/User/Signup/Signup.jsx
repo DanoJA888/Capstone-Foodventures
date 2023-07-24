@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../../UserContext.js";
 import axios from "axios";
+import "./Signup.css"
 
 export default function Signup() {
   const [currInfo, setInfo] = useState({
@@ -53,98 +54,110 @@ export default function Signup() {
   }
 
   return (
-    <div>
-      <form onSubmit={uploadNewUser}>
-        <h2>Sign Up</h2>
-        <div>
-          <label htmlFor="username">Username:</label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="firstName">First Name:</label>
-          <input
-            type="text"
-            id="firstName"
-            name="firstName"
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="lastName">Last Name:</label>
-          <input
-            type="text"
-            id="lastName"
-            name="lastName"
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="heightFt">Height(ft):</label>
-          <input
-            type="number"
-            step={1}
-            id="heightFt"
-            name="heightFt"
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="heightIn">Height(in):</label>
-          <input
-            type="number"
-            step={1}
-            id="heightIn"
-            name="heightIn"
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="weight">Weight(lbs):</label>
-          <input
-            type="number"
-            step={1}
-            id="weight"
-            name="weight"
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <button type="submit">Sign Up</button>
-        <p>
-          Already have an account?
-          <Link to="/login">Log In</Link>
-        </p>
-      </form>
+    <div className="container">
+      <h2 className="title mb-4">Sign Up</h2>
+      <div className="container d-flex justify-content-center align-items-center">
+        <form className="mt-4" onSubmit={uploadNewUser}>
+          <div className="mb-3">
+            <label htmlFor="username" className="form-label">Username:</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              className="form-control"
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="email" className="form-label">Email:</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              className="form-control"
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="password" className="form-label">Password:</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              className="form-control"
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="firstName" className="form-label">First Name:</label>
+            <input
+              type="text"
+              id="firstName"
+              name="firstName"
+              className="form-control"
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="lastName" className="form-label">Last Name:</label>
+            <input
+              type="text"
+              id="lastName"
+              name="lastName"
+              className="form-control"
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="heightFt" className="form-label">Height(ft):</label>
+            <input
+              type="number"
+              step={1}
+              id="heightFt"
+              name="heightFt"
+              className="form-control"
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="heightIn" className="form-label">Height(in):</label>
+            <input
+              type="number"
+              step={1}
+              id="heightIn"
+              name="heightIn"
+              className="form-control"
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="mb-3">
+            <label htmlFor="weight" className="form-label">Weight(lbs):</label>
+            <input
+              type="number"
+              step={1}
+              id="weight"
+              name="weight"
+              className="form-control"
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="text-center">
+            <button type="submit" className="btn btn-primary">Sign Up</button>
+            <p className="mt-3">
+              Already have an account?
+              <Link to="/login">Log In</Link>
+            </p>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }
