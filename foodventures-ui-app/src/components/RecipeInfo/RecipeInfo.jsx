@@ -105,23 +105,23 @@ export default function RecipeInfo() {
 
   return (
     <div>
-      <div className="container text-center">
       <div className="row">
-        <div className="col-md-8 d-flex align-items-center justify-content-end"> 
-          <h1>{recipe.label}</h1>
-        </div>
-        {currUser && 
-          <div className="col-md-4 d-flex align-items-center justify-content-end">
-            <div>
-              {favorited ? (
-                <button className="btn btn-danger" onClick={() => removeFromFavs()}>Remove From Favorites</button>
-              ) : (
-                <button className="btn btn-success"onClick={() => addToFavs()}>Add To Favorites</button>
-              )}
-            </div>
+          <div className="col-md-11 d-flex align-items-center justify-content-center"> 
+            <h1 className="recipe-title">{recipe.label}</h1>
           </div>
-        }
-      </div>
+          {currUser && 
+            <div className="col-md-1 d-flex align-items-center justify-content-end">
+              <div>
+                {favorited ? (
+                  <button className="btn btn-danger" onClick={() => removeFromFavs()}>Remove From Favorites</button>
+                ) : (
+                  <button className="btn btn-success"onClick={() => addToFavs()}>Add To Favorites</button>
+                )}
+              </div>
+            </div>
+          }
+        </div>
+      <div className="container text-center">
         <img src={recipe.image} alt={recipe.label} />
         <p>{recipe.source}</p>
         <div className="row ">
