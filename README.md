@@ -36,3 +36,8 @@ Week 2
 <a href="https://www.loom.com/share/2cfaf8c353d244cbaee96ff382e6f446">
   <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/2cfaf8c353d244cbaee96ff382e6f446-with-play.gif">
 </a>
+
+Week 3
+<a href="https://www.loom.com/share/8eab63eef58d45c9ba712f907dce7239">
+  <img style="max-width:300px;" src="https://cdn.loom.com/sessions/thumbnails/8eab63eef58d45c9ba712f907dce7239-with-play.gif">
+</a>
