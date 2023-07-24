@@ -11,6 +11,8 @@ export default function RecipeInfo() {
   const { currUser } = useContext(UserContext);
   const [favorited, setFavorited] = useState(false);
   const [recipeFetched, setRecipeFetched] = useState(false);
+  const [isScraped, setIsScraped] = useState(false);
+  const [recipeScrape, setRecipeScrape] = useState([]);
   const [recipe, setRecipe] = useState({
     ingredientLines: [],
   });
@@ -38,6 +40,8 @@ export default function RecipeInfo() {
       });
       const data = await response.json();
       console.log(data);
+      setRecipeScrape(data)
+      setIsScraped(true);
     } catch (error) {
       console.error('Error fetching the website:', error);
     }
@@ -155,13 +159,24 @@ export default function RecipeInfo() {
           <div className="col-md-6 mb-4">
             <h3>Ingredients</h3>
             <ul className="list-group">
-              {recipe.ingredientLines.map((ingredient, index) => (
+              {recipe.ingredientLines.map((ingredient) => (
                 <li className="list-group-item">{ingredient}</li>
               ))}
             </ul>
           </div>
           <div className="col-md-6 mb-4">
-            <h3 className="title">Directions</h3>
+            <h3>Directions</h3>
+            {!isScraped ? (
+                <p>Loading Recipe Info...</p>
+              ) : (
+                <div>
+                  <ul className="list-group">
+                    {recipeScrape.map((paragraph) => (
+                      <li className="list-group-item">{paragraph}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             <a href={recipe.url} target="_blank" className="btn btn-primary">
               Recipe
             </a>
