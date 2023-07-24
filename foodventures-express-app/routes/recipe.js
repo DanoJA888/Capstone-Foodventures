@@ -3,6 +3,7 @@ import { Recipe } from "../models/recipe.js";
 import { Cuisine } from "../models/cuisine.js";
 import { uuid } from "uuidv4";
 import axios from "axios";
+import * as cheerio from "cheerio";
 
 
 const router = express.Router();
@@ -13,8 +14,13 @@ router.post("/scrape_recipe", async (req, res) =>{
     console.log(recipeLink)
     const response = await axios.get(recipeLink);
     const html = response.data;
-    console.log(html);
-    res.status(200).json(html)
+    const $ = cheerio.load(html);
+    const paragaraphs = []
+    $('p').each((i, paragraph) => {
+      const p = $(paragraph).text().trim();
+      paragaraphs.push(p);
+    })
+    res.status(200).json(paragaraphs);
   }
   catch(error){
     res.status(500).json({error: "Recipe Unavailable: " + error});
