@@ -19,20 +19,19 @@ router.post("/add_recipe", async (req, res) => {
         } = req.body;
     
     try {
-        const characters = "abcdefghijklmnopqrstuvwxyz0123456789";
-        let recipeId = uuid();
-        const code = cuisine.replaceAll(" ", "%20");
+      const recipeId = uuid();
+      const code = cuisine.replaceAll(" ", "%20");
 
-        const user = req.session.user;
-        const checkCuisine = await Cuisine.findOne({where: {cuisineName : cuisine}});
-        if(!checkCuisine){
-          
-          const cuisineData = {
-              cuisineName : cuisine,
-              cusineCode: code
-          }
-          const newCuisine = await Cuisine.create(cuisineData);
+      const user = req.session.user;
+      const checkCuisine = await Cuisine.findOne({where: {cuisineName : cuisine}});
+      if(!checkCuisine){
+        
+        const cuisineData = {
+            cuisineName : cuisine,
+            cusineCode: code
         }
+        const newCuisine = await Cuisine.create(cuisineData);
+      }
       const newRecipe = await Recipe.create({
         userId: user.id,
         recipeId,

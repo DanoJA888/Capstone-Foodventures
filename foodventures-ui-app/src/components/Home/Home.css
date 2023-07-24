@@ -2,13 +2,18 @@
   text-align: center;
   padding: 15px;
 }
-.btn-cuisine {
+.link-cuisine{
   width : 100%;
   display: flex;
 
   justify-content: center;
   word-wrap: break-word;
-  transition: background-color 0.3s ease;
+}
+.btn-cuisine {
+  width : 100%;
+  display: flex;
+  justify-content: center;
+  word-wrap: break-word;
 }
 .btn-cuisine:hover {
   color: #fff !important;
