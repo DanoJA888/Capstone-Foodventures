@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { UserContext } from "../UserContext.js";
 import { url } from "../../../constant.js";
+import "./RecipeInfo.css";
 
 export default function RecipeInfo() {
   const { recipeId } = useParams();
@@ -104,28 +105,42 @@ export default function RecipeInfo() {
 
   return (
     <div>
-        <div>
-            <img src={recipe.image} alt={recipe.label} />
-            <h1>{recipe.label}</h1>
-            <h2>{recipe.source}</h2>
-
-            {recipe.ingredientLines.map((ingredient) => (
-            <p>{ingredient}</p>
-            ))}
-
-            <a href={recipe.url} target="_blank">
-            Recipe
-            </a>
-        </div>
-        {currUser && 
-            <div>
+      <div className="row">
+          <div className="col-md-11 d-flex align-items-center justify-content-center"> 
+            <h1 className="recipe-title">{recipe.label}</h1>
+          </div>
+          {currUser && 
+            <div className="col-md-1 d-flex align-items-center justify-content-end">
+              <div>
                 {favorited ? (
-                    <button onClick={() => removeFromFavs()}>Remove From Favorites</button>
+                  <button className="btn btn-danger" onClick={() => removeFromFavs()}>Remove From Favorites</button>
                 ) : (
-                    <button onClick={() => addToFavs()}>Add To Favorites</button>
+                  <button className="btn btn-success"onClick={() => addToFavs()}>Add To Favorites</button>
                 )}
+              </div>
             </div>
-        }
+          }
+        </div>
+      <div className="container text-center">
+        <img src={recipe.image} alt={recipe.label} />
+        <p>{recipe.source}</p>
+        <div className="row ">
+          <div className="col-md-6 mb-4">
+            <h3>Ingredients</h3>
+            <ul className="list-group">
+              {recipe.ingredientLines.map((ingredient, index) => (
+                <li className="list-group-item">{ingredient}</li>
+              ))}
+            </ul>
+          </div>
+          <div className="col-md-6 mb-4">
+            <h3 className="title">Directions</h3>
+            <a href={recipe.url} target="_blank" className="btn btn-primary">
+              Recipe
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

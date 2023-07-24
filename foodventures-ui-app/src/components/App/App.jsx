@@ -13,6 +13,7 @@ import RecipeInfo from "../RecipeInfo/RecipeInfo";
 import SearchResults from "../SearchResults/SearchResults";
 import Profile from "../User/Profile/Profile";
 import UploadRecipe from "../User/UploadRecipe/UploadRecipe";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function App() {
   const [currUser, setUser] = useState(() => {
@@ -39,7 +40,7 @@ export default function App() {
           <Routes>
             <Route path = '/' element={<Home updateCuisine = {updateCuisine}/>}></Route>
             <Route path = '/search' element={<Search updateSearch  = {updateSearch}/>}></Route>
-            <Route path = '/search_results' element={<SearchResults cuisine = {selectedCuisine} search = {currSearch} updateSearch  = {updateSearch}/>}></Route>
+            <Route path = '/search_results' element={<SearchResults cuisine = {selectedCuisine} search = {currSearch} updateSearch = {updateSearch}/>}></Route>
             <Route path = '/searched/:recipeId' element={<RecipeInfo/>}></Route>
             <Route path = '/mealplan' element={<MealPlan/>}></Route>
             <Route path = '/login' element={<Login/>}></Route>
