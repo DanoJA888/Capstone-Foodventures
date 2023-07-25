@@ -10,8 +10,8 @@ export default function SearchResults({cuisine, search, updateSearch}) {
   const [currRecipes, updateRecipes] = useState([]);
 
   const apiCall = async () =>{
-      console.log(url(null, cuisine, search));
-      const response = await fetch(url(null, cuisine, search));
+      console.log(url({cuisine, q: search}));
+      const response = await fetch(url({cuisine, q: search}));
       const data = await response.json();
       updateRecipes(data.hits);
   };

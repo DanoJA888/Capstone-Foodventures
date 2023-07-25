@@ -3,6 +3,7 @@ import { UserContext } from "../../UserContext.js";
 import { Link } from 'react-router-dom';
 import "./Profile.css";
 import {API_ID, API_KEY} from "../../../../constant.js";
+import { url } from "../../../../constant.js";
 
 export default function Profile() {
   const { currUser } = useContext(UserContext);
@@ -57,13 +58,12 @@ export default function Profile() {
   
 
   const showReccs = async () =>{
-    let url = `https://api.edamam.com/api/recipes/v2?type=public&app_id=${API_ID}&app_key=${API_KEY}`;
     let possibleReccs = [];
     // for loop to fetch recipes from differen cuisines and concats them to an array, where i can hold 60 recipes (important for random cuisine pull)
     for(let i = 0; i < cuisines.length; i++){
-      const responseCuisine = await fetch(url+`&cuisineType=${cuisines[i]}`);
+      const responseCuisine = await fetch(url({cuisine: cuisines[i]}));
       console.log(ingredients[i]);
-      const responseIngs = await fetch(url+`&q=${ingredients[i]}`);
+      const responseIngs = await fetch(url({q: ingredients[i]}));
       const dataCuisine = await responseCuisine.json();
       const dataIngs = await responseIngs.json();
       possibleReccs = possibleReccs.concat(dataCuisine.hits);
