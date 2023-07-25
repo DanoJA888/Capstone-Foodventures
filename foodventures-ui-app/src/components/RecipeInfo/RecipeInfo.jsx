@@ -2,12 +2,17 @@ import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { UserContext } from "../UserContext.js";
 import { url } from "../../../constant.js";
+import cheerio from "cheerio";
+import axios from "axios";
 import "./RecipeInfo.css";
 
 export default function RecipeInfo() {
   const { recipeId } = useParams();
   const { currUser } = useContext(UserContext);
   const [favorited, setFavorited] = useState(false);
+  const [recipeFetched, setRecipeFetched] = useState(false);
+  const [isScraped, setIsScraped] = useState(false);
+  const [recipeScrape, setRecipeScrape] = useState([]);
   const [recipe, setRecipe] = useState({
     ingredientLines: [],
   });
@@ -22,6 +27,25 @@ export default function RecipeInfo() {
     weight: 0
   });
 
+  const scrape = async () =>{
+    try {
+      const response = await fetch(`http://localhost:3001/scrape_recipe`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ 
+          recipeLink: recipe.url,
+        })
+      });
+      const data = await response.json();
+      console.log(data);
+      setRecipeScrape(data)
+      setIsScraped(true);
+    } catch (error) {
+      console.error('Error fetching the website:', error);
+    }
+  }
 
   async function addToFavs() {
 
@@ -81,6 +105,7 @@ export default function RecipeInfo() {
       }
     });
     setHighestWeight(currHighestWeight);
+    setRecipeFetched(true);
   };
 
 
@@ -102,6 +127,12 @@ export default function RecipeInfo() {
     apiCall();
     checkInFavs();
   }, [recipeId, favorited]);
+
+  useEffect(() =>{
+    if(recipeFetched){
+      scrape();
+    }
+  }, [recipeFetched]);
 
   return (
     <div>
@@ -128,13 +159,24 @@ export default function RecipeInfo() {
           <div className="col-md-6 mb-4">
             <h3>Ingredients</h3>
             <ul className="list-group">
-              {recipe.ingredientLines.map((ingredient, index) => (
+              {recipe.ingredientLines.map((ingredient) => (
                 <li className="list-group-item">{ingredient}</li>
               ))}
             </ul>
           </div>
           <div className="col-md-6 mb-4">
-            <h3 className="title">Directions</h3>
+            <h3>Directions</h3>
+            {!isScraped ? (
+                <p>Loading Recipe Info...</p>
+              ) : (
+                <div>
+                  <ul className="list-group">
+                    {recipeScrape.map((paragraph) => (
+                      <li className="list-group-item">{paragraph}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             <a href={recipe.url} target="_blank" className="btn btn-primary">
               Recipe
             </a>

@@ -1,8 +1,10 @@
 import React, { useRef, useContext, useState } from "react";
 import { UserContext } from "../../UserContext.js";
 import "./UploadRecipe.css";
+import { useNavigate } from 'react-router-dom';
 
 export default function UploadRecipe({ resetCuisine, resetSearch }) {
+    const navigate = useNavigate();
     const { currUser } = useContext(UserContext);
     const ingRef = useRef(null);
     const ingQuant = useRef(null);
@@ -31,6 +33,7 @@ export default function UploadRecipe({ resetCuisine, resetSearch }) {
             credentials: "include",
           });
           alert("Recipe Added");
+          navigate('/search_results');
         } catch (error) {
           alert({ error });
         }

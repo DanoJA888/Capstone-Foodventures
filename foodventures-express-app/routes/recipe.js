@@ -2,10 +2,26 @@ import express from "express";
 import { Recipe } from "../models/recipe.js";
 import { Cuisine } from "../models/cuisine.js";
 import { uuid } from "uuidv4";
+import axios from "axios";
+import * as cheerio from "cheerio";
+import recipeScraper from "recipe-scraper"
 
 
 const router = express.Router();
 
+router.post("/scrape_recipe", async (req, res) =>{
+  const {recipeLink} = req.body;
+  try{
+    console.log(recipeLink)
+    const response = await recipeScraper(recipeLink);
+    console.log(response)
+    res.status(200).json(response.instructions);
+  }
+  catch(error){
+    res.status(500).json({error: "Recipe Unavailable: " + error});
+  }
+
+})
 router.post("/add_recipe", async (req, res) => {
     const {
         recipeName,
@@ -19,8 +35,8 @@ router.post("/add_recipe", async (req, res) => {
         } = req.body;
     
     try {
-      const recipeId = uuid();
-      const code = cuisine.replaceAll(" ", "%20");
+        const recipeId = uuid();
+        const code = cuisine.replaceAll(" ", "%20");
 
       const user = req.session.user;
       const checkCuisine = await Cuisine.findOne({where: {cuisineName : cuisine}});
