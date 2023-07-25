@@ -13,6 +13,7 @@ export default function RecipeInfo() {
   const [recipeFetched, setRecipeFetched] = useState(false);
   const [isScraped, setIsScraped] = useState(false);
   const [recipeScrape, setRecipeScrape] = useState([]);
+  const [urlSupported, setUrlSupported] = useState(true);
   const [recipe, setRecipe] = useState({
     ingredientLines: [],
   });
@@ -28,24 +29,27 @@ export default function RecipeInfo() {
   });
 
   const scrape = async () =>{
-    try {
-      const response = await fetch(`http://localhost:3001/scrape_recipe`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ 
-          recipeLink: recipe.url,
-        })
-      });
-      const data = await response.json();
-      console.log(data);
-      setRecipeScrape(data)
-      setIsScraped(true);
-    } catch (error) {
-      console.error('Error fetching the website:', error);
+    const response = await fetch(`http://localhost:3001/scrape_recipe`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ 
+        recipeLink: recipe.url,
+      })
+    });
+    const data = await response.json();
+    console.log(data);
+    if (Array.isArray(data)) {
+      setRecipeScrape(data);
+      
+    } else {
+      console.error("Invalid data format:", data);
+      setUrlSupported(false);
     }
+    setIsScraped(true);
   }
+
 
   async function addToFavs() {
 
@@ -98,15 +102,20 @@ export default function RecipeInfo() {
     );
     const data = await response.json();
     setRecipe(data.recipe);
+    findHighestWeight(data.recipe);
+    setRecipeFetched(true);
+  };
+
+  function findHighestWeight(recipe){
     let currHighestWeight = { weight: 0 };
-    data.recipe.ingredients.forEach(ingredient => {
+    recipe.ingredients.forEach(ingredient => {
       if (ingredient.weight >currHighestWeight.weight ){
         currHighestWeight = ingredient
       }
     });
     setHighestWeight(currHighestWeight);
-    setRecipeFetched(true);
-  };
+  }
+
 
 
   const checkInFavs = async () => {
@@ -124,15 +133,39 @@ export default function RecipeInfo() {
   };
 
   useEffect(() => {
-    apiCall();
+    const inCache = localStorage.getItem(`searched/${recipeId}`)
+    if(inCache){
+      const cachedInfo = JSON.parse(inCache);
+      setRecipe(cachedInfo.recipe);
+      findHighestWeight(cachedInfo.recipe);
+      setRecipeScrape(cachedInfo.recipeScrape);
+      setRecipeFetched(true);
+      setIsScraped(true);
+      setUrlSupported(cachedInfo.recipeScrape.length > 1);
+    }
+    else{
+      apiCall();
+    }
     checkInFavs();
   }, [recipeId, favorited]);
 
   useEffect(() =>{
-    if(recipeFetched){
+    console.log(highestWeight);
+    if(recipeFetched && !isScraped){
       scrape();
     }
-  }, [recipeFetched]);
+  }, [recipeFetched, isScraped]);
+
+  useEffect(() => {
+    if (recipeFetched && isScraped) {
+      const cachedInfo = {
+        recipe,
+        recipeScrape,
+      };
+      localStorage.setItem(`searched/${recipeId}`, JSON.stringify(cachedInfo));
+      const cacheTimeout = setTimeout(() => {localStorage.removeItem(`searched/${recipeId}`);}, 60000);
+    }
+  }, [recipeFetched, isScraped]);
 
   return (
     <div>
@@ -168,6 +201,8 @@ export default function RecipeInfo() {
             <h3>Directions</h3>
             {!isScraped ? (
                 <p>Loading Recipe Info...</p>
+              ) : !urlSupported ? (
+                <p>Unsupported URL</p>
               ) : (
                 <div>
                   <ul className="list-group">
@@ -176,7 +211,8 @@ export default function RecipeInfo() {
                     ))}
                   </ul>
                 </div>
-              )}
+              )
+            }
             <a href={recipe.url} target="_blank" className="btn btn-primary">
               Recipe
             </a>
