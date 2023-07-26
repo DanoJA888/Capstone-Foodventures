@@ -3,6 +3,7 @@ import { UserContext } from "../../UserContext.js";
 import { Link } from 'react-router-dom';
 import "./Profile.css";
 import {API_ID, API_KEY} from "../../../../constant.js";
+import { url } from "../../../../constant.js";
 
 export default function Profile() {
   const { currUser } = useContext(UserContext);
@@ -38,7 +39,9 @@ export default function Profile() {
     const data = await response.json();
     console.log(data.topCuisines)
     setCuisines(data.topCuisines);
-    setCuisinesFetched(true);
+    if(data.topCuisines.length > 0){
+      setCuisinesFetched(true);
+    }
   };
   
   const topIngs = async () => {
@@ -52,29 +55,43 @@ export default function Profile() {
     const data = await response.json();
     console.log(data.topIngs);
     setIngredients(data.topIngs);
-    setIngredientsFetched(true);
+    if(data.topIngs.length > 0){
+      setIngredientsFetched(true);
+    }
   };
   
 
   const showReccs = async () =>{
-    let url = `https://api.edamam.com/api/recipes/v2?type=public&app_id=${API_ID}&app_key=${API_KEY}`;
     let possibleReccs = [];
-    // for loop to fetch recipes from differen cuisines and concats them to an array, where i can hold 60 recipes (important for random cuisine pull)
+    const checkIngs = new Set(ingredients);
     for(let i = 0; i < cuisines.length; i++){
-      const responseCuisine = await fetch(url+`&cuisineType=${cuisines[i]}`);
-      console.log(ingredients[i]);
-      const responseIngs = await fetch(url+`&q=${ingredients[i]}`);
+      const responseCuisine = await fetch(url({cuisine: cuisines[i]}));
       const dataCuisine = await responseCuisine.json();
-      const dataIngs = await responseIngs.json();
       possibleReccs = possibleReccs.concat(dataCuisine.hits);
-      possibleReccs = possibleReccs.concat(dataIngs.hits);
+
     }
+    // check each recipes ingredients to see if users fave ings are included
+    // sacrifice performance for accuracy 
     let reccs = [];
-    //randomly select 8 recipes from my pool of recipes
-    for(let i = 0; i < 8; i++){
-      reccs.push(possibleReccs[Math.floor(Math.random()*possibleReccs.length)]);
+    console.log(checkIngs);
+    let takenIdx = new Set();
+    possibleReccs.forEach((option, index) => {
+      option.recipe.ingredients.forEach((ing) => {
+        if(checkIngs.has(ing.food.toLowerCase())){
+          reccs.push(option);
+          takenIdx.add(index);
+        }
+      })
+    })
+    // avoids repeating recipes
+    while(takenIdx.size < 8){
+      const idx = Math.floor(Math.random()*possibleReccs.length);
+      if(!takenIdx.has(idx)){
+        reccs.push(possibleReccs[idx]);
+        takenIdx.add(idx)
+      }
     }
-    console.log(reccs)
+    console.log(takenIdx);
     setReccs(reccs);
     setIsLoading(false);
   }

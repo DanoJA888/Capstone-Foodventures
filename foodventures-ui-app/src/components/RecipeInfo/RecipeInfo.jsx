@@ -98,7 +98,7 @@ export default function RecipeInfo() {
   const apiCall = async () => {
     console.log(recipeId);
     const response = await fetch(
-      url(recipeId, null, null)
+      url({recipeId})
     );
     const data = await response.json();
     setRecipe(data.recipe);

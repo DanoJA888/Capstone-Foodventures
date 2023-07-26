@@ -54,10 +54,10 @@ router.post("/add_favorites", async (req, res) =>{
           (userCuisines[recipeCuisine] =1)
         }
         
-        {userIngs[highestWeight.food] ? 
-          (userIngs[highestWeight.food] +=1) 
+        {userIngs[highestWeight.food.toLowerCase()] ? 
+          (userIngs[highestWeight.food.toLowerCase()] +=1) 
           : 
-          (userIngs[highestWeight.food] =1)
+          (userIngs[highestWeight.food.toLowerCase()] =1)
         }
         console.log(JSON.stringify(highestWeight) + " hi");
         console.log(highestWeight.food + " ho");
@@ -100,10 +100,10 @@ router.delete("/remove_favorites", async (req, res) =>{
           : 
           (userCuisines[recipeCuisine] -=1)
         }
-        {userIngs[highestWeight.food] === 1 ? 
-          (delete userIngs[highestWeight.food]) 
+        {userIngs[highestWeight.food.toLowerCase()] === 1 ? 
+          (delete userIngs[highestWeight.food.toLowerCase()]) 
           : 
-          (userIngs[highestWeight.food] -=1)
+          (userIngs[highestWeight.food.toLowerCase()] -=1)
         }
 
         const updatedCount = await User.update(
