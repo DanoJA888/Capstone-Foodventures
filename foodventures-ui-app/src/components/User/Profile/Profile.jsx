@@ -7,13 +7,14 @@ import { url } from "../../../../constant.js";
 
 export default function Profile() {
   const { currUser } = useContext(UserContext);
-  const [currFavs, setFavs] = useState([]);
+  const [favs, setFavs] = useState([]);
   const [cuisines, setCuisines] = useState([]);
   const [ingredients, setIngredients] = useState([]);
   const [reccomendations, setReccs] = useState([]);
   const [cuisinesFetched, setCuisinesFetched] = useState(false);
   const [ingredientsFetched, setIngredientsFetched] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const inCache = localStorage.getItem(`profile/${currUser.username}`);
 
   
   const fetchFavorites = async () => {
@@ -39,7 +40,10 @@ export default function Profile() {
     const data = await response.json();
     console.log(data.topCuisines)
     setCuisines(data.topCuisines);
-    if(data.topCuisines.length > 0){
+    if(data.topCuisines.length == 0){
+      setIsLoading(false)
+    }
+    else{
       setCuisinesFetched(true);
     }
   };
@@ -55,7 +59,10 @@ export default function Profile() {
     const data = await response.json();
     console.log(data.topIngs);
     setIngredients(data.topIngs);
-    if(data.topIngs.length > 0){
+    if(data.topIngs.length == 0){
+      setIsLoading(false)
+    }
+    else{
       setIngredientsFetched(true);
     }
   };
@@ -96,20 +103,46 @@ export default function Profile() {
     setIsLoading(false);
   }
 
-  useEffect(() => {
-    fetchFavorites();
-    topCuisines();
-    topIngs(); 
+  useEffect(() => { 
+    if(inCache) {
+      const profileInfo = JSON.parse(inCache);
+      fetchFavorites();
+      setReccs(profileInfo.reccomendations);
+      setIngredients(profileInfo.ingredients);
+      setCuisines(profileInfo.cuisines);
+      setIsLoading(false);
+    }
+    else {
+      fetchFavorites();
+      topCuisines();
+      topIngs(); 
+    }
   },[]);
+
   // since i have an awaiting expression to fetch the users favorite cuisines and the showReccs function is an async function, 
   // I have to wait for the cuisines to update in the state in order to make the external api calls.
   useEffect(() => {
-    if (cuisinesFetched && ingredientsFetched && reccomendations.length === 0) {
-      console.log(reccomendations);
+    console.log(isLoading);
+    if (!cuisines.length == 0 && !ingredients.length == 0 && reccomendations.length === 0) {
       showReccs();
     }
   }, [cuisinesFetched, ingredientsFetched])
 
+  useEffect(() =>{
+    if (reccomendations.length > 0){
+      const cachedInfo = {
+        ingredients,
+        cuisines,
+        reccomendations
+      };
+      localStorage.setItem(`profile/${currUser.username}`, JSON.stringify(cachedInfo));
+      const cacheTimeout = setTimeout(() => {localStorage.removeItem(`profile/${currUser.username}`);}, 60000);
+    }
+  }, [reccomendations])
+
+  useEffect(() =>{
+   console.log(isLoading);
+  }, [isLoading])
 
   return (
     <div>
@@ -128,14 +161,14 @@ export default function Profile() {
         </div>
         <div>
             <h1>Favorites</h1>
-          {currFavs.length === 0 && (
+          {favs.length === 0 && (
             <div>
               <p>No Favorites</p>
             </div>
           )}
-          {currFavs && (
+          {favs && (
             <div>
-              {currFavs.map((fav) => {
+              {favs.map((fav) => {
                 const recipeId = fav.recipeId;
                 return (
                   <div>
@@ -146,13 +179,18 @@ export default function Profile() {
             </div>
           )}
           <div>
-          {currFavs.length !== 0 &&
+          
             <div>
+            <h1>Recipes You Might Like</h1>
               {isLoading ? (
                 <p>Loading recommendations...</p>
-              ) : (
+              ) : reccomendations.length == 0 ? (
+                <p>No reccomendations to load</p>
+              ) :
+              (
                 <div>
-                  <h1>Recipes You Might Like</h1>
+                  
+                  
                   {reccomendations.map((rec) => {
                     const recipeId = rec._links.self.href.substring(38, 71);
                     return (
@@ -164,7 +202,7 @@ export default function Profile() {
                 </div>
               )}
             </div>
-          }
+        
           </div>
         </div>
       </div>
