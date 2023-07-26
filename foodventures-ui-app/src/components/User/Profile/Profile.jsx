@@ -39,7 +39,9 @@ export default function Profile() {
     const data = await response.json();
     console.log(data.topCuisines)
     setCuisines(data.topCuisines);
-    setCuisinesFetched(true);
+    if(data.topCuisines.length > 0){
+      setCuisinesFetched(true);
+    }
   };
   
   const topIngs = async () => {
@@ -53,24 +55,24 @@ export default function Profile() {
     const data = await response.json();
     console.log(data.topIngs);
     setIngredients(data.topIngs);
-    setIngredientsFetched(true);
+    if(data.topIngs.length > 0){
+      setIngredientsFetched(true);
+    }
   };
   
 
   const showReccs = async () =>{
     let possibleReccs = [];
     const checkIngs = new Set(ingredients);
-    // for loop to fetch recipes from differen cuisines and concats them to an array, where i can hold 60 recipes (important for random cuisine pull)
     for(let i = 0; i < cuisines.length; i++){
       const responseCuisine = await fetch(url({cuisine: cuisines[i]}));
-      //console.log(ingredients[i]);
-      //const responseIngs = await fetch(url({q: ingredients[i]}));
       const dataCuisine = await responseCuisine.json();
-      //const dataIngs = await responseIngs.json();
       possibleReccs = possibleReccs.concat(dataCuisine.hits);
-      //possibleReccs = possibleReccs.concat(dataIngs.hits);
+
     }
+    
     let reccs = [];
+    console.log(checkIngs);
     let takenIdx = new Set();
     console.log(possibleReccs);
     possibleReccs.forEach((option, index) => {
@@ -81,14 +83,7 @@ export default function Profile() {
         }
       })
     })
-    //randomly select 8 recipes from my pool of recipes
-    /*
-    for(let i = takenIdx.size ; i < 8; i++){
-      reccs.push(possibleReccs[Math.floor(Math.random()*possibleReccs.length)]);
-    }
 
-   */
-    console.log(reccs);
     while(takenIdx.size < 8){
       const idx = Math.floor(Math.random()*possibleReccs.length);
       if(!takenIdx.has(idx)){
