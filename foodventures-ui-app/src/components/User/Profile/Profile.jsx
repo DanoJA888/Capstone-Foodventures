@@ -70,20 +70,20 @@ export default function Profile() {
       possibleReccs = possibleReccs.concat(dataCuisine.hits);
 
     }
-    
+    // check each recipes ingredients to see if users fave ings are included
+    // sacrifice performance for accuracy 
     let reccs = [];
     console.log(checkIngs);
     let takenIdx = new Set();
-    console.log(possibleReccs);
     possibleReccs.forEach((option, index) => {
       option.recipe.ingredients.forEach((ing) => {
-        if(checkIngs.has(ing.food)){
+        if(checkIngs.has(ing.food.toLowerCase())){
           reccs.push(option);
           takenIdx.add(index);
         }
       })
     })
-
+    // avoids repeating recipes
     while(takenIdx.size < 8){
       const idx = Math.floor(Math.random()*possibleReccs.length);
       if(!takenIdx.has(idx)){
@@ -91,8 +91,6 @@ export default function Profile() {
         takenIdx.add(idx)
       }
     }
-     
-    console.log(reccs);
     console.log(takenIdx);
     setReccs(reccs);
     setIsLoading(false);
