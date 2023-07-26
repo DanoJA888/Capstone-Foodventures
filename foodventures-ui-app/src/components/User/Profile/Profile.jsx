@@ -29,7 +29,20 @@ export default function Profile() {
     setFavs(data);
   };
 
-  const topCuisines = async () => {
+  function topCuisines(){
+   fetchCuisine().then((cuisine) =>{
+    console.log(cuisine)
+    if(cuisine.length == 0){
+      setIsLoading(false);
+    }
+    else{
+      setCuisines(cuisine);
+      setCuisinesFetched(true);
+    }
+   })
+  };
+
+  const fetchCuisine = async () =>{
     const response = await fetch("http://localhost:3001/user_cuisines", {
       method: "GET",
       headers: {
@@ -38,17 +51,25 @@ export default function Profile() {
       credentials: "include",
     });
     const data = await response.json();
-    console.log(data.topCuisines)
-    setCuisines(data.topCuisines);
-    if(data.topCuisines.length == 0){
-      setIsLoading(false)
-    }
-    else{
-      setCuisinesFetched(true);
-    }
-  };
+    console.log(data.topCuisines);
+    return data.topCuisines;
+  }
   
   const topIngs = async () => {
+
+    fetchIngs().then((ings) =>{
+      console.log(ings)
+      if(ings.length == 0){
+        setIsLoading(false);
+      }
+      else{
+        setIngredients(ings);
+        setIngredientsFetched(true);
+      }
+     })
+    };
+  
+  const fetchIngs = async () =>{
     const response = await fetch("http://localhost:3001/user_ings", {
       method: "GET",
       headers: {
@@ -57,19 +78,12 @@ export default function Profile() {
       credentials: "include",
     });
     const data = await response.json();
-    console.log(data.topIngs);
-    setIngredients(data.topIngs);
-    if(data.topIngs.length == 0){
-      setIsLoading(false)
-    }
-    else{
-      setIngredientsFetched(true);
-    }
-  };
-  
+    return data.topIngs;
+  }
 
   const showReccs = async () =>{
     let possibleReccs = [];
+    console.log(cuisines);
     const checkIngs = new Set(ingredients);
     for(let i = 0; i < cuisines.length; i++){
       const responseCuisine = await fetch(url({cuisine: cuisines[i]}));
