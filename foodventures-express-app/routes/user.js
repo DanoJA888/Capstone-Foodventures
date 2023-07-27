@@ -90,19 +90,7 @@ router.get("/user_cuisines", async (req, res) =>{
     }));
     cuisineArr.sort((c1, c2) => compareOcurrance(c1.occurrence, c2.occurrence));
     console.log(cuisineArr);
-    let topCuisines = [];
-    if (cuisineArr.length < 3){
-      for(let i = 0; i < cuisineArr.length; i++){
-        topCuisines.push(cuisineArr[i].name);
-      }
-    }
-    else{
-      topCuisines = [
-        cuisineArr[0].name,
-        cuisineArr[1].name,
-        cuisineArr[2].name
-      ]
-    }
+    let topCuisines = cuisineArr.slice(0, 3).map((cuisineObj) => cuisineObj.name);;
     console.log(topCuisines)
     res.status(200).json({topCuisines});
   }
@@ -119,19 +107,7 @@ router.get("/user_ings", async (req, res) =>{
     })
     )
     ingArr.sort((i1, i2) => compareOcurrance(i1.occurrence, i2.occurrence));
-    let topIngs = [];
-    if (ingArr.length < 3){
-      for(let i = 0; i < ingArr.length; i++){
-        topIngs.push(ingArr[i].name);
-      }
-    }
-    else{
-      topIngs = [
-        ingArr[0].name,
-        ingArr[1].name,
-        ingArr[2].name
-      ]
-    }
+    let topIngs = ingArr.slice(0, 3).map((ingObject) => ingObject.name);;
     console.log(topIngs);
     res.status(200).json({topIngs});
   }
