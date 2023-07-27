@@ -115,6 +115,7 @@ export default function Profile() {
   function allInfoMatches(fetched, cached) {
     const allFetchedInCache = [...fetched].every(fetch => cached.has(fetch));
     const allCachedInFetch = [...cached].every(cache => fetched.has(cache));
+    console.log("This is the result you get, is it what you expect?",allFetchedInCache && allCachedInFetch)
     return allFetchedInCache && allCachedInFetch;
   }
 
@@ -123,6 +124,10 @@ export default function Profile() {
     const cachedIngSet = new Set(cachedIngs);
     const fetchedCuisine = new Set(await fetchCuisine());
     const fetchedIngredients = new Set(await fetchIngredients());
+    console.log(cachedCuisineSet);
+    console.log(cachedIngSet);
+    console.log(fetchedCuisine);
+    console.log(fetchedIngredients);
     const cuisinesMatch = allInfoMatches(fetchedCuisine, cachedCuisineSet)
     const ingredientMatch = allInfoMatches(fetchedIngredients, cachedIngSet)
     return (cuisinesMatch && ingredientMatch)
@@ -177,7 +182,7 @@ export default function Profile() {
         reccomendations
       };
       localStorage.setItem(`profile/${currUser.username}`, JSON.stringify(cachedInfo));
-      const cacheTimeout = setTimeout(() => {localStorage.removeItem(`profile/${currUser.username}`);}, 60000);
+      const reccomendationsCacheTimeout = setTimeout(() => {localStorage.removeItem(`profile/${currUser.username}`);}, 600000);
     }
   }, [reccomendations]);
 
