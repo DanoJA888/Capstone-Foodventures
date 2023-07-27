@@ -14,7 +14,7 @@ export default function Profile() {
   const [cuisinesFetched, setCuisinesFetched] = useState(false);
   const [ingredientsFetched, setIngredientsFetched] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const inCache = localStorage.getItem(`profile/${currUser.username}`);
+
 
   
   const fetchFavorites = async () => {
@@ -29,17 +29,15 @@ export default function Profile() {
     setFavs(data);
   };
 
-  function topCuisines(){
-   fetchCuisine().then((cuisine) =>{
-    console.log(cuisine)
-    if(cuisine.length == 0){
-      setIsLoading(false);
-    }
-    else{
-      setCuisines(cuisine);
-      setCuisinesFetched(true);
-    }
-   })
+  const  topCuisines = async () => {
+   const fetchedCuisine = await fetchCuisine();
+   if(fetchedCuisine.length == 0){
+     setIsLoading(false);
+   }
+   else{
+     setCuisines(fetchedCuisine);
+     setCuisinesFetched(true);
+   }
   };
 
   const fetchCuisine = async () =>{
@@ -56,17 +54,14 @@ export default function Profile() {
   }
   
   const topIngs = async () => {
-
-    fetchIngs().then((ings) =>{
-      console.log(ings)
-      if(ings.length == 0){
-        setIsLoading(false);
-      }
-      else{
-        setIngredients(ings);
-        setIngredientsFetched(true);
-      }
-     })
+    const fetchedIngs = await fetchIngs();
+    if(fetchedIngs.length == 0){
+      setIsLoading(false);
+    }
+    else{
+      setIngredients(fetchedIngs);
+      setIngredientsFetched(true);
+    }
     };
   
   const fetchIngs = async () =>{
@@ -116,33 +111,65 @@ export default function Profile() {
     setReccs(reccs);
     setIsLoading(false);
   }
+  
+  function allInfoMatches(fetched, cached) {
+    const allFetchedInCache = [...fetched].every(fetch => cached.has(fetch));
+    const allCachedInFetch = [...cached].every(cache => fetched.has(cache));
+    return allFetchedInCache && allCachedInFetch;
+  }
 
-  useEffect(() => { 
-    if(inCache) {
-      const profileInfo = JSON.parse(inCache);
-      fetchFavorites();
-      setReccs(profileInfo.reccomendations);
-      setIngredients(profileInfo.ingredients);
-      setCuisines(profileInfo.cuisines);
-      setIsLoading(false);
-    }
-    else {
-      fetchFavorites();
-      topCuisines();
-      topIngs(); 
-    }
-  },[]);
+  const noChangeForReccs = async (cachedCuisine, cachedIngs) =>{
+    const cachedCuisineSet = new Set(cachedCuisine);
+    const cachedIngSet = new Set(cachedIngs);
+    const fetchedCuisine = new Set(await fetchCuisine());
+    const fetchedIngs = new Set(await fetchIngs());
+    const cuisinesMatch = allInfoMatches(fetchedCuisine, cachedCuisineSet)
+    const ingredientMatch = allInfoMatches(fetchedIngs, cachedIngSet)
+    return (cuisinesMatch && ingredientMatch)
+  }
+
+  useEffect(() => {
+    const inCache = localStorage.getItem(`profile/${currUser.username}`);
+    const determineCacheAction = async () => {
+      if (inCache) {
+        console.log(reccomendations);
+        const profileInfo = JSON.parse(inCache);
+        const noChange = await noChangeForReccs(profileInfo.cuisines, profileInfo.ingredients);
+        if (noChange) {
+          console.log("no, this is running");
+          fetchFavorites();
+          setReccs(profileInfo.reccomendations);
+          setIngredients(profileInfo.ingredients);
+          setCuisines(profileInfo.cuisines);
+          setIsLoading(false);
+        } else {
+          console.log("this is running");
+          fetchFavorites();
+          topCuisines();
+          topIngs();
+        }
+      }
+      else {
+        fetchFavorites();
+        topCuisines();
+        topIngs(); 
+      }
+    };
+  
+    determineCacheAction();
+  }, []);
 
   // since i have an awaiting expression to fetch the users favorite cuisines and the showReccs function is an async function, 
   // I have to wait for the cuisines to update in the state in order to make the external api calls.
   useEffect(() => {
     console.log(isLoading);
-    if (!cuisines.length == 0 && !ingredients.length == 0 && reccomendations.length === 0) {
+    if (cuisines.length !== 0 && ingredients.length !== 0) {
       showReccs();
     }
   }, [cuisinesFetched, ingredientsFetched])
 
   useEffect(() =>{
+    console.log(reccomendations);
     if (reccomendations.length > 0){
       const cachedInfo = {
         ingredients,
@@ -152,11 +179,7 @@ export default function Profile() {
       localStorage.setItem(`profile/${currUser.username}`, JSON.stringify(cachedInfo));
       const cacheTimeout = setTimeout(() => {localStorage.removeItem(`profile/${currUser.username}`);}, 60000);
     }
-  }, [reccomendations])
-
-  useEffect(() =>{
-   console.log(isLoading);
-  }, [isLoading])
+  }, [reccomendations]);
 
   return (
     <div>
