@@ -7,10 +7,10 @@ import { url } from "../../../../constant.js";
 
 export default function Profile() {
   const { currUser } = useContext(UserContext);
-  const [favs, setFavs] = useState([]);
+  const [favorites, setFavorites] = useState([]);
   const [cuisines, setCuisines] = useState([]);
   const [ingredients, setIngredients] = useState([]);
-  const [reccomendations, setReccs] = useState([]);
+  const [reccomendations, setReccomendations] = useState([]);
   const [cuisinesFetched, setCuisinesFetched] = useState(false);
   const [ingredientsFetched, setIngredientsFetched] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -26,10 +26,10 @@ export default function Profile() {
       credentials: "include",
     });
     const data = await response.json();
-    setFavs(data);
+    setFavorites(data);
   };
 
-  const  topCuisines = async () => {
+  const topCuisines = async () => {
    const fetchedCuisine = await fetchCuisine();
    if(fetchedCuisine.length == 0){
      setIsLoading(false);
@@ -53,18 +53,18 @@ export default function Profile() {
     return data.topCuisines;
   }
   
-  const topIngs = async () => {
-    const fetchedIngs = await fetchIngs();
-    if(fetchedIngs.length == 0){
+  const topIngredients = async () => {
+    const fetchedIngredients = await fetchIngredients();
+    if(fetchedIngredients.length == 0){
       setIsLoading(false);
     }
     else{
-      setIngredients(fetchedIngs);
+      setIngredients(fetchedIngredients);
       setIngredientsFetched(true);
     }
     };
   
-  const fetchIngs = async () =>{
+  const fetchIngredients = async () =>{
     const response = await fetch("http://localhost:3001/user_ings", {
       method: "GET",
       headers: {
@@ -76,39 +76,39 @@ export default function Profile() {
     return data.topIngs;
   }
 
-  const showReccs = async () =>{
-    let possibleReccs = [];
+  const generateReccomendations = async () =>{
+    let possibleReccomendations = [];
     console.log(cuisines);
-    const checkIngs = new Set(ingredients);
+    const ingredientsSet = new Set(ingredients);
     for(let i = 0; i < cuisines.length; i++){
       const responseCuisine = await fetch(url({cuisine: cuisines[i]}));
       const dataCuisine = await responseCuisine.json();
-      possibleReccs = possibleReccs.concat(dataCuisine.hits);
+      possibleReccomendations = possibleReccomendations.concat(dataCuisine.hits);
 
     }
     // check each recipes ingredients to see if users fave ings are included
     // sacrifice performance for accuracy 
-    let reccs = [];
-    console.log(checkIngs);
+    let reccomendations = [];
+    console.log(ingredientsSet);
     let takenIdx = new Set();
-    possibleReccs.forEach((option, index) => {
+    possibleReccomendations.forEach((option, index) => {
       option.recipe.ingredients.forEach((ing) => {
-        if(checkIngs.has(ing.food.toLowerCase())){
-          reccs.push(option);
+        if(ingredientsSet.has(ing.food.toLowerCase())){
+          reccomendations.push(option);
           takenIdx.add(index);
         }
       })
     })
     // avoids repeating recipes
     while(takenIdx.size < 8){
-      const idx = Math.floor(Math.random()*possibleReccs.length);
+      const idx = Math.floor(Math.random()*possibleReccomendations.length);
       if(!takenIdx.has(idx)){
-        reccs.push(possibleReccs[idx]);
+        reccomendations.push(possibleReccomendations[idx]);
         takenIdx.add(idx)
       }
     }
     console.log(takenIdx);
-    setReccs(reccs);
+    setReccomendations(reccomendations);
     setIsLoading(false);
   }
   
@@ -122,9 +122,9 @@ export default function Profile() {
     const cachedCuisineSet = new Set(cachedCuisine);
     const cachedIngSet = new Set(cachedIngs);
     const fetchedCuisine = new Set(await fetchCuisine());
-    const fetchedIngs = new Set(await fetchIngs());
+    const fetchedIngredients = new Set(await fetchIngredients());
     const cuisinesMatch = allInfoMatches(fetchedCuisine, cachedCuisineSet)
-    const ingredientMatch = allInfoMatches(fetchedIngs, cachedIngSet)
+    const ingredientMatch = allInfoMatches(fetchedIngredients, cachedIngSet)
     return (cuisinesMatch && ingredientMatch)
   }
 
@@ -137,8 +137,8 @@ export default function Profile() {
         const noChange = await noChangeForReccs(profileInfo.cuisines, profileInfo.ingredients);
         if (noChange) {
           console.log("no, this is running");
+          setReccomendations(profileInfo.reccomendations);
           fetchFavorites();
-          setReccs(profileInfo.reccomendations);
           setIngredients(profileInfo.ingredients);
           setCuisines(profileInfo.cuisines);
           setIsLoading(false);
@@ -146,25 +146,25 @@ export default function Profile() {
           console.log("this is running");
           fetchFavorites();
           topCuisines();
-          topIngs();
+          topIngredients();
         }
       }
       else {
         fetchFavorites();
         topCuisines();
-        topIngs(); 
+        topIngredients(); 
       }
     };
   
     determineCacheAction();
   }, []);
 
-  // since i have an awaiting expression to fetch the users favorite cuisines and the showReccs function is an async function, 
+  // since i have an awaiting expression to fetch the users favorite cuisines and the generateReccomendations function is an async function, 
   // I have to wait for the cuisines to update in the state in order to make the external api calls.
   useEffect(() => {
     console.log(isLoading);
     if (cuisines.length !== 0 && ingredients.length !== 0) {
-      showReccs();
+      generateReccomendations();
     }
   }, [cuisinesFetched, ingredientsFetched])
 
@@ -198,14 +198,14 @@ export default function Profile() {
         </div>
         <div>
             <h1>Favorites</h1>
-          {favs.length === 0 && (
+          {favorites.length === 0 && (
             <div>
               <p>No Favorites</p>
             </div>
           )}
-          {favs && (
+          {favorites && (
             <div>
-              {favs.map((fav) => {
+              {favorites.map((fav) => {
                 const recipeId = fav.recipeId;
                 return (
                   <div>
