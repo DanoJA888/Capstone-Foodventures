@@ -30,13 +30,12 @@ export default function RecipeInfo() {
         recipeLink: recipe.url,
       })
     });
-    const data = await response.json();
-    console.log(data);
-    if (Array.isArray(data)) {
-      setRecipeScrape(data);
-      
+    const directions = await response.json();
+    console.log(directions);
+    if (Array.isArray(directions) && directions.length > 0) {
+      setRecipeScrape(directions);
     } else {
-      console.error("Invalid data format:", data);
+      console.error("Invalid data format:", directions);
       setUrlSupported(false);
     }
     setIsScraped(true);
