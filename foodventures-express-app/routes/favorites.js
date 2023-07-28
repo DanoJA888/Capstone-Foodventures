@@ -40,10 +40,11 @@ router.post("/add_favorites", async (req, res) =>{
     try{
         const user = req.session.user;
         let userCuisines = user.favCuisines;
-        let userIngs = user.favIngs;
+        let mainIngredients = user.mainIngredients;
+        let secondaryIngredients = user.secondaryIngredients;
 
         
-        const {recipeId, recipeName, recipeCuisine, highestWeight} = req.body;
+        const {recipeId, recipeName, recipeCuisine, mainIngredient, secondaryIngredient} = req.body;
         if (!user) {
             throw new Error('User not authenticated'); 
         }
@@ -54,18 +55,24 @@ router.post("/add_favorites", async (req, res) =>{
           (userCuisines[recipeCuisine] =1)
         }
         
-        {userIngs[highestWeight.food.toLowerCase()] ? 
-          (userIngs[highestWeight.food.toLowerCase()] +=1) 
+        {mainIngredients[mainIngredient.toLowerCase()] ? 
+          (mainIngredients[mainIngredient.toLowerCase()] +=1) 
           : 
-          (userIngs[highestWeight.food.toLowerCase()] =1)
+          (mainIngredients[mainIngredient.toLowerCase()] =1)
         }
-        console.log(JSON.stringify(highestWeight) + " hi");
-        console.log(highestWeight.food + " ho");
+        {secondaryIngredients[secondaryIngredient.toLowerCase()] ? 
+          (secondaryIngredients[secondaryIngredient.toLowerCase()] +=1) 
+          : 
+          (secondaryIngredients[secondaryIngredient.toLowerCase()] =1)
+        }
+        console.log(JSON.stringify(mainIngredient) + " hi");
+        console.log(mainIngredient + " ho");
         
         const updatedCount = await User.update(
           {
             favCuisines: userCuisines,
-            favIngs: userIngs
+            mainIngredients: mainIngredients,
+            secondaryIngredients: secondaryIngredients
           },
           {where: { id: user.id }}
         );
@@ -76,7 +83,7 @@ router.post("/add_favorites", async (req, res) =>{
         };
         const newFav = await Favorite.create(followData);
         
-        res.status(200).json({userIngs: highestWeight.food})
+        res.status(200).json({mainIngredients: mainIngredient})
 
     }
     catch(error){
@@ -89,9 +96,10 @@ router.delete("/remove_favorites", async (req, res) =>{
     try{
         const user = req.session.user;
         let userCuisines = user.favCuisines;
-        let userIngs = user.favIngs;
+        let mainIngredients = user.mainIngredients;
+        let secondaryIngredients = user.secondaryIngredients;
         
-        const {recipeId, recipeCuisine, highestWeight} = req.body;
+        const {recipeId, recipeCuisine, mainIngredient, secondaryIngredient} = req.body;
         if (!user) {
             throw new Error('User not authenticated'); 
         }
@@ -100,16 +108,23 @@ router.delete("/remove_favorites", async (req, res) =>{
           : 
           (userCuisines[recipeCuisine] -=1)
         }
-        {userIngs[highestWeight.food.toLowerCase()] === 1 ? 
-          (delete userIngs[highestWeight.food.toLowerCase()]) 
+
+        {mainIngredients[mainIngredient.toLowerCase()] === 1 ? 
+          (delete mainIngredients[mainIngredient.toLowerCase()]) 
           : 
-          (userIngs[highestWeight.food.toLowerCase()] -=1)
+          (mainIngredients[mainIngredient.toLowerCase()] -=1)
+        }
+        {secondaryIngredients[secondaryIngredient.toLowerCase()] === 1 ? 
+          (delete secondaryIngredients[secondaryIngredient.toLowerCase()]) 
+          : 
+          (secondaryIngredients[secondaryIngredient.toLowerCase()] -=1)
         }
 
         const updatedCount = await User.update(
           {
             favCuisines: userCuisines,
-            favIngs: userIngs,
+            mainIngredients: mainIngredients,
+            secondaryIngredients: secondaryIngredients,
           },
           {where: { id: user.id }}
         );

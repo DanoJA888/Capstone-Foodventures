@@ -45,7 +45,8 @@ router.post("/user/signup", async (req, res) => {
       heightIn,
       weight,
       favCuisines: {},
-      favIngs: {}
+      mainIngredients: {},
+      secondaryIngredients: {}
     });
 
     req.session.user = newUser;
@@ -98,18 +99,36 @@ router.get("/user_cuisines", async (req, res) =>{
     res.status(500).json({error: "server error: " + error})
   }
 })
-router.get("/user_ings", async (req, res) =>{
+
+router.get("/get_main_ings", async (req, res) =>{
   try{
     const user = req.session.user;
-    const ingArr = Object.keys(user.favIngs).map((ingredient) => ({
+    const allMainIngredients = Object.keys(user.mainIngredients).map((ingredient) => ({
       name: ingredient,
-      occurrence: user.favIngs[ingredient] 
+      occurrence: user.mainIngredients[ingredient] 
     })
     )
-    ingArr.sort((i1, i2) => compareOcurrance(i1.occurrence, i2.occurrence));
-    let topIngs = ingArr.slice(0, 3).map((ingObject) => ingObject.name);;
-    console.log(topIngs);
-    res.status(200).json({topIngs});
+    allMainIngredients.sort((i1, i2) => compareOcurrance(i1.occurrence, i2.occurrence));
+    let topThreeMain = allMainIngredients.slice(0, 3).map((mainIng) => mainIng.name);
+
+    res.status(200).json({topThreeMain});
+  }
+  catch(error){
+    res.status(500).json({error: "server error: " + error})
+  }
+})
+
+router.get("/get_second_ings", async (req, res) =>{
+  try{
+    const user = req.session.user;
+    const allSecondaryIngredients = Object.keys(user.secondaryIngredients).map((ingredient) => ({
+      name: ingredient,
+      occurrence: user.secondaryIngredients[ingredient] 
+    })
+    )
+    allSecondaryIngredients.sort((i1, i2) => compareOcurrance(i1.occurrence, i2.occurrence));
+    let topThreeSecondary = allSecondaryIngredients.slice(0, 3).map((secondIng) => secondIng.name);
+    res.status(200).json({topThreeSecondary});
   }
   catch(error){
     res.status(500).json({error: "server error: " + error})

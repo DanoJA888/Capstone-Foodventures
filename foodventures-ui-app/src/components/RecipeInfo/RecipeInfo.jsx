@@ -17,16 +17,8 @@ export default function RecipeInfo() {
   const [recipe, setRecipe] = useState({
     ingredientLines: [],
   });
-  const [highestWeight, setHighestWeight] = useState({
-    food: "",
-    foodCategory: "",
-    foodId: "",
-    image: "",
-    measure: "",
-    quantity: 0,
-    text: "",
-    weight: 0
-  });
+  const [mainIngredient, setMainIngredient] = useState("");
+  const [secondaryIngredient, setSecondaryIngredient] = useState("");
 
   const scrape = async () =>{
     const response = await fetch(`http://localhost:3001/scrape_recipe`, {
@@ -63,7 +55,8 @@ export default function RecipeInfo() {
           recipeId, 
           recipeName: recipe.label, 
           recipeCuisine: recipe.cuisineType[0],
-          highestWeight: highestWeight,
+          mainIngredient: mainIngredient,
+          secondaryIngredient: secondaryIngredient
         }),
         credentials: "include",
       });
@@ -84,7 +77,8 @@ export default function RecipeInfo() {
         body: JSON.stringify({ 
           recipeId, 
           recipeCuisine: recipe.cuisineType[0],
-          highestWeight:highestWeight,
+          mainIngredient:mainIngredient,
+          secondaryIngredient: secondaryIngredient,
         }),
         credentials: "include",
       });
@@ -102,18 +96,25 @@ export default function RecipeInfo() {
     );
     const data = await response.json();
     setRecipe(data.recipe);
-    findHighestWeight(data.recipe);
+    findMainIngredients(data.recipe);
     setRecipeFetched(true);
   };
 
-  function findHighestWeight(recipe){
-    let currHighestWeight = { weight: 0 };
+  function findMainIngredients(recipe){
+    let currMainIng = { weight: 0 };
+    let currSecondaryIng = {weight : 0}
     recipe.ingredients.forEach(ingredient => {
-      if (ingredient.weight >currHighestWeight.weight ){
-        currHighestWeight = ingredient
+      if (ingredient.weight >currMainIng.weight ){
+        currMainIng = ingredient
+      }
+      else if(ingredient.weight >currSecondaryIng.weight ){
+        currSecondaryIng = ingredient;
       }
     });
-    setHighestWeight(currHighestWeight);
+    console.log(currMainIng.food);
+    console.log(currSecondaryIng.food);
+    setMainIngredient(currMainIng.food);
+    setSecondaryIngredient(currSecondaryIng.food);
   }
 
 
@@ -137,7 +138,7 @@ export default function RecipeInfo() {
     if(inCache){
       const cachedInfo = JSON.parse(inCache);
       setRecipe(cachedInfo.recipe);
-      findHighestWeight(cachedInfo.recipe);
+      findMainIngredients(cachedInfo.recipe);
       setRecipeScrape(cachedInfo.recipeScrape);
       setRecipeFetched(true);
       setIsScraped(true);
@@ -150,7 +151,7 @@ export default function RecipeInfo() {
   }, [recipeId, favorited]);
 
   useEffect(() =>{
-    console.log(highestWeight);
+    console.log(mainIngredient);
     if(recipeFetched && !isScraped){
       scrape();
     }
