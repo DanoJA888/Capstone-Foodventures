@@ -1,4 +1,4 @@
-import express from "express";
+import express, { response } from "express";
 import { Recipe } from "../models/recipe.js";
 import { Cuisine } from "../models/cuisine.js";
 import { uuid } from "uuidv4";
@@ -9,16 +9,45 @@ import recipeScraper from "recipe-scraper"
 
 const router = express.Router();
 
+const myScrape = ( async (recipeLink)=> {
+  try{
+    console.log(recipeLink)
+    const response = await axios.get(recipeLink);
+    const html = response.data;
+    const $ = cheerio.load(html);
+    const parentElement = $('.recipe-method-section');
+    const directions = parentElement.find('ul li')
+    const steps = []
+    directions.each((i, listed_item) => {
+      // each step was giving a large amount of blank space and newline tags
+      // regular expression that replaces that empty space awith a single blank space
+      const step = $(listed_item).text().replace(/\s+/g, ' ').trim();
+      steps.push(step);
+    })
+    console.log("link not supported by package");
+    return steps;
+  }
+  catch(error){
+    throw new Error ("Your Scrape doesn't work: " + error);
+  }
+})
+
 router.post("/scrape_recipe", async (req, res) =>{
   const {recipeLink} = req.body;
   try{
-    console.log(recipeLink)
+    //console.log(recipeLink)
     const response = await recipeScraper(recipeLink);
-    console.log(response)
     res.status(200).json(response.instructions);
   }
   catch(error){
-    res.status(500).json({error: "Recipe Unavailable: " + error});
+    try{
+      const scrap = await myScrape(recipeLink);
+      res.status(200).json(scrap)
+
+    }
+    catch(error){
+      res.status(500).json({error: "Recipe Unavailable: " + error});
+    }
   }
 
 })
