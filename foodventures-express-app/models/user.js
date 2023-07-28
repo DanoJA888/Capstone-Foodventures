@@ -40,7 +40,11 @@ export const User = sequelize.define('User', {
     type: DataTypes.JSONB,
     allowNull: false
   },
-  favIngs: {
+  mainIngredients: {
+    type: DataTypes.JSONB,
+    allowNull: false
+  },
+  secondaryIngredients: {
     type: DataTypes.JSONB,
     allowNull: false
   }

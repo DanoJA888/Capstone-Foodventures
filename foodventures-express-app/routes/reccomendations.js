@@ -11,7 +11,7 @@ function rankByPoints(c1, c2) {
 
 router.post("/generate_reccomendations", async (req, res) => {
     const {
-      ingredients,
+      mainIngredients,
       cuisines
     } = req.body;
   
@@ -20,22 +20,21 @@ router.post("/generate_reccomendations", async (req, res) => {
       console.log(cuisines);
       const weights = [.45, .35, .20];
       let ingredientWeight = {};
-      ingredients.forEach((ingredient, index) => {
+      mainIngredients.forEach((ingredient, index) => {
           ingredientWeight[ingredient] = weights[index];
       });
       console.log(ingredientWeight);
-      const ingredientsSet = new Set(ingredients);
+      const mainIngredientsSet = new Set(mainIngredients);
       for(let i = 0; i < cuisines.length; i++){
         const responseCuisine = await fetch(url({cuisine: cuisines[i]}));
         const dataCuisine = await responseCuisine.json();
         possibleReccomendations = possibleReccomendations.concat(dataCuisine.hits);
   
       }
-      console.log(possibleReccomendations);
-      // check each recipes ingredients to see if users fave ings are included
+      // check each recipes mainIngredients to see if users fave ings are included
       // sacrifice performance for accuracy 
       let reccomendations = [];
-      console.log(ingredientsSet);
+      console.log(mainIngredientsSet);
       let takenIdx = new Set();
       possibleReccomendations.forEach((option, index) => {
         let recipeWithPoint = {
@@ -45,7 +44,7 @@ router.post("/generate_reccomendations", async (req, res) => {
         }
         option.recipe.ingredients.forEach((ing) => {
   
-          if(ingredientsSet.has(ing.food.toLowerCase())){
+          if(mainIngredientsSet.has(ing.food.toLowerCase())){
             //reccomendations.push(option);
             //takenIdx.add(index);
   

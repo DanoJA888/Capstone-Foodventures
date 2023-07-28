@@ -9,10 +9,11 @@ export default function Profile() {
   const { currUser } = useContext(UserContext);
   const [favorites, setFavorites] = useState([]);
   const [cuisines, setCuisines] = useState([]);
-  const [ingredients, setIngredients] = useState([]);
+  const [mainIngredients, setMainIngredients] = useState([]);
+  const [secondaryIngredients, setSecondaryIngredients] = useState([]);
   const [reccomendations, setReccomendations] = useState([]);
   const [cuisinesFetched, setCuisinesFetched] = useState(false);
-  const [ingredientsFetched, setIngredientsFetched] = useState(false);
+  const [mainIngredientsFetched, setMainIngredientsFetched] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
 
@@ -54,18 +55,20 @@ export default function Profile() {
   }
   
   const topIngredients = async () => {
-    const fetchedIngredients = await fetchIngredients();
-    if(fetchedIngredients.length == 0){
+    const mainIngs = await fetchMainIngredients();
+    const secondaryIngs = await fetchSecondaryIngredients();
+    if(mainIngs.length == 0){
       setIsLoading(false);
     }
     else{
-      setIngredients(fetchedIngredients);
-      setIngredientsFetched(true);
+      setMainIngredients(mainIngs);
+      setSecondaryIngredients(secondaryIngs);
+      setMainIngredientsFetched(true);
     }
     };
   
-  const fetchIngredients = async () =>{
-    const response = await fetch("http://localhost:3001/user_ings", {
+  const fetchMainIngredients = async () =>{
+    const response = await fetch("http://localhost:3001/get_main_ings", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -73,7 +76,18 @@ export default function Profile() {
       credentials: "include",
     });
     const data = await response.json();
-    return data.topIngs;
+    return data.topThreeMain;
+  }
+  const fetchSecondaryIngredients = async () =>{
+    const response = await fetch("http://localhost:3001/get_second_ings", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+    const data = await response.json();
+    return data.topThreeSecondary;
   }
 
   const generateReccomendations = async () =>{
@@ -82,7 +96,7 @@ export default function Profile() {
       headers: {
         "Content-Type": "application/json",
       },
-      body : JSON.stringify({ingredients, cuisines}),
+      body : JSON.stringify({mainIngredients, cuisines}),
       credentials: "include",
     });
     const data = await response.json();
@@ -97,14 +111,19 @@ export default function Profile() {
     return allFetchedInCache && allCachedInFetch;
   }
 
-  const noChangeForReccs = async (cachedCuisine, cachedIngs) =>{
+  const noChangeForReccs = async (cachedCuisine, cachedMainIngs, cachedSecondaryIngs) =>{
     const cachedCuisineSet = new Set(cachedCuisine);
-    const cachedIngSet = new Set(cachedIngs);
+    const cachedMainIngsSet = new Set(cachedMainIngs);
+    const cachedSecondaryIngsSet = new Set(cachedSecondaryIngs);
     const fetchedCuisine = new Set(await fetchCuisine());
-    const fetchedIngredients = new Set(await fetchIngredients());
-    const cuisinesMatch = allInfoMatches(fetchedCuisine, cachedCuisineSet)
-    const ingredientMatch = allInfoMatches(fetchedIngredients, cachedIngSet)
-    return (cuisinesMatch && ingredientMatch)
+    const fetchedMainIngredients = new Set(await fetchMainIngredients());
+    const fetchedSecondaryIngredients = new Set(await fetchSecondaryIngredients());
+    console.log(fetchedMainIngredients);
+    console.log(fetchedSecondaryIngredients)
+    const cuisinesMatch = allInfoMatches(fetchedCuisine, cachedCuisineSet);
+    const mainIngredientMatch = allInfoMatches(fetchedMainIngredients, cachedMainIngsSet);
+    const secondaryIngredientMatch = allInfoMatches(fetchedSecondaryIngredients, cachedSecondaryIngsSet);
+    return (cuisinesMatch && mainIngredientMatch && secondaryIngredientMatch);
   }
 
   useEffect(() => {
@@ -113,12 +132,13 @@ export default function Profile() {
       if (inCache) {
         console.log(reccomendations);
         const profileInfo = JSON.parse(inCache);
-        const noChange = await noChangeForReccs(profileInfo.cuisines, profileInfo.ingredients);
+        const noChange = await noChangeForReccs(profileInfo.cuisines, profileInfo.mainIngredients, profileInfo.secondaryIngredients);
         if (noChange) {
           console.log("no, this is running");
           setReccomendations(profileInfo.reccomendations);
           fetchFavorites();
-          setIngredients(profileInfo.ingredients);
+          setMainIngredients(profileInfo.mainIngredients);
+          setSecondaryIngredients(profileInfo.secondaryIngredients);
           setCuisines(profileInfo.cuisines);
           setIsLoading(false);
         } else {
@@ -142,16 +162,17 @@ export default function Profile() {
   // I have to wait for the cuisines to update in the state in order to make the external api calls.
   useEffect(() => {
     console.log(isLoading);
-    if (cuisines.length !== 0 && ingredients.length !== 0) {
+    if (cuisines.length !== 0 && mainIngredients.length !== 0) {
       generateReccomendations();
     }
-  }, [cuisinesFetched, ingredientsFetched])
+  }, [cuisinesFetched, mainIngredientsFetched])
 
   useEffect(() =>{
     console.log(reccomendations);
     if (reccomendations.length > 0){
       const cachedInfo = {
-        ingredients,
+        mainIngredients,
+        secondaryIngredients,
         cuisines,
         reccomendations
       };
