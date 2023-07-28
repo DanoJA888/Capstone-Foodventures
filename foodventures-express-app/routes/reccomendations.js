@@ -12,6 +12,7 @@ function rankByPoints(c1, c2) {
 router.post("/generate_reccomendations", async (req, res) => {
     const {
       mainIngredients,
+      secondaryIngredients,
       cuisines
     } = req.body;
   
@@ -19,12 +20,20 @@ router.post("/generate_reccomendations", async (req, res) => {
       let possibleReccomendations = [];
       console.log(cuisines);
       const weights = [.45, .35, .20];
-      let ingredientWeight = {};
+
+      let mainIngredientWeight = {};
       mainIngredients.forEach((ingredient, index) => {
-          ingredientWeight[ingredient] = weights[index];
+          mainIngredientWeight[ingredient] = weights[index];
       });
-      console.log(ingredientWeight);
+      let secondIngredientWeights = {};
+      secondaryIngredients.forEach((ingredient, index) => {
+        secondIngredientWeights[ingredient] = weights[index];
+      });
+
+      console.log(mainIngredientWeight);
+      console.log(secondIngredientWeights);
       const mainIngredientsSet = new Set(mainIngredients);
+      const secondaryIngredientsSet = new Set(secondaryIngredients);
       for(let i = 0; i < cuisines.length; i++){
         const responseCuisine = await fetch(url({cuisine: cuisines[i]}));
         const dataCuisine = await responseCuisine.json();
@@ -34,7 +43,6 @@ router.post("/generate_reccomendations", async (req, res) => {
       // check each recipes mainIngredients to see if users fave ings are included
       // sacrifice performance for accuracy 
       let reccomendations = [];
-      console.log(mainIngredientsSet);
       let takenIdx = new Set();
       possibleReccomendations.forEach((option, index) => {
         let recipeWithPoint = {
@@ -43,12 +51,12 @@ router.post("/generate_reccomendations", async (req, res) => {
           points : 0
         }
         option.recipe.ingredients.forEach((ing) => {
-  
+
           if(mainIngredientsSet.has(ing.food.toLowerCase())){
-            //reccomendations.push(option);
-            //takenIdx.add(index);
-  
-            recipeWithPoint['points'] += ingredientWeight[ing.food.toLowerCase()];
+            recipeWithPoint['points'] += mainIngredientWeight[ing.food.toLowerCase()] * .8;
+          }
+          if(secondaryIngredientsSet.has(ing.food.toLowerCase())){
+            recipeWithPoint['points'] += secondIngredientWeights[ing.food.toLowerCase()] * .2;
           }
         })
         if(recipeWithPoint.points > 0){

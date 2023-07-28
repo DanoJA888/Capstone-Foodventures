@@ -96,7 +96,7 @@ export default function Profile() {
       headers: {
         "Content-Type": "application/json",
       },
-      body : JSON.stringify({mainIngredients, cuisines}),
+      body : JSON.stringify({mainIngredients, secondaryIngredients, cuisines}),
       credentials: "include",
     });
     const data = await response.json();
