@@ -107,8 +107,7 @@ router.get("/user_ings", async (req, res) =>{
     })
     )
     ingArr.sort((i1, i2) => compareOcurrance(i1.occurrence, i2.occurrence));
-    let topIngs = ingArr.slice(0, 3).map((ingObject) => ingObject.name);;
-    console.log(topIngs);
+    let topIngs = ingArr.slice(0, 3).map((ingObject) => ingObject.name);
     res.status(200).json({topIngs});
   }
   catch(error){

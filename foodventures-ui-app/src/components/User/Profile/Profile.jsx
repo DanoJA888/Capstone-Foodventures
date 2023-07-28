@@ -77,45 +77,23 @@ export default function Profile() {
   }
 
   const generateReccomendations = async () =>{
-    let possibleReccomendations = [];
-    console.log(cuisines);
-    const ingredientsSet = new Set(ingredients);
-    for(let i = 0; i < cuisines.length; i++){
-      const responseCuisine = await fetch(url({cuisine: cuisines[i]}));
-      const dataCuisine = await responseCuisine.json();
-      possibleReccomendations = possibleReccomendations.concat(dataCuisine.hits);
-
-    }
-    // check each recipes ingredients to see if users fave ings are included
-    // sacrifice performance for accuracy 
-    let reccomendations = [];
-    console.log(ingredientsSet);
-    let takenIdx = new Set();
-    possibleReccomendations.forEach((option, index) => {
-      option.recipe.ingredients.forEach((ing) => {
-        if(ingredientsSet.has(ing.food.toLowerCase())){
-          reccomendations.push(option);
-          takenIdx.add(index);
-        }
-      })
-    })
-    // avoids repeating recipes
-    while(takenIdx.size < 8){
-      const idx = Math.floor(Math.random()*possibleReccomendations.length);
-      if(!takenIdx.has(idx)){
-        reccomendations.push(possibleReccomendations[idx]);
-        takenIdx.add(idx)
-      }
-    }
-    console.log(takenIdx);
-    setReccomendations(reccomendations);
+    const response = await fetch("http://localhost:3001/generate_reccomendations", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body : JSON.stringify({ingredients, cuisines}),
+      credentials: "include",
+    });
+    const data = await response.json();
+    console.log(data);
+    setReccomendations(data);
     setIsLoading(false);
   }
   
   function allInfoMatches(fetched, cached) {
     const allFetchedInCache = [...fetched].every(fetch => cached.has(fetch));
     const allCachedInFetch = [...cached].every(cache => fetched.has(cache));
-    console.log("This is the result you get, is it what you expect?",allFetchedInCache && allCachedInFetch)
     return allFetchedInCache && allCachedInFetch;
   }
 
@@ -124,10 +102,6 @@ export default function Profile() {
     const cachedIngSet = new Set(cachedIngs);
     const fetchedCuisine = new Set(await fetchCuisine());
     const fetchedIngredients = new Set(await fetchIngredients());
-    console.log(cachedCuisineSet);
-    console.log(cachedIngSet);
-    console.log(fetchedCuisine);
-    console.log(fetchedIngredients);
     const cuisinesMatch = allInfoMatches(fetchedCuisine, cachedCuisineSet)
     const ingredientMatch = allInfoMatches(fetchedIngredients, cachedIngSet)
     return (cuisinesMatch && ingredientMatch)
@@ -234,10 +208,10 @@ export default function Profile() {
                   
                   
                   {reccomendations.map((rec) => {
-                    const recipeId = rec._links.self.href.substring(38, 71);
+                    const recipeId = rec.recipeId;
                     return (
                       <div>
-                        <Link to= {`/searched/${recipeId}`}><h2>{rec.recipe.label}</h2></Link>
+                        <Link to= {`/searched/${recipeId}`}><h2>{rec.label}</h2></Link>
                       </div>
                     );
                   })}
