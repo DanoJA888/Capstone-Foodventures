@@ -20,6 +20,7 @@ export default function RecipeInfo() {
   const [mainIngredient, setMainIngredient] = useState("");
   const [secondaryIngredient, setSecondaryIngredient] = useState("");
   const [difficulty, setDifficulty] = useState("");
+  const [loadStatus, setLoadStatus] = useState(true);
 
   const scrape = async () =>{
     const response = await fetch(`http://localhost:3001/scrape_recipe`, {
@@ -154,9 +155,6 @@ export default function RecipeInfo() {
     if(recipeFetched && !isScraped){
       scrape();
     }
-  }, [recipeFetched, isScraped]);
-
-  useEffect(() => {
     if (recipeFetched && isScraped) {
       const prelimDiff = recipe.ingredientLines.length + recipeScrape.length;
       const diff  = recipeScrape.length > 0 ?  prelimDiff / 2 : prelimDiff;
@@ -170,6 +168,12 @@ export default function RecipeInfo() {
       else{
         setDifficulty("Medium");
       }
+    }
+  }, [recipeFetched, isScraped]);
+
+  useEffect(() =>{
+    if(recipeFetched && isScraped && difficulty != ""){
+      setLoadStatus(false);
       const cachedInfo = {
         recipe,
         recipeScrape,
@@ -178,61 +182,71 @@ export default function RecipeInfo() {
       localStorage.setItem(`searched/${recipeId}`, JSON.stringify(cachedInfo));
       const cacheTimeout = setTimeout(() => {localStorage.removeItem(`searched/${recipeId}`);}, 60000);
     }
-  }, [recipeFetched, isScraped]);
+  }, [recipeFetched, isScraped, difficulty]);
 
   return (
     <div>
-      <div className="row">
-          <div className="col-md-11 d-flex align-items-center justify-content-center"> 
-            <h1 className="recipe-title">{recipe.label}</h1>
+      {loadStatus && 
+        <div class="d-flex justify-content-center spinner-view">
+          <div class="spinner-border" role="status">
           </div>
-          {currUser && 
-            <div className="col-md-1 d-flex align-items-center justify-content-end">
-              <div>
-                {favorited ? (
-                  <button className="btn btn-danger" onClick={() => removeFromFavs()}>Remove From Favorites</button>
-                ) : (
-                  <button className="btn btn-success"onClick={() => addToFavs()}>Add To Favorites</button>
-                )}
-              </div>
-            </div>
-          }
         </div>
-      <div className="container text-center">
-        <img src={recipe.image} alt={recipe.label} />
-        <p>{recipe.source}</p>
-        <div className="row ">
-          <div className="col-md-6 mb-4">
-            <h3>Ingredients</h3>
-            <ul className="list-group">
-              {recipe.ingredientLines.map((ingredient) => (
-                <li className="list-group-item">{ingredient}</li>
-              ))}
-            </ul>
-            <div class= {`pill ${difficulty}`}>{difficulty}</div>
-          </div>
-          <div className="col-md-6 mb-4">
-            <h3>Directions</h3>
-            {!isScraped ? (
-                <p>Loading Recipe Info...</p>
-              ) : !urlSupported ? (
-                <p>Unsupported URL</p>
-              ) : (
+      }
+      {!loadStatus &&
+      <div>
+        <div className="row">
+            <div className="col-md-11 d-flex align-items-center justify-content-center"> 
+              <h1 className="recipe-title">{recipe.label}</h1>
+            </div>
+            {currUser && 
+              <div className="col-md-1 d-flex align-items-center justify-content-end">
                 <div>
-                  <ul className="list-group">
-                    {recipeScrape.map((paragraph) => (
-                      <li className="list-group-item">{paragraph}</li>
-                    ))}
-                  </ul>
+                  {favorited ? (
+                    <button className="btn btn-danger" onClick={() => removeFromFavs()}>Remove From Favorites</button>
+                  ) : (
+                    <button className="btn btn-success"onClick={() => addToFavs()}>Add To Favorites</button>
+                  )}
                 </div>
-              )
+              </div>
             }
-            <a href={recipe.url} target="_blank" className="btn btn-primary">
-              Recipe
-            </a>
+          </div>
+        <div className="container text-center">
+          <img src={recipe.image} alt={recipe.label} />
+          <p>{recipe.source}</p>
+          <div className="row ">
+            <div className="col-md-6 mb-4">
+              <h3>Ingredients</h3>
+              <ul className="list-group">
+                {recipe.ingredientLines.map((ingredient) => (
+                  <li className="list-group-item">{ingredient}</li>
+                ))}
+              </ul>
+              <div class= {`pill ${difficulty}`}>{difficulty}</div>
+            </div>
+            <div className="col-md-6 mb-4">
+              <h3>Directions</h3>
+              {!isScraped ? (
+                  <p>Loading Recipe Info...</p>
+                ) : !urlSupported ? (
+                  <p>Unsupported URL</p>
+                ) : (
+                  <div>
+                    <ul className="list-group">
+                      {recipeScrape.map((paragraph) => (
+                        <li className="list-group-item">{paragraph}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )
+              }
+              <a href={recipe.url} target="_blank" className="btn btn-primary">
+                Recipe
+              </a>
+            </div>
           </div>
         </div>
       </div>
+      }
     </div>
   );
 }

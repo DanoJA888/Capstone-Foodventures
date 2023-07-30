@@ -42,7 +42,6 @@ export default function App() {
             <Route path = '/search' element={<Search updateSearch  = {updateSearch}/>}></Route>
             <Route path = '/search_results' element={<SearchResults cuisine = {selectedCuisine} search = {currSearch} updateSearch = {updateSearch}/>}></Route>
             <Route path = '/searched/:recipeId' element={<RecipeInfo/>}></Route>
-            <Route path = '/mealplan' element={<MealPlan/>}></Route>
             <Route path = '/login' element={<Login/>}></Route>
             <Route path = '/signup' element={<Signup/>}></Route>
             <Route path = '/profile' element = {<Profile/>}></Route>
