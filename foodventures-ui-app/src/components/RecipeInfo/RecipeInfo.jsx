@@ -19,6 +19,7 @@ export default function RecipeInfo() {
   });
   const [mainIngredient, setMainIngredient] = useState("");
   const [secondaryIngredient, setSecondaryIngredient] = useState("");
+  const [difficulty, setDifficulty] = useState("");
 
   const scrape = async () =>{
     const response = await fetch(`http://localhost:3001/scrape_recipe`, {
@@ -116,8 +117,6 @@ export default function RecipeInfo() {
     setSecondaryIngredient(currSecondaryIng.food);
   }
 
-
-
   const checkInFavs = async () => {
     const response = await fetch("http://localhost:3001/check_favorite", {
       method: "POST",
@@ -142,6 +141,7 @@ export default function RecipeInfo() {
       setRecipeFetched(true);
       setIsScraped(true);
       setUrlSupported(cachedInfo.recipeScrape.length > 1);
+      setDifficulty(cachedInfo.difficulty);
     }
     else{
       apiCall();
@@ -158,9 +158,22 @@ export default function RecipeInfo() {
 
   useEffect(() => {
     if (recipeFetched && isScraped) {
+      const prelimDiff = recipe.ingredientLines.length + recipeScrape.length;
+      const diff  = recipeScrape.length > 0 ?  prelimDiff / 2 : prelimDiff;
+      console.log(diff);
+      if(diff <= 10){
+        setDifficulty("Easy");
+      }
+      else if(diff >=20){
+        setDifficulty("Hard");
+      }
+      else{
+        setDifficulty("Medium");
+      }
       const cachedInfo = {
         recipe,
         recipeScrape,
+        difficulty
       };
       localStorage.setItem(`searched/${recipeId}`, JSON.stringify(cachedInfo));
       const cacheTimeout = setTimeout(() => {localStorage.removeItem(`searched/${recipeId}`);}, 60000);
@@ -196,6 +209,7 @@ export default function RecipeInfo() {
                 <li className="list-group-item">{ingredient}</li>
               ))}
             </ul>
+            <div class= {`pill ${difficulty}`}>{difficulty}</div>
           </div>
           <div className="col-md-6 mb-4">
             <h3>Directions</h3>
