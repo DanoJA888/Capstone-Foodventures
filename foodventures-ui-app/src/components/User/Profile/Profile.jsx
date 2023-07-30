@@ -118,8 +118,8 @@ export default function Profile() {
     const fetchedCuisine = new Set(await fetchCuisine());
     const fetchedMainIngredients = new Set(await fetchMainIngredients());
     const fetchedSecondaryIngredients = new Set(await fetchSecondaryIngredients());
-    console.log(fetchedMainIngredients);
-    console.log(fetchedSecondaryIngredients)
+    console.log(fetchedCuisine);
+    console.log(cachedCuisineSet);
     const cuisinesMatch = allInfoMatches(fetchedCuisine, cachedCuisineSet);
     const mainIngredientMatch = allInfoMatches(fetchedMainIngredients, cachedMainIngsSet);
     const secondaryIngredientMatch = allInfoMatches(fetchedSecondaryIngredients, cachedSecondaryIngsSet);

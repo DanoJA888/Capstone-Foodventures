@@ -4,3 +4,23 @@
 .recipe-title {
     margin-left: 100px; 
   }
+.pill {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 50px; 
+}
+.Easy{
+    background-color: #28a745; 
+    color: #fff;
+}
+.Medium{
+    background-color: #ffc107; 
+    color: black; 
+}
+.Hard{
+    background-color: #dc3545; 
+    color: #fff; 
+}
+.spinner-view{
+    margin-top: 15%;
+}

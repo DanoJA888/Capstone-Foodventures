@@ -20,7 +20,7 @@ export default function Navbar({resetCuisine, resetSearch}) {
         <div className="d-flex align-items-center">
           <Link to="/" onClick={() => {resetSearch(null); resetCuisine(null)}} className="btn btn-outline-light m-1">Home</Link>
           <Link to="/search" className="btn btn-outline-light m-1">Search</Link>
-          <Link to="/mealplan" onClick={() => {resetSearch(null); resetCuisine(null)}} className="btn btn-outline-light m-1" >Meal Plan</Link>
+          
           <div>
             {
               currUser ? (
