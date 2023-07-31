@@ -10,7 +10,6 @@ export default function SearchResults({cuisineList, cuisine, search, updateSearc
   const [loadStatus, setLoadStatus] = useState(true);
 
   const apiCall = async () =>{
-    
       const response = await fetch(url({cuisine, q: search}));
       const data = await response.json();
       updateRecipes(data.hits);

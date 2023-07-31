@@ -10,15 +10,21 @@ export default function UploadRecipe({cuisineList}) {
   const ingQuant = useRef(null);
   const directionsRef = useRef(null);
   const [newCuisine, setNewCuisine] = useState(false);
+  //ingredientLines holds the entire text of each ingredient: ex) 1 apple
+  // ingredients is more individual stored in arr of objects :
+  //                  qty: 1
+  //                  food: apple
   const [recipe, setRecipe] = useState({
     recipeName: "",
     recipeSource: `Username: ${currUser.username}`,
     ingredientLines: [],
+    ingredients: [],
     directions: "",
     url: "",
     calories: 0,
     servings: 0,
     cuisine: "",
+    image: "https://static.thenounproject.com/png/526867-200.png"
   });
 
   async function uploadRecipe(event) {
@@ -33,7 +39,7 @@ export default function UploadRecipe({cuisineList}) {
         credentials: "include",
       });
       alert("Recipe Added");
-      navigate('/search_results');
+      navigate('/');
     } catch (error) {
       alert({ error });
     }
@@ -51,28 +57,46 @@ export default function UploadRecipe({cuisineList}) {
   };
   const addIng = (event, name) =>{
     event.preventDefault();
-    const updatedList = [...recipe[name]];
-    updatedList.push({ 
-      "text": ingQuant.current.value + " " + ingRef.current.value,
-      "quantity" : ingQuant.current.value,
-      "food" : ingRef.current.value
+    //updates array with entire line
+    const updatedIngredientList = [...recipe[name]];
+    updatedIngredientList.push(ingQuant.current.value + " " + ingRef.current.value);
+    setRecipe(prevRecipe => ({
+      ...prevRecipe,
+      [name]: updatedIngredientList,
+    }));
+    //updates array with specific info seperated
+    const updatedIngredients = [...recipe["ingredients"]];
+    updatedIngredients.push({ 
+      text: ingQuant.current.value + " " + ingRef.current.value,
+      quantity : ingQuant.current.value,
+      food : ingRef.current.value
     });
-    setRecipe({
-      ...recipe,
-      [name]: updatedList,
-    });
+    setRecipe(prevRecipe => ({
+      ...prevRecipe,
+      ["ingredients"]: updatedIngredients,
+    }));
+    
     ingQuant.current.value = "";
     ingRef.current.value = "";
   }
   const removeIng = (event, ingredient) => {
     event.preventDefault();
-    const updatedList = [...recipe["ingredientLines"]];
-    const index = updatedList.indexOf(ingredient);
-    updatedList.splice(index, 1);
-    setRecipe({
-        ...recipe,
-        ["ingredientLines"]: updatedList,
-    });
+    //updates array with entire line
+    const updatedIngredients = [...recipe["ingredients"]];
+    const index = updatedIngredients.indexOf(ingredient);
+    console.log(index);
+    updatedIngredients.splice(index, 1);
+    setRecipe(prevRecipe => ({
+      ...prevRecipe,
+      ["ingredients"]: updatedIngredients,
+    }));
+    //updates array with specific info seperated
+    const updatedIngredientList = [...recipe["ingredientLines"]];
+    updatedIngredientList.splice(index, 1);
+    setRecipe(prevRecipe => ({
+      ...prevRecipe,
+      ["ingredientLines"]: updatedIngredientList,
+    }));
   }
   const addDirections = (event, name) =>{
     event.preventDefault();
@@ -184,7 +208,7 @@ export default function UploadRecipe({cuisineList}) {
       <h3>{recipe.recipeSource}</h3>
       <h4>Ingredients</h4>
       {
-        recipe.ingredientLines.map((ingredient) => (
+        recipe.ingredients.map((ingredient) => (
           <div>
             <p>{ingredient.text}</p> <button onClick={(event) => removeIng(event, ingredient)}>x</button>
           </div>

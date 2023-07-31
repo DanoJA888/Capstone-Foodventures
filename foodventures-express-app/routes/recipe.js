@@ -64,15 +64,14 @@ router.post("/add_recipe", async (req, res) => {
         servings,
         cuisine
         } = req.body;
-    
+    console.log(req.body);
     try {
         const recipeId = uuid();
         const code = cuisine.replaceAll(" ", "%20");
 
       const user = req.session.user;
       const checkCuisine = await Cuisine.findOne({where: {cuisineName : cuisine}});
-      if(!checkCuisine){
-        
+      if(!checkCuisine){  
         const cuisineData = {
             cuisineName : cuisine,
             cusineCode: code
@@ -82,14 +81,7 @@ router.post("/add_recipe", async (req, res) => {
       const newRecipe = await Recipe.create({
         userId: user.id,
         recipeId,
-        recipeName,
-        recipeSource,
-        ingredientLines,
-        directions,
-        url,
-        calories,
-        servings,
-        cuisine
+        recipe: req.body
       });
       res.status(200).json({recipeId: recipeId, cuisine: code})
     }
