@@ -5,7 +5,7 @@ import { Link, useParams } from 'react-router-dom';
 import SearchParams from "../SearchParams/SearchParams";
 import { url } from "../../../constant.js";
 
-export default function SearchResults({cuisine, search, updateSearch}) {
+export default function SearchResults({cuisineList, cuisine, search, updateSearch, updateCuisine}) {
   const {request} = useParams();
   const [currRecipes, updateRecipes] = useState([]);
 
@@ -24,7 +24,7 @@ export default function SearchResults({cuisine, search, updateSearch}) {
     <div>
         <h1 className="title">Search</h1>
         <div>
-          <SearchParams updateSearch={updateSearch}/>
+        <SearchParams cuisineList = {cuisineList} updateSearch = {updateSearch} updateCuisine = {updateCuisine}/>
         </div>
         {cuisine !== "" &&
           <h1 className="title">{cuisine}</h1>
