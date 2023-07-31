@@ -1,4 +1,3 @@
-
 export const API_ID = "305eeabe";
 export const API_KEY = "9e7c1459f48822c0c067d0077d3d3962";
 export const API_CALL = `https://api.edamam.com/api/recipes/v2`
@@ -30,3 +29,72 @@ export const fetchCuisines = async () => {
   const data = await response.json();
   return data;
 };
+
+const timeMeasuerments = new Set(["minutes", "minute", "mins", "min", 
+"seconds", "second", "secs", "sec", "hours", "hour", "hrs", "hr"]);
+
+export function calculateDifficulty(ingredients, directions){
+  const ingredientAmount = ingredients.length;
+  const amountOfSteps = directions.length;
+  let timeTaken = 0.0;
+
+  if (amountOfSteps > 0){
+    directions.forEach((step) => {
+      let words = step.split(' ');
+      words.forEach((word, index) => {
+        const sanitizedWord = word.replace(/\./g, '');
+        if(timeMeasuerments.has(sanitizedWord)){
+          console.log(sanitizedWord);
+          const number = words[index-1];
+          const timeValue = (parseInt(number[number.length-1]));
+          let timeUnit = sanitizedWord.toLowerCase();
+          if (timeUnit.includes('hour') || timeUnit.includes('hr')) {
+            timeTaken += timeValue * 60;
+          } else if (timeUnit.includes('second') || timeUnit.includes('sec')) {
+            timeTaken += timeValue / 60;
+          }
+          else{
+            timeTaken += timeValue
+          }
+        }
+        console.log(timeTaken);
+      });
+    });
+    console.log(timeTaken);
+    let rank = 0
+    if(timeTaken <= 20){
+      rank +=1;
+    }  else if(timeTaken >=45){
+      rank +=3;
+    } else{
+      rank += 2;
+    }
+
+    const stepAndIngDifficulty = (ingredientAmount + amountOfSteps) / 2;
+    console.log(stepAndIngDifficulty);
+    if(stepAndIngDifficulty <= 10){
+      rank +=1;
+    } else if(stepAndIngDifficulty >=25){
+      rank +=3;
+    } else{
+      rank += 2;
+    }
+    const finalRank = rank / 2;
+    console.log(finalRank);
+    if(finalRank <= 1){
+      return "Easy";
+    } else if(finalRank <= 2){
+      return "Medium";
+    } else{
+      return "Hard";
+    }
+  }
+
+  if(ingredientAmount <= 10){
+    return "Easy";
+  } else if(ingredientAmount >=25){
+    return "Hard";
+  } else{
+    return "Medium";
+  }
+}

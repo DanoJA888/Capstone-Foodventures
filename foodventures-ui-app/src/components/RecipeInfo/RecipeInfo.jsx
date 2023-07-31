@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { UserContext } from "../UserContext.js";
-import { url } from "../../../constant.js";
+import { url, calculateDifficulty} from "../../../constant.js";
 import cheerio from "cheerio";
 import axios from "axios";
 import "./RecipeInfo.css";
@@ -178,18 +178,7 @@ export default function RecipeInfo() {
       scrape();
     }
     if (recipeFetched && isScraped) {
-      const prelimDiff = recipe.ingredientLines.length + recipeScrape.length;
-      const diff  = recipeScrape.length > 0 ?  prelimDiff / 2 : prelimDiff;
-      console.log(diff);
-      if(diff <= 10){
-        setDifficulty("Easy");
-      }
-      else if(diff >=20){
-        setDifficulty("Hard");
-      }
-      else{
-        setDifficulty("Medium");
-      }
+      setDifficulty(calculateDifficulty(recipe.ingredientLines, recipeScrape));
     }
   }, [recipeFetched, isScraped]);
 
