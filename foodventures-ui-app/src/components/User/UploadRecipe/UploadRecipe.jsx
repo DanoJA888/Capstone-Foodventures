@@ -8,6 +8,7 @@ export default function UploadRecipe({cuisineList}) {
   const { currUser } = useContext(UserContext);
   const ingRef = useRef(null);
   const ingQuant = useRef(null);
+  const ingWeight = useRef(null);
   const directionsRef = useRef(null);
   const [newCuisine, setNewCuisine] = useState(false);
   //ingredientLines holds the entire text of each ingredient: ex) 1 apple
@@ -15,7 +16,7 @@ export default function UploadRecipe({cuisineList}) {
   //                  qty: 1
   //                  food: apple
   const [recipe, setRecipe] = useState({
-    recipeName: "",
+    label: "",
     recipeSource: `Username: ${currUser.username}`,
     ingredientLines: [],
     ingredients: [],
@@ -55,6 +56,7 @@ export default function UploadRecipe({cuisineList}) {
     });
     setNewCuisine(value === "Other");
   };
+
   const addIng = (event, name) =>{
     event.preventDefault();
     //updates array with entire line
@@ -69,7 +71,8 @@ export default function UploadRecipe({cuisineList}) {
     updatedIngredients.push({ 
       text: ingQuant.current.value + " " + ingRef.current.value,
       quantity : ingQuant.current.value,
-      food : ingRef.current.value
+      food : ingRef.current.value, 
+      weight: ingWeight.current.value
     });
     setRecipe(prevRecipe => ({
       ...prevRecipe,
@@ -78,7 +81,9 @@ export default function UploadRecipe({cuisineList}) {
     
     ingQuant.current.value = "";
     ingRef.current.value = "";
+    ingWeight.current.value = 0;
   }
+
   const removeIng = (event, ingredient) => {
     event.preventDefault();
     //updates array with entire line
@@ -98,6 +103,7 @@ export default function UploadRecipe({cuisineList}) {
       ["ingredientLines"]: updatedIngredientList,
     }));
   }
+
   const addDirections = (event, name) =>{
     event.preventDefault();
     setRecipe({
@@ -106,6 +112,7 @@ export default function UploadRecipe({cuisineList}) {
     });
     directionsRef.current.value = "";
   }
+
   console.log(recipe);
   return (
     <div>
@@ -114,8 +121,8 @@ export default function UploadRecipe({cuisineList}) {
         <div>
           <input
             type="text"
-            id="recipeName"
-            name="recipeName"
+            id="label"
+            name="label"
             onChange={handleChange}
             placeholder="Add Recipe Name..."
             required
@@ -135,6 +142,14 @@ export default function UploadRecipe({cuisineList}) {
             name="ingredientLines"
             placeholder="Add Ingredient..."
             ref={ingRef}
+          />
+          <input
+            type="number"
+            step={1}
+            id="ingredientWeight"
+            name="ingredientWeight"
+            placeholder="Add Ingredient Weight..."
+            ref={ingWeight}
           />
           <button onClick={(event) => addIng(event, "ingredientLines")}>Add</button>
         </div>
@@ -204,7 +219,7 @@ export default function UploadRecipe({cuisineList}) {
       </form>
     <div>
       <h1>Your recipe</h1>
-      <h2>{recipe.recipeName}</h2>
+      <h2>{recipe.label}</h2>
       <h3>{recipe.recipeSource}</h3>
       <h4>Ingredients</h4>
       {

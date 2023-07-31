@@ -55,7 +55,7 @@ router.post("/scrape_recipe", async (req, res) =>{
 })
 router.post("/add_recipe", async (req, res) => {
     const {
-        recipeName,
+        label,
         recipeSource,
         ingredientLines,
         directions,
@@ -81,13 +81,25 @@ router.post("/add_recipe", async (req, res) => {
       const newRecipe = await Recipe.create({
         userId: user.id,
         recipeId,
-        recipe: req.body
+        recipe: req.body, 
+        cuisine: cuisine
       });
       res.status(200).json({recipeId: recipeId, cuisine: code})
     }
     catch(error){
         res.status(500).json({error: "Server Error: " + error});
     }
+});
+
+router.get("/get_recipes", async (req, res) => {
+  try {
+    const cuisine = req.query.cuisine;
+    const recipes = await Recipe.findAll({where: {cuisine : cuisine}});
+    res.json(recipes);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server Error" });
+  }
 });
 
 export default router;

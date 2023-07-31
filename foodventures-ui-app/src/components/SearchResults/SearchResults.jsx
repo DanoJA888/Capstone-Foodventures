@@ -10,9 +10,22 @@ export default function SearchResults({cuisineList, cuisine, search, updateSearc
   const [loadStatus, setLoadStatus] = useState(true);
 
   const apiCall = async () =>{
-      const response = await fetch(url({cuisine, q: search}));
-      const data = await response.json();
-      updateRecipes(data.hits);
+    const responseInternalAPI = await fetch(`http://localhost:3001/get_recipes?cuisine=${cuisine}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    let results = []
+    const recipes = await responseInternalAPI.json();
+    console.log(recipes);
+    results = results.concat(recipes);
+    const responseExternalApi = await fetch(url({cuisine, q: search}));
+    const urlRecipes = await responseExternalApi.json();
+    console.log(urlRecipes);
+    results= results.concat(urlRecipes.hits)
+    console.log(results);
+    updateRecipes(results);
   };
 
   useEffect(() =>{
@@ -41,7 +54,13 @@ export default function SearchResults({cuisineList, cuisine, search, updateSearc
             ):(
               currRecipes.map((recipe) => {
                 // using substring method to extract recipeId
-                const recipeId = recipe._links.self.href.substring(38, 71);
+                let recipeId = "";
+                {recipe._links? (
+                  recipeId = recipe._links.self.href.substring(38, 71)
+                  ):(
+                  recipeId = recipe.recipeId
+                )}
+                console.log(recipeId);
                 return (
                   <div className="col-md-3">
                     <div className="border p-4 text-center">
