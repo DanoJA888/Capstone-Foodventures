@@ -45,7 +45,7 @@ export default function App() {
             <Route path = '/login' element={<Login/>}></Route>
             <Route path = '/signup' element={<Signup/>}></Route>
             <Route path = '/profile' element = {<Profile/>}></Route>
-            <Route path = '/upload' element = {<UploadRecipe/>}></Route>
+            <Route path = '/upload' element = {<UploadRecipe cuisineList={cuisineList}/>}></Route>
           </Routes>
           
         </main>
