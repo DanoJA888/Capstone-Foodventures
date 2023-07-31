@@ -8,6 +8,7 @@ import { url } from "../../../constant.js";
 export default function SearchResults({cuisineList, cuisine, search, updateSearch, updateCuisine}) {
   const {request} = useParams();
   const [currRecipes, updateRecipes] = useState([]);
+  const [loadStatus, setLoadStatus] = useState(true);
 
   const apiCall = async () =>{
       console.log(url({cuisine, q: search}));
@@ -18,6 +19,7 @@ export default function SearchResults({cuisineList, cuisine, search, updateSearc
 
   useEffect(() =>{
     apiCall();
+    setLoadStatus(false);
   }, [cuisine, search]);
 
   return (
@@ -31,7 +33,12 @@ export default function SearchResults({cuisineList, cuisine, search, updateSearc
         }
         <div className="container mt-3 mr-1">
           <div className="row">
-            {currRecipes.length == 0 ? (
+            {loadStatus ? (
+              <div class="d-flex justify-content-center spinner-view">
+                <div class="spinner-border" role="status">
+                </div>
+              </div>
+            ) : currRecipes.length == 0 ? (
               <h5 className="title">No Recipes Found</h5>
             ):(
               currRecipes.map((recipe) => {
@@ -49,7 +56,6 @@ export default function SearchResults({cuisineList, cuisine, search, updateSearc
                 );
               })
             )}
-            
           </div>
         </div>
     </div>
