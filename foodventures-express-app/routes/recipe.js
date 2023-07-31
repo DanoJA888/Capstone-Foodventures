@@ -40,7 +40,14 @@ router.post("/scrape_recipe", async (req, res) =>{
   try{
     //console.log(recipeLink)
     const response = await recipeScraper(recipeLink);
-    res.status(200).json(response.instructions);
+    let individualSteps = [];
+    response.instructions.forEach((step) =>{
+      const brokenDownStep = step.split(". ");
+      console.log(brokenDownStep);
+      individualSteps = individualSteps.concat(brokenDownStep);
+    })
+    console.log(individualSteps);
+    res.status(200).json(individualSteps);
   }
   catch(error){
     try{
