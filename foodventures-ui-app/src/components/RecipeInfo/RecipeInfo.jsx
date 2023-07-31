@@ -36,7 +36,10 @@ export default function RecipeInfo() {
     console.log(directions);
     if (Array.isArray(directions) && directions.length > 0) {
       setRecipeScrape(directions);
-    } else {
+    } 
+    else if (recipe.directions){
+      setRecipeScrape(recipe.directions);
+    }else {
       console.error("Invalid data format:", directions);
       setUrlSupported(false);
     }
@@ -92,13 +95,31 @@ export default function RecipeInfo() {
 
   const apiCall = async () => {
     console.log(recipeId);
-    const response = await fetch(
-      url({recipeId})
-    );
-    const data = await response.json();
-    setRecipe(data.recipe);
-    findMainIngredients(data.recipe);
-    setRecipeFetched(true);
+    const response = await fetch(url({recipeId}));
+    if (response.ok) {
+      const recipeInfo = await response.json();
+      setRecipe(recipeInfo.recipe);
+      findMainIngredients(recipeInfo.recipe);
+      setRecipeFetched(true);
+    } 
+    else if (response.status === 404) {
+      const dbSearch = await fetch(`http://localhost:3001/get_recipe?recipeId=${recipeId}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const recipeInfo= await dbSearch.json();
+      console.log(recipeInfo.recipe);
+        if (recipeInfo.recipe) {
+          setRecipe(recipeInfo.recipe);
+          findMainIngredients(recipeInfo.recipe);
+          setRecipeFetched(true);
+        } else {
+          console.error('Recipe not found in both APIs');
+          setRecipeFetched(true);
+        }
+    }
   };
 
   function findMainIngredients(recipe){
@@ -134,6 +155,7 @@ export default function RecipeInfo() {
 
   useEffect(() => {
     const inCache = localStorage.getItem(`searched/${recipeId}`)
+    console.log(inCache)
     if(inCache){
       const cachedInfo = JSON.parse(inCache);
       setRecipe(cachedInfo.recipe);

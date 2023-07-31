@@ -20,7 +20,7 @@ export default function UploadRecipe({cuisineList}) {
     recipeSource: `Username: ${currUser.username}`,
     ingredientLines: [],
     ingredients: [],
-    directions: "",
+    directions: [],
     url: "",
     calories: 0,
     servings: 0,
@@ -106,9 +106,11 @@ export default function UploadRecipe({cuisineList}) {
 
   const addDirections = (event, name) =>{
     event.preventDefault();
+    const updateDirections = [...recipe["directions"]];
+    updateDirections.push(directionsRef.current.value);
     setRecipe({
       ...recipe,
-      [name]: directionsRef.current.value
+      ["directions"]: updateDirections
     });
     directionsRef.current.value = "";
   }
@@ -203,16 +205,14 @@ export default function UploadRecipe({cuisineList}) {
           )}
         </div>
         <div>
-          <textarea 
+          <input 
           name="directions" 
           id="directions" 
           cols="30" 
           rows="10"
           placeholder="Recipe Directions..."
           ref={directionsRef}
-          >
-
-          </textarea>
+          />
           <button onClick={(event) => addDirections(event, "directions")}>Add</button>
         </div>
         <button type="submit">Upload Recipe</button>
@@ -233,6 +233,11 @@ export default function UploadRecipe({cuisineList}) {
       <h4>Calories: </h4> <p>{recipe.calories}</p>
       <h4>Cuisine: </h4> <p>{recipe.cuisine}</p>
       <h5>Directions</h5> <p>{recipe.directions}</p>
+      {
+        recipe.directions.map((step) => (
+            <div>{console.log(step)}<p>{step}</p></div>
+        ))
+      }
     </div>
   </div>
 );

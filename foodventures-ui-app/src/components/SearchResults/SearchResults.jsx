@@ -60,7 +60,6 @@ export default function SearchResults({cuisineList, cuisine, search, updateSearc
                   ):(
                   recipeId = recipe.recipeId
                 )}
-                console.log(recipeId);
                 return (
                   <div className="col-md-3">
                     <div className="border p-4 text-center">

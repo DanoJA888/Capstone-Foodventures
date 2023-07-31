@@ -102,4 +102,15 @@ router.get("/get_recipes", async (req, res) => {
   }
 });
 
+router.get("/get_recipe", async (req, res) => {
+  try {
+    const recipeId = req.query.recipeId;
+    const recipe = await Recipe.findOne({where: {recipeId : recipeId}});
+    res.status(200).json(recipe);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server Error" });
+  }
+});
+
 export default router;
