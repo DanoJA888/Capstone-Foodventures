@@ -6,12 +6,11 @@ import SearchParams from "../SearchParams/SearchParams";
 import { url } from "../../../constant.js";
 
 export default function SearchResults({cuisineList, cuisine, search, updateSearch, updateCuisine}) {
-  const {request} = useParams();
   const [currRecipes, updateRecipes] = useState([]);
   const [loadStatus, setLoadStatus] = useState(true);
 
   const apiCall = async () =>{
-      console.log(url({cuisine, q: search}));
+    
       const response = await fetch(url({cuisine, q: search}));
       const data = await response.json();
       updateRecipes(data.hits);
