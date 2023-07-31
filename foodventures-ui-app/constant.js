@@ -74,7 +74,7 @@ export function calculateDifficulty(ingredients, directions){
     console.log(stepAndIngDifficulty);
     if(stepAndIngDifficulty <= 10){
       rank +=1;
-    } else if(stepAndIngDifficulty >=20){
+    } else if(stepAndIngDifficulty >=25){
       rank +=3;
     } else{
       rank += 2;
@@ -92,7 +92,7 @@ export function calculateDifficulty(ingredients, directions){
 
   if(ingredientAmount <= 10){
     return "Easy";
-  } else if(ingredientAmount >=20){
+  } else if(ingredientAmount >=25){
     return "Hard";
   } else{
     return "Medium";
