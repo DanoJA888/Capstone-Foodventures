@@ -20,6 +20,13 @@ export function url({recipeId = null, cuisine = null, q = null}){
   return generalLink;
 }
 
-
-
-
+export const fetchCuisines = async () => {
+  const response = await fetch("http://localhost:3001/get_cuisines", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  const data = await response.json();
+  return data;
+};
