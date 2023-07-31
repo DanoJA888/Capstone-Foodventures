@@ -1,24 +1,19 @@
 import React, { useState, useContext, useEffect } from "react";
 import { UserContext } from "../UserContext.js";
 import { Link } from 'react-router-dom';
+import { fetchCuisines } from "../../../constant.js";
 import "./Home.css";
 
 export default function Home({updateCuisine}) {
   const { currUser, updateUser } = useContext(UserContext);
   const [cuisines, setCuisines] = useState([]);
-  const fetchCuisines = async () => {
-    const response = await fetch("http://localhost:3001/get_cuisines", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await response.json();
+  const getCuisines = async () => {
+    const data = await fetchCuisines();
     setCuisines(data);
   };
 
   useEffect(() => {
-    fetchCuisines();
+    getCuisines();
   }, []);
 
   return (
