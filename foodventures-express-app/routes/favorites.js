@@ -42,12 +42,13 @@ router.post("/add_favorites", async (req, res) =>{
         let userCuisines = user.favCuisines;
         let mainIngredients = user.mainIngredients;
         let secondaryIngredients = user.secondaryIngredients;
-
+        let calorieList = user.minAndMaxCals;
         
-        const {recipeId, recipeName, recipeCuisine, mainIngredient, secondaryIngredient} = req.body;
+        const {recipeId, recipeName, recipeCuisine, mainIngredient, secondaryIngredient, calories} = req.body;
         if (!user) {
             throw new Error('User not authenticated'); 
         }
+        
         
         {userCuisines[recipeCuisine] ? 
           (userCuisines[recipeCuisine] +=1) 
@@ -65,14 +66,14 @@ router.post("/add_favorites", async (req, res) =>{
           : 
           (secondaryIngredients[secondaryIngredient.toLowerCase()] =1)
         }
-        console.log(JSON.stringify(mainIngredient) + " hi");
-        console.log(mainIngredient + " ho");
-        
+
+        calorieList.push(calories);
         const updatedCount = await User.update(
           {
             favCuisines: userCuisines,
             mainIngredients: mainIngredients,
-            secondaryIngredients: secondaryIngredients
+            secondaryIngredients: secondaryIngredients, 
+            minAndMaxCals: calorieList,
           },
           {where: { id: user.id }}
         );
@@ -98,8 +99,9 @@ router.delete("/remove_favorites", async (req, res) =>{
         let userCuisines = user.favCuisines;
         let mainIngredients = user.mainIngredients;
         let secondaryIngredients = user.secondaryIngredients;
+        let calorieList = user.minAndMaxCals;
         
-        const {recipeId, recipeCuisine, mainIngredient, secondaryIngredient} = req.body;
+        const {recipeId, recipeCuisine, mainIngredient, secondaryIngredient, calories} = req.body;
         if (!user) {
             throw new Error('User not authenticated'); 
         }
@@ -120,11 +122,17 @@ router.delete("/remove_favorites", async (req, res) =>{
           (secondaryIngredients[secondaryIngredient.toLowerCase()] -=1)
         }
 
+        const indexToRemove = calorieList.indexOf(calories);
+        if (indexToRemove !== -1) {
+          calorieList.splice(indexToRemove, 1);
+        }
+
         const updatedCount = await User.update(
           {
             favCuisines: userCuisines,
             mainIngredients: mainIngredients,
             secondaryIngredients: secondaryIngredients,
+            minAndMaxCals: calorieList,
           },
           {where: { id: user.id }}
         );

@@ -46,7 +46,8 @@ router.post("/user/signup", async (req, res) => {
       weight,
       favCuisines: {},
       mainIngredients: {},
-      secondaryIngredients: {}
+      secondaryIngredients: {},
+      minAndMaxCals: []
     });
 
     req.session.user = newUser;
@@ -132,6 +133,26 @@ router.get("/get_second_ings", async (req, res) =>{
   }
   catch(error){
     res.status(500).json({error: "server error: " + error})
+  }
+})
+
+router.get("/get_calorie_range", async (req, res) => {
+  try{
+    const user = req.session.user;
+    let max= -Infinity;
+    let min = Infinity;
+    user.minAndMaxCals.forEach((calorie) =>{
+      if(calorie > max){
+        max = calorie;
+      }
+      if(calorie < min){
+        min = calorie
+      }
+    })
+    return res.status(200).json({calorieRange: [max, min]})
+  }
+  catch(error){
+    res.status(500).json({error: "server error: " + error});
   }
 })
 export default router;

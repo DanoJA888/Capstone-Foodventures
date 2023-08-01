@@ -14,6 +14,7 @@ import SearchResults from "../SearchResults/SearchResults";
 import Profile from "../User/Profile/Profile";
 import UploadRecipe from "../User/UploadRecipe/UploadRecipe";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { fetchCuisines } from "../../../constant.js";
 
 export default function App() {
   const [currUser, setUser] = useState(() => {
@@ -30,6 +31,14 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('user', JSON.stringify(currUser));
   }, [currUser]);
+  const getCuisines = async () => {
+    const data = await fetchCuisines();
+    setCuisineList(data);
+  };
+
+  useEffect(() => {
+    getCuisines();
+  }, []);
 
   return (
     <div className="app">

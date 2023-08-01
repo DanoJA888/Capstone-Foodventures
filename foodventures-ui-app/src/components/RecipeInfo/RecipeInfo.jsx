@@ -50,6 +50,7 @@ export default function RecipeInfo() {
   async function addToFavs() {
 
     try {
+      const calories = (recipe.calories / recipe.yield);
       const response = await fetch(`http://localhost:3001/add_favorites`, {
         method: "POST",
         headers: {
@@ -60,7 +61,8 @@ export default function RecipeInfo() {
           recipeName: recipe.label, 
           recipeCuisine: recipe.cuisineType[0],
           mainIngredient: mainIngredient,
-          secondaryIngredient: secondaryIngredient
+          secondaryIngredient: secondaryIngredient,
+          calories: calories
         }),
         credentials: "include",
       });
@@ -71,7 +73,7 @@ export default function RecipeInfo() {
     }
   }
   async function removeFromFavs() {
-
+    const calories = (recipe.calories / recipe.yield);
     try {
       const response = await fetch(`http://localhost:3001/remove_favorites`, {
         method: "DELETE",
@@ -83,6 +85,7 @@ export default function RecipeInfo() {
           recipeCuisine: recipe.cuisineType[0],
           mainIngredient:mainIngredient,
           secondaryIngredient: secondaryIngredient,
+          calories: calories
         }),
         credentials: "include",
       });

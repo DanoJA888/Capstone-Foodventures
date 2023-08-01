@@ -47,5 +47,9 @@ export const User = sequelize.define('User', {
   secondaryIngredients: {
     type: DataTypes.JSONB,
     allowNull: false
+  },
+  minAndMaxCals: {
+    type: DataTypes.ARRAY(DataTypes.FLOAT),
+    allowNull: false
   }
 });
