@@ -106,23 +106,20 @@ export default function Profile() {
   }
   
   function allInfoMatches(fetched, cached) {
-    const allFetchedInCache = [...fetched].every(fetch => cached.has(fetch));
-    const allCachedInFetch = [...cached].every(cache => fetched.has(cache));
-    return allFetchedInCache && allCachedInFetch;
+    if(fetched.length === cached.length){
+      const equal = fetched.every((val, idx) => val === cached[idx]);
+      return equal;
+    }
+    return false;
   }
 
   const noChangeForReccs = async (cachedCuisine, cachedMainIngs, cachedSecondaryIngs) =>{
-    const cachedCuisineSet = new Set(cachedCuisine);
-    const cachedMainIngsSet = new Set(cachedMainIngs);
-    const cachedSecondaryIngsSet = new Set(cachedSecondaryIngs);
-    const fetchedCuisine = new Set(await fetchCuisine());
-    const fetchedMainIngredients = new Set(await fetchMainIngredients());
-    const fetchedSecondaryIngredients = new Set(await fetchSecondaryIngredients());
-    console.log(fetchedCuisine);
-    console.log(cachedCuisineSet);
-    const cuisinesMatch = allInfoMatches(fetchedCuisine, cachedCuisineSet);
-    const mainIngredientMatch = allInfoMatches(fetchedMainIngredients, cachedMainIngsSet);
-    const secondaryIngredientMatch = allInfoMatches(fetchedSecondaryIngredients, cachedSecondaryIngsSet);
+    const fetchedCuisine = await fetchCuisine();
+    const fetchedMainIngredients = await fetchMainIngredients();
+    const fetchedSecondaryIngredients = await fetchSecondaryIngredients();
+    const cuisinesMatch = allInfoMatches(fetchedCuisine, cachedCuisine);
+    const mainIngredientMatch = allInfoMatches(fetchedMainIngredients, cachedMainIngs);
+    const secondaryIngredientMatch = allInfoMatches(fetchedSecondaryIngredients, cachedSecondaryIngs);
     return (cuisinesMatch && mainIngredientMatch && secondaryIngredientMatch);
   }
 
