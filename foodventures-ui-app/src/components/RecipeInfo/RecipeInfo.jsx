@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { UserContext } from "../UserContext.js";
-import { url, calculateDifficulty} from "../../../constant.js";
+import { url, calculateDifficulty, difficultyFactorMessage} from "../../../constant.js";
 import cheerio from "cheerio";
 import axios from "axios";
 import "./RecipeInfo.css";
@@ -202,10 +202,21 @@ export default function RecipeInfo() {
   }, [recipeFetched, isScraped, difficulty]);
 
   return (
-      <div>
+      <div class="px-5 py-3">
         <div className="row">
-            <div className="col-md-11 d-flex align-items-center justify-content-center"> 
-              <h1 className="recipe-title">{recipe.label}</h1>
+        <div class="pill col-md-1 d-flex align-items-center justify-content-start">
+          <span 
+            class={`pill ${difficulty.difficulty}`}
+            data-tooltip={
+              difficulty.factors === 3
+                ? difficultyFactorMessage[difficulty.factors]
+                : `Based on total ingredients`
+            }>
+            {difficulty.difficulty}
+          </span>
+        </div>
+            <div className="col-md-10 d-flex align-items-center justify-content-center"> 
+              <h1 class="title">{recipe.label}</h1>
             </div>
             {currUser && 
               <div className="col-md-1 d-flex align-items-center justify-content-end">
@@ -230,15 +241,7 @@ export default function RecipeInfo() {
                   <li className="list-group-item">{ingredient}</li>
                 ))}
               </ul>
-              <div class="pill">
-                  <span class={`pill ${difficulty.difficulty}`}data-tooltip={
-                          difficulty.factors === 3
-                            ? `Based on recipe ingredients, recipe steps, and approximate time`
-                            : `Based on total ingredients`
-                  }>
-                    {difficulty.difficulty}
-                  </span>
-              </div>
+              
             </div>
             <div className="col-md-6 mb-4">
               <h3>Directions</h3>

@@ -105,3 +105,8 @@ export function calculateDifficulty(ingredients, directions){
   }
   return difficultyInfo;
 }
+
+export const difficultyFactorMessage = {
+  1: `Based on total ingredients`,
+  3: `Based on recipe ingredients, recipe steps, and approximate time`
+}
