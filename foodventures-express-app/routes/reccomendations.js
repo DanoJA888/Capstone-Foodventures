@@ -9,14 +9,31 @@ function rankByPoints(c1, c2) {
   return c2 - c1;
 }
 
+function calorieDistanceCalculation(max, min, option){
+  const optionCalories = option.recipe.calories / option.recipe.yield;
+  console.log(optionCalories)
+  if(max === min){
+    return optionCalories === max ? 1 : 0;
+  }
+  if (min <= optionCalories && optionCalories <= max) {
+    return 1.0;
+  } else if (optionCalories < min){
+    return optionCalories / min;
+  } else{
+    return max / optionCalories;
+  }
+}
+
 router.post("/generate_reccomendations", async (req, res) => {
     const {
       mainIngredients,
       secondaryIngredients,
-      cuisines
+      cuisines,
+      calorieRange
     } = req.body;
   
     try {
+      
       let possibleReccomendations = [];
       console.log(cuisines);
       const weights = [.45, .35, .20];
@@ -38,7 +55,6 @@ router.post("/generate_reccomendations", async (req, res) => {
         const responseCuisine = await fetch(url({cuisine: cuisines[i]}));
         const dataCuisine = await responseCuisine.json();
         possibleReccomendations = possibleReccomendations.concat(dataCuisine.hits);
-  
       }
       // check each recipes mainIngredients to see if users fave ings are included
       // sacrifice performance for accuracy 
@@ -53,12 +69,13 @@ router.post("/generate_reccomendations", async (req, res) => {
         option.recipe.ingredients.forEach((ing) => {
 
           if(mainIngredientsSet.has(ing.food.toLowerCase())){
-            recipeWithPoint['points'] += mainIngredientWeight[ing.food.toLowerCase()] * .8;
+            recipeWithPoint['points'] += mainIngredientWeight[ing.food.toLowerCase()] * .60;
           }
           if(secondaryIngredientsSet.has(ing.food.toLowerCase())){
-            recipeWithPoint['points'] += secondIngredientWeights[ing.food.toLowerCase()] * .2;
+            recipeWithPoint['points'] += secondIngredientWeights[ing.food.toLowerCase()] * .20;
           }
         })
+        recipeWithPoint['points'] += calorieDistanceCalculation(calorieRange[0], calorieRange[1], option) * .20;
         if(recipeWithPoint.points > 0){
           reccomendations.push(recipeWithPoint);
           takenIdx.add(index);

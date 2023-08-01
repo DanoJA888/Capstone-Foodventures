@@ -15,7 +15,7 @@ export default function Profile() {
   const [cuisinesFetched, setCuisinesFetched] = useState(false);
   const [mainIngredientsFetched, setMainIngredientsFetched] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-
+  const [calorieRange, setCalorieRange] = useState([]);
 
   
   const fetchFavorites = async () => {
@@ -54,9 +54,10 @@ export default function Profile() {
     return data.topCuisines;
   }
   
-  const topIngredients = async () => {
+  const setInformaion = async () => {
     const mainIngs = await fetchMainIngredients();
     const secondaryIngs = await fetchSecondaryIngredients();
+    const calRange = await fetchCalorieRange();
     if(mainIngs.length == 0){
       setIsLoading(false);
     }
@@ -64,6 +65,7 @@ export default function Profile() {
       setMainIngredients(mainIngs);
       setSecondaryIngredients(secondaryIngs);
       setMainIngredientsFetched(true);
+      setCalorieRange(calRange);
     }
     };
   
@@ -90,13 +92,25 @@ export default function Profile() {
     return data.topThreeSecondary;
   }
 
+  const fetchCalorieRange = async () =>{
+    const response = await fetch("http://localhost:3001/get_calorie_range", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+    });
+    const data = await response.json();
+    return data.calorieRange;
+  }
+
   const generateReccomendations = async () =>{
     const response = await fetch("http://localhost:3001/generate_reccomendations", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body : JSON.stringify({mainIngredients, secondaryIngredients, cuisines}),
+      body : JSON.stringify({mainIngredients, secondaryIngredients, cuisines, calorieRange}),
       credentials: "include",
     });
     const data = await response.json();
@@ -113,14 +127,16 @@ export default function Profile() {
     return false;
   }
 
-  const noChangeForReccs = async (cachedCuisine, cachedMainIngs, cachedSecondaryIngs) =>{
+  const noChangeForReccs = async (cachedCuisine, cachedMainIngs, cachedSecondaryIngs, cachedCalorieRange) =>{
     const fetchedCuisine = await fetchCuisine();
     const fetchedMainIngredients = await fetchMainIngredients();
     const fetchedSecondaryIngredients = await fetchSecondaryIngredients();
+    const fetchedCalorieRange = await fetchCalorieRange();
     const cuisinesMatch = allInfoMatches(fetchedCuisine, cachedCuisine);
     const mainIngredientMatch = allInfoMatches(fetchedMainIngredients, cachedMainIngs);
     const secondaryIngredientMatch = allInfoMatches(fetchedSecondaryIngredients, cachedSecondaryIngs);
-    return (cuisinesMatch && mainIngredientMatch && secondaryIngredientMatch);
+    const calorieRangeMatch = allInfoMatches(fetchedCalorieRange, cachedCalorieRange)
+    return (cuisinesMatch && mainIngredientMatch && secondaryIngredientMatch && calorieRangeMatch);
   }
 
   useEffect(() => {
@@ -129,7 +145,7 @@ export default function Profile() {
       if (inCache) {
         console.log(reccomendations);
         const profileInfo = JSON.parse(inCache);
-        const noChange = await noChangeForReccs(profileInfo.cuisines, profileInfo.mainIngredients, profileInfo.secondaryIngredients);
+        const noChange = await noChangeForReccs(profileInfo.cuisines, profileInfo.mainIngredients, profileInfo.secondaryIngredients, profileInfo.calorieRange);
         if (noChange) {
           console.log("no, this is running");
           setReccomendations(profileInfo.reccomendations);
@@ -137,18 +153,19 @@ export default function Profile() {
           setMainIngredients(profileInfo.mainIngredients);
           setSecondaryIngredients(profileInfo.secondaryIngredients);
           setCuisines(profileInfo.cuisines);
+          setCalorieRange(profileInfo.calorieRange);
           setIsLoading(false);
         } else {
           console.log("this is running");
           fetchFavorites();
           topCuisines();
-          topIngredients();
+          setInformaion();
         }
       }
       else {
         fetchFavorites();
         topCuisines();
-        topIngredients(); 
+        setInformaion(); 
       }
     };
   
@@ -171,6 +188,7 @@ export default function Profile() {
         mainIngredients,
         secondaryIngredients,
         cuisines,
+        calorieRange,
         reccomendations
       };
       localStorage.setItem(`profile/${currUser.username}`, JSON.stringify(cachedInfo));

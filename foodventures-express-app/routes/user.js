@@ -149,7 +149,7 @@ router.get("/get_calorie_range", async (req, res) => {
         min = calorie
       }
     })
-    return res.status(200).json([max, min])
+    return res.status(200).json({calorieRange: [max, min]})
   }
   catch(error){
     res.status(500).json({error: "server error: " + error});
