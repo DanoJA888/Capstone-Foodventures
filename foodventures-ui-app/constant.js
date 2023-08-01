@@ -37,8 +37,13 @@ export function calculateDifficulty(ingredients, directions){
   const ingredientAmount = ingredients.length;
   const amountOfSteps = directions.length;
   let timeTaken = 0.0;
+  let difficultyInfo = {
+    difficulty: "",
+    factors: 1
+  };
 
   if (amountOfSteps > 0){
+    difficultyInfo.factors = 3;
     directions.forEach((step) => {
       let words = step.split(' ');
       words.forEach((word, index) => {
@@ -82,19 +87,21 @@ export function calculateDifficulty(ingredients, directions){
     const finalRank = rank / 2;
     console.log(finalRank);
     if(finalRank <= 1){
-      return "Easy";
+      difficultyInfo.difficulty = "Easy"
     } else if(finalRank <= 2){
-      return "Medium";
+      difficultyInfo.difficulty = "Medium";
     } else{
-      return "Hard";
+      difficultyInfo.difficulty = "Hard";
     }
+    return difficultyInfo
   }
 
   if(ingredientAmount <= 10){
-    return "Easy";
+    difficultyInfo.difficulty=  "Easy";
   } else if(ingredientAmount >=25){
-    return "Hard";
+    difficultyInfo.difficulty =  "Hard";
   } else{
-    return "Medium";
+    difficultyInfo.difficulty =  "Medium";
   }
+  return difficultyInfo;
 }
