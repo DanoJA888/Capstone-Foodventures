@@ -1,21 +1,12 @@
 import React, { useState, useContext, useEffect } from "react";
 import { UserContext } from "../UserContext.js";
 import { Link } from 'react-router-dom';
-import { fetchCuisines } from "../../../constant.js";
+
 import "./Home.css";
 
 export default function Home({cuisineList, setCuisineList, updateCuisine}) {
   const { currUser, updateUser } = useContext(UserContext);
   
-  const getCuisines = async () => {
-    const data = await fetchCuisines();
-    setCuisineList(data);
-  };
-
-  useEffect(() => {
-    getCuisines();
-  }, []);
-
   return (
   <div >
     <h1 className="title">Discover Dishes From Around the World!</h1>
