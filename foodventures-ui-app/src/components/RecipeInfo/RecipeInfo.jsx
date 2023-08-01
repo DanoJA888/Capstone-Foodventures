@@ -19,7 +19,10 @@ export default function RecipeInfo() {
   });
   const [mainIngredient, setMainIngredient] = useState("");
   const [secondaryIngredient, setSecondaryIngredient] = useState("");
-  const [difficulty, setDifficulty] = useState("");
+  const [difficulty, setDifficulty] = useState({
+    difficulty : "",
+    factors: 0
+  });
   const [loadStatus, setLoadStatus] = useState(true);
 
   const scrape = async () =>{
@@ -186,7 +189,7 @@ export default function RecipeInfo() {
   }, [recipeFetched, isScraped]);
 
   useEffect(() =>{
-    if(recipeFetched && isScraped && difficulty != ""){
+    if(recipeFetched && isScraped && difficulty){
       setLoadStatus(false);
       const cachedInfo = {
         recipe,
@@ -235,7 +238,15 @@ export default function RecipeInfo() {
                   <li className="list-group-item">{ingredient}</li>
                 ))}
               </ul>
-              <div class= {`pill ${difficulty}`}>{difficulty}</div>
+              <div class="pill">
+                  <span class={`pill ${difficulty.difficulty}`}data-tooltip={
+                          difficulty.factors === 3
+                            ? `Based on recipe ingredients, recipe steps, and approximate time`
+                            : `Based on total ingredients`
+                  }>
+                    {difficulty.difficulty}
+                  </span>
+              </div>
             </div>
             <div className="col-md-6 mb-4">
               <h3>Directions</h3>
