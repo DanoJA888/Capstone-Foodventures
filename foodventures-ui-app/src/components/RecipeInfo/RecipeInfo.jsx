@@ -202,14 +202,6 @@ export default function RecipeInfo() {
   }, [recipeFetched, isScraped, difficulty]);
 
   return (
-    <div>
-      {loadStatus && 
-        <div class="d-flex justify-content-center spinner-view">
-          <div class="spinner-border" role="status">
-          </div>
-        </div>
-      }
-      {!loadStatus &&
       <div>
         <div className="row">
             <div className="col-md-11 d-flex align-items-center justify-content-center"> 
@@ -250,10 +242,18 @@ export default function RecipeInfo() {
             </div>
             <div className="col-md-6 mb-4">
               <h3>Directions</h3>
-              {!isScraped ? (
-                  <p>Loading Recipe Info...</p>
+              {loadStatus ? (
+                  <div class="d-flex justify-content-center spinner-view">
+                    <div class="spinner-border" role="status">
+                    </div>
+                  </div>
                 ) : !urlSupported ? (
-                  <p>Unsupported URL</p>
+                  <div>
+                    <p>Unsupported URL</p>
+                    <a href={recipe.url} target="_blank" className="btn btn-primary">
+                      Recipe
+                    </a>
+                  </div>
                 ) : (
                   <div>
                     <ul className="list-group">
@@ -261,17 +261,13 @@ export default function RecipeInfo() {
                         <li className="list-group-item">{paragraph}</li>
                       ))}
                     </ul>
+                    
                   </div>
                 )
               }
-              <a href={recipe.url} target="_blank" className="btn btn-primary">
-                Recipe
-              </a>
             </div>
           </div>
         </div>
       </div>
-      }
-    </div>
   );
 }
