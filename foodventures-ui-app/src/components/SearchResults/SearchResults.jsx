@@ -8,6 +8,8 @@ import { url } from "../../../constant.js";
 export default function SearchResults({cuisineList, cuisine, search, updateSearch, updateCuisine}) {
   const [currRecipes, updateRecipes] = useState([]);
   const [loadStatus, setLoadStatus] = useState(true);
+  const [previousCuisine, setPreviousCuisine]= useState("");
+  const [previousSearch, setPreviousSearch] = useState("");
 
   const apiCall = async () =>{
     const responseInternalAPI = await fetch(`http://localhost:3001/get_recipes?cuisine=${cuisine}`, {
@@ -16,6 +18,8 @@ export default function SearchResults({cuisineList, cuisine, search, updateSearc
         "Content-Type": "application/json",
       },
     });
+    setPreviousCuisine(cuisine);
+    setPreviousSearch(search);
     let results = []
     const recipes = await responseInternalAPI.json();
     console.log(recipes);
@@ -29,9 +33,14 @@ export default function SearchResults({cuisineList, cuisine, search, updateSearc
   };
 
   useEffect(() =>{
-    apiCall();
-    setLoadStatus(false);
-  }, [cuisine, search]);
+    if(previousCuisine !== cuisine || previousSearch !== search){
+      setLoadStatus(true);
+      apiCall();
+    }
+    if(currRecipes.length > 0){
+      setLoadStatus(false);
+    }
+  }, [cuisine, search, currRecipes]);
 
   return (
     <div>
@@ -39,8 +48,8 @@ export default function SearchResults({cuisineList, cuisine, search, updateSearc
         <div>
         <SearchParams cuisineList = {cuisineList} updateSearch = {updateSearch} updateCuisine = {updateCuisine}/>
         </div>
-        {cuisine !== "" &&
-          <h1 className="title">{cuisine}</h1>
+        {cuisine !== "" &&  
+          <h1 className="title">{cuisine.replace("%20", " ")}</h1>
         }
         <div className="container mt-3 mr-1">
           <div className="row">
