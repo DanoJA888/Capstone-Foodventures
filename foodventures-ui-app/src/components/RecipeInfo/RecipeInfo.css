@@ -2,7 +2,7 @@
     text-align: center;
 }
 .recipe-title {
-    margin-left: 100px; 
+  text-align: center;
   }
 .pill {
     position: relative;
@@ -33,7 +33,7 @@
     position: absolute;
     bottom: -30px;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-25%);
     padding: 4px 8px;
     border-radius: 25px; 
     background-color: lightgrey;

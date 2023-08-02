@@ -16,15 +16,15 @@ export default function UploadRecipe({cuisineList}) {
   //                  qty: 1
   //                  food: apple
   const [recipe, setRecipe] = useState({
-    label: "",
-    recipeSource: `Username: ${currUser.username}`,
+    label: "Title",
+    recipeSource: `${currUser.username} (User)`,
     ingredientLines: [],
     ingredients: [],
     directions: [],
     url: "",
     calories: 0,
     servings: 0,
-    cuisine: "",
+    cuisine: "Cuisine",
     image: "https://static.thenounproject.com/png/526867-200.png"
   });
 
@@ -117,128 +117,170 @@ export default function UploadRecipe({cuisineList}) {
 
   console.log(recipe);
   return (
-    <div>
-      <h1>Upload A Recipe!</h1>
-      <form onSubmit={uploadRecipe}>
-        <div>
-          <input
-            type="text"
-            id="label"
-            name="label"
-            onChange={handleChange}
-            placeholder="Add Recipe Name..."
-            required
-          />
-        </div>
-        <div>
-          <input
-            type="text"
-            id="ingredientQuantity"
-            name="ingredientQuantity"
-            placeholder="Add Quantity..."
-            ref={ingQuant}
-          />
-          <input
-            type="text"
-            id="ingredientLines"
-            name="ingredientLines"
-            placeholder="Add Ingredient..."
-            ref={ingRef}
-          />
-          <input
-            type="number"
-            step={1}
-            id="ingredientWeight"
-            name="ingredientWeight"
-            placeholder="Add Ingredient Weight..."
-            ref={ingWeight}
-          />
-          <button onClick={(event) => addIng(event, "ingredientLines")}>Add</button>
-        </div>
-        
-        <div>
-          <input
-            type="number"
-            step={1}
-            id="servings"
-            name="servings"
-            onChange={handleChange}
-            placeholder="Add Servings..."
-            required
-          />
-        </div>
-        <div>
-          <input
-            type="number"
-            step={1}
-            id="calories"
-            name="calories"
-            onChange={handleChange}
-            placeholder="Add Calories..."
-            required
-          />
-        </div>
-        <div>
-          <select
-            id="cuisine"
-            name="cuisine"
-            value={recipe.cuisine}
-            onChange={handleChange}
-          >
-            {cuisineList.map((cuisine) => (
-            <option value={cuisine.cusineCode}>
-                {cuisine.cuisineName}
-            </option>
-            ))}
-            <option value="Other">Other</option> 
-          </select>
+    <div class="px-5 py-3 container text-center">
+      <h1 class= "title">Upload A Recipe!</h1>
+      <div className="row ">
+          <div className="col-md-5 mb-4 form-box">
+            <form onSubmit={uploadRecipe} >
+              <h1>Enter Your Recipe Details</h1>
+              <div>
+                <label for="label" className="mb-2 fw-bold">Recipe Name</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  id="label"
+                  name="label"
+                  onChange={handleChange}
+                  placeholder="Add Recipe Name..."
+                  required
+                />
+              </div>
+              <div className=" my-3 d-flex flex-column align-items-center">
+                <label for="ingredientQuantity" className="mb-2 fw-bold">Add Ingredients</label>
+                  <input
+                  type="text"
+                  className="form-control "
+                  id="ingredientQuantity"
+                  name="ingredientQuantity"
+                  placeholder="Add Quantity..."
+                  ref={ingQuant}
+                />
+                <input
+                  type="text"
+                  className="form-control"
+                  id="ingredientLines"
+                  name="ingredientLines"
+                  placeholder="Add Ingredient..."
+                  ref={ingRef}
+                />
+                <input
+                  type="number"
+                  step={1}
+                  className="form-control"
+                  id="ingredientWeight"
+                  name="ingredientWeight"
+                  placeholder="Add Ingredient Weight..."
+                  ref={ingWeight}
+                />
+                <button 
+                onClick={(event) => addIng(event, "ingredientLines")}
+                className="btn btn-outline-dark btn-upload">
+                  Add Ingredient
+                </button>
+              </div>
+              
+              <div>
+              <label for="servings" className="mb-2 fw-bold">Food Portions</label>
+                <input
+                  type="number"
+                  step={1}
+                  className="form-control"
+                  id="servings"
+                  name="servings"
+                  onChange={handleChange}
+                  placeholder="Add Servings..."
+                  required
+                />
+              </div>
+              <div>
+                <input
+                  type="number"
+                  step={1}
+                  className="form-control"
+                  id="calories"
+                  name="calories"
+                  onChange={handleChange}
+                  placeholder="Add Calories..."
+                  required
+                />
+              </div>
+              <div className="my-3">
+              <label for="cuisine" className="mb-2 fw-bold">Cuisine</label>
+                <select
+                  className="form-control"
+                  id="cuisine"
+                  name="cuisine"
+                  value={recipe.cuisine}
+                  onChange={handleChange}
+                >
+                  {cuisineList.map((cuisine) => (
+                  <option value={cuisine.cusineCode}>
+                      {cuisine.cuisineName}
+                  </option>
+                  ))}
+                  <option value="Other">Other</option> 
+                </select>
 
-          {newCuisine && (
-            <input
-              type="text"
-              placeholder="Enter cuisine"
-              onChange={(event) =>
-                setRecipe({ ...recipe, cuisine: event.target.value })
-              }
-              required
-            />
-          )}
-        </div>
-        <div>
-          <input 
-          name="directions" 
-          id="directions" 
-          cols="30" 
-          rows="10"
-          placeholder="Recipe Directions..."
-          ref={directionsRef}
-          />
-          <button onClick={(event) => addDirections(event, "directions")}>Add</button>
-        </div>
-        <button type="submit">Upload Recipe</button>
-      </form>
-    <div>
-      <h1>Your recipe</h1>
-      <h2>{recipe.label}</h2>
-      <h3>{recipe.recipeSource}</h3>
-      <h4>Ingredients</h4>
-      {
-        recipe.ingredients.map((ingredient) => (
-          <div>
-            <p>{ingredient.text}</p> <button onClick={(event) => removeIng(event, ingredient)}>x</button>
+                {newCuisine && (
+                  <input
+                    type="text"
+                    className="form-control"
+                    placeholder="Enter cuisine"
+                    onChange={(event) =>
+                      setRecipe({ ...recipe, cuisine: event.target.value })
+                    }
+                    required
+                  />
+                )}
+              </div>
+              <div className="my-3 d-flex flex-column align-items-center">
+              <label for="directions" className="mb-2 fw-bold">Add Steps</label>
+                <input 
+                name="directions" 
+                className="form-control"
+                id="directions" 
+                cols="30" 
+                rows="10"
+                placeholder="Recipe Directions..."
+                ref={directionsRef}
+                />
+                <button 
+                onClick={(event) => addDirections(event, "directions")}
+                className="btn btn-outline-dark btn-upload">
+                  Add Step
+                </button>
+              </div>
+              <div className="d-flex flex-column align-items-center">
+                <button type="submit"
+                className="btn btn-outline-dark btn-upload"
+                >Upload Recipe</button>
+              </div>
+            </form>
           </div>
-        ))
-      }
-      <h4>Servings: </h4> <p>{recipe.servings}</p>
-      <h4>Calories: </h4> <p>{recipe.calories}</p>
-      <h4>Cuisine: </h4> <p>{recipe.cuisine}</p>
-      <h5>Directions</h5> <p>{recipe.directions}</p>
-      {
-        recipe.directions.map((step) => (
-            <div>{console.log(step)}<p>{step}</p></div>
-        ))
-      }
+        <div className="col-md-2 mb-4"></div>
+        <div className="col-md-5 mb-4 recipe-box">
+          <h1>Your Recipe</h1>
+          <p className="mb-2 fw-bold">Recipe Name</p>
+          <h2>{recipe.label}</h2>
+          <p className="mb-2 fw-bold">Source</p>
+          <h4 className="fw-normal">{recipe.recipeSource}</h4>
+          <p className="mb-2 fw-bold">Ingredients</p>
+          <div className="recipe-box">
+            {
+              recipe.ingredients.map((ingredient) => (
+                <div className="ingredient-container">
+                  <p>{ingredient.text}</p>
+                  <button 
+                  onClick={(event) => removeIng(event, ingredient)}
+                  className="btn btn-outline-dark btn-remove"
+                  >x</button>
+                </div>
+              ))
+            }
+          </div>
+          <p className="mb-2 fw-bold">Servings </p> <h4 className="fw-normal">{recipe.servings}</h4>
+          <p className="mb-2 fw-bold">Calories </p> <h4 className="fw-normal">{recipe.calories}</h4>
+          <p className="mb-2 fw-bold">Cuisine </p> <h4 className="fw-normal">{recipe.cuisine.replace("%20", " ")}</h4>
+          <p className="mb-2 fw-bold">Directions</p>
+          <div className="recipe-box">
+            {
+              recipe.directions.map((step) => (
+                  <p>{step}</p>
+              ))
+            }
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
 );
 }

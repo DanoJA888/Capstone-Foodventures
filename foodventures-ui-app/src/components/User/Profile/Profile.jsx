@@ -198,41 +198,42 @@ export default function Profile() {
 
   return (
     <div>
-      <p>Profile</p>
-      <div>
-        <div>
-          <p>USERNAME {currUser.username}</p>
-          <p>EMAIL {currUser.email}</p>
-          <p>
-            NAME {currUser.firstName} {currUser.lastName}
-          </p>
-          <p>
-            HEIGHT {currUser.heightFt}'{currUser.heightIn}
-          </p>
-          <p>WEIGHT {currUser.weight} lbs</p>
+      <h1 className="title">Profile</h1>
+      <div class="container ">
+        <div class="row justify-content-center">
+          <div class="col-md-6 info-box">
+            <h1 className="fw-bold mb-0">{currUser.username}</h1> 
+            <h3 className="mb-2">{currUser.firstName} {currUser.lastName}</h3>
+            <h5> {currUser.email} </h5>
+            <p className="mb-0">Height {currUser.heightFt}'{currUser.heightIn}</p>
+            <p>Weight {currUser.weight} lbs</p>
+          </div>
         </div>
-        <div>
-            <h1>Favorites</h1>
-          {favorites.length === 0 && (
-            <div>
-              <p>No Favorites</p>
-            </div>
-          )}
-          {favorites && (
-            <div>
-              {favorites.map((fav) => {
-                const recipeId = fav.recipeId;
-                return (
-                  <div>
-                    <Link to= {`/searched/${recipeId}`}><h2>{fav.recipeName}</h2></Link>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-          <div>
-          
-            <div>
+      </div>
+      <div class="px-5 py-3 container text-center">
+        <div className="row">
+          <div className="col-md-5 mb-4 favs-and-reccs">
+              <h1>Favorites</h1>
+            {favorites.length === 0 && (
+              <div>
+                <p>No Favorites</p>
+              </div>
+            )}
+            {favorites && (
+              <div>
+                {favorites.map((fav) => {
+                  const recipeId = fav.recipeId;
+                  return (
+                    <div>
+                      <Link to= {`/searched/${recipeId}`}><h2>{fav.recipeName}</h2></Link>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+          <div className="col-md-2 mb-4"></div>
+          <div className="col-md-5 mb-4 favs-and-reccs"> 
             <h1>Recipes You Might Like</h1>
               {isLoading ? (
                 <p>Loading recommendations...</p>
@@ -241,8 +242,6 @@ export default function Profile() {
               ) :
               (
                 <div>
-                  
-                  
                   {reccomendations.map((rec) => {
                     const recipeId = rec.recipeId;
                     return (
@@ -253,11 +252,10 @@ export default function Profile() {
                   })}
                 </div>
               )}
-            </div>
-        
           </div>
         </div>
       </div>
     </div>
+    
   );
 }
