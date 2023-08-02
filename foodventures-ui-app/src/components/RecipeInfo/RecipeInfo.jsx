@@ -2,8 +2,6 @@ import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { UserContext } from "../UserContext.js";
 import { url, calculateDifficulty, difficultyFactorMessage} from "../../../constant.js";
-import cheerio from "cheerio";
-import axios from "axios";
 import "./RecipeInfo.css";
 
 export default function RecipeInfo() {

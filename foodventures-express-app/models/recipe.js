@@ -20,37 +20,6 @@ export const Recipe = sequelize.define('Recipe', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  /*
-  recipeName: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
-  recipeSource: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  ingredientLines: {
-    type: DataTypes.ARRAY(DataTypes.JSONB),
-    allowNull: false,
-  },
-  directions: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  url: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  calories: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  servings: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  
-  */
   recipe :{
     type: DataTypes.JSONB,
     allowNull: false

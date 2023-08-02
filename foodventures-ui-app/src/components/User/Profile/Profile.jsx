@@ -2,8 +2,6 @@ import React, { useEffect, useState, useContext } from "react";
 import { UserContext } from "../../UserContext.js";
 import { Link } from 'react-router-dom';
 import "./Profile.css";
-import {API_ID, API_KEY} from "../../../../constant.js";
-import { url } from "../../../../constant.js";
 
 export default function Profile() {
   const { currUser } = useContext(UserContext);

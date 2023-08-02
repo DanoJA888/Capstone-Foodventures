@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React from "react";
 import "./Search.css";
 import SearchParams from "../SearchParams/SearchParams";
 
