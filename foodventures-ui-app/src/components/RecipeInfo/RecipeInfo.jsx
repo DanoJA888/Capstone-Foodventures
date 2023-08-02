@@ -204,17 +204,17 @@ export default function RecipeInfo() {
   return (
       <div class="px-5 py-3">
         <div className="row">
-        <div class="pill col-md-1 d-flex align-items-center justify-content-start">
-          <span 
-            class={`pill ${difficulty.difficulty}`}
-            data-tooltip={
-              difficulty.factors === 3
-                ? difficultyFactorMessage[difficulty.factors]
-                : `Based on total ingredients`
-            }>
-            {difficulty.difficulty}
-          </span>
-        </div>
+          <div class="pill col-md-1 d-flex align-items-center justify-content-start">
+            <span 
+              class={`pill ${difficulty.difficulty}`}
+              data-tooltip={
+                difficulty.factors === 3
+                  ? difficultyFactorMessage[difficulty.factors]
+                  : `Based on total ingredients`
+              }>
+              {difficulty.difficulty}
+            </span>
+          </div>
             <div className="col-md-10 d-flex align-items-center justify-content-center"> 
               <h1 class="title">{recipe.label}</h1>
             </div>
@@ -229,7 +229,7 @@ export default function RecipeInfo() {
                 </div>
               </div>
             }
-          </div>
+        </div>
         <div className="container text-center">
           <img src={recipe.image} alt={recipe.label} />
           <p>{recipe.source}</p>
