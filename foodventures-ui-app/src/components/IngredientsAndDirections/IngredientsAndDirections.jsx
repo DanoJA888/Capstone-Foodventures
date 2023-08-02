@@ -1,8 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
-import { useParams } from "react-router-dom";
-import { UserContext } from "../UserContext.js";
-import { url, calculateDifficulty, difficultyFactorMessage} from "../../../constant.js";
-import FavoriteButton from "../FavoriteButton/FavoriteButton.jsx";
+import React from "react";
 
 export default function IngredientsAndDirections({recipe, recipeScrape, loadStatus, urlSupported}) {
   return(
