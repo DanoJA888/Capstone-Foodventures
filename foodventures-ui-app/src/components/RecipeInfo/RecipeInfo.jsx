@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { UserContext } from "../UserContext.js";
 import { url, calculateDifficulty, difficultyFactorMessage} from "../../../constant.js";
+import FavoriteButton from "../FavoriteButton/FavoriteButton.jsx";
 import "./RecipeInfo.css";
 
 export default function RecipeInfo() {
@@ -47,56 +48,6 @@ export default function RecipeInfo() {
       }
     }
     setIsScraped(true);
-  }
-
-
-  async function addToFavs() {
-
-    try {
-      const calories = (recipe.calories / recipe.yield);
-      const response = await fetch(`http://localhost:3001/add_favorites`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ 
-          recipeId, 
-          recipeName: recipe.label, 
-          recipeCuisine: recipe.cuisineType[0],
-          mainIngredient: mainIngredient,
-          secondaryIngredient: secondaryIngredient,
-          calories: calories
-        }),
-        credentials: "include",
-      });
-      setFavorited(true);
-      alert("Added to Favorites");
-    } catch (error) {
-      alert({ error });
-    }
-  }
-  async function removeFromFavs() {
-    const calories = (recipe.calories / recipe.yield);
-    try {
-      const response = await fetch(`http://localhost:3001/remove_favorites`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ 
-          recipeId, 
-          recipeCuisine: recipe.cuisineType[0],
-          mainIngredient:mainIngredient,
-          secondaryIngredient: secondaryIngredient,
-          calories: calories
-        }),
-        credentials: "include",
-      });
-      setFavorited(false);
-      alert("Removed from Favorites");
-    } catch (error) {
-      alert({ error });
-    }
   }
 
   const apiCall = async () => {
@@ -155,7 +106,6 @@ export default function RecipeInfo() {
     });
     const data = await response.json();
     setFavorited(Object.keys(data).length !== 0);
-    
   };
 
   useEffect(() => {
@@ -175,7 +125,7 @@ export default function RecipeInfo() {
       apiCall();
     }
     checkInFavs();
-  }, [recipeId, favorited]);
+  }, [recipeId]);
 
   useEffect(() =>{
     console.log(mainIngredient);
@@ -219,13 +169,7 @@ export default function RecipeInfo() {
           </div>
           {currUser && 
             <div className="col-md-1 d-flex align-items-center justify-content-end">
-              <div>
-                {favorited ? (
-                  <button className="btn btn-danger" onClick={() => removeFromFavs()}>Remove From Favorites</button>
-                ) : (
-                  <button className="btn btn-success"onClick={() => addToFavs()}>Add To Favorites</button>
-                )}
-              </div>
+              <FavoriteButton recipeId = {recipeId} recipe = {recipe} favorited = {favorited} setFavorited = {setFavorited} mainIngredient = {mainIngredient} secondaryIngredient = {secondaryIngredient}/>
             </div>
           }
         </div>
