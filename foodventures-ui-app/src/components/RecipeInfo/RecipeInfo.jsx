@@ -215,20 +215,20 @@ export default function RecipeInfo() {
               {difficulty.difficulty}
             </span>
           </div>
-            <div className="col-md-10 d-flex align-items-center justify-content-center"> 
-              <h1 class="title">{recipe.label}</h1>
-            </div>
-            {currUser && 
-              <div className="col-md-1 d-flex align-items-center justify-content-end">
-                <div>
-                  {favorited ? (
-                    <button className="btn btn-danger" onClick={() => removeFromFavs()}>Remove From Favorites</button>
-                  ) : (
-                    <button className="btn btn-success"onClick={() => addToFavs()}>Add To Favorites</button>
-                  )}
-                </div>
+          <div className="col-md-10 d-flex align-items-center justify-content-center"> 
+            <h1 class="title">{recipe.label}</h1>
+          </div>
+          {currUser && 
+            <div className="col-md-1 d-flex align-items-center justify-content-end">
+              <div>
+                {favorited ? (
+                  <button className="btn btn-danger" onClick={() => removeFromFavs()}>Remove From Favorites</button>
+                ) : (
+                  <button className="btn btn-success"onClick={() => addToFavs()}>Add To Favorites</button>
+                )}
               </div>
-            }
+            </div>
+          }
         </div>
         <div className="container text-center">
           <img src={recipe.image} alt={recipe.label} />

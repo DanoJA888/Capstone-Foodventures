@@ -74,7 +74,7 @@ export default function SearchResults({cuisineList, cuisine, search, updateSearc
                     <div className="border p-4 text-center">
                       <img src={recipe.recipe.image} alt={recipe.recipe.label} className="img-fluid" />
                       <Link to={`/searched/${recipeId}`}>
-                        <h2>{recipe.recipe.label}</h2>
+                        <h2 className="text-truncate">{recipe.recipe.label}</h2>
                       </Link>
                     </div>
                   </div>
