@@ -30,8 +30,14 @@ export const fetchCuisines = async () => {
   return data;
 };
 
-const timeMeasuerments = new Set(["minutes", "minute", "mins", "min", 
+const timeMeasurements = new Set(["minutes", "minute", "mins", "min", 
 "seconds", "second", "secs", "sec", "hours", "hour", "hrs", "hr"]);
+//handles case for word representation of time intervals
+const timeInWords = {
+  "a" : "1",
+  "an" : "1",
+  "few" : "2"
+}
 
 export function calculateDifficulty(ingredients, directions){
   const ingredientAmount = ingredients.length;
@@ -47,12 +53,19 @@ export function calculateDifficulty(ingredients, directions){
     directions.forEach((step) => {
       let words = step.split(' ');
       words.forEach((word, index) => {
-        const sanitizedWord = word.replace(/\./g, '');
-        if(timeMeasuerments.has(sanitizedWord)){
-          console.log(sanitizedWord);
-          const number = words[index-1];
+        // this regex removes periods from the word, noticed that "hour." wasnt being recognized as part of the set
+        const cleanWord = word.replace(/\./g, '');
+        if(timeMeasurements.has(cleanWord)){
+          //gets the string before the time measurement to add to time
+          let number = words[index-1];
+          console.log(number)
+          if(number in timeInWords){
+            console.log(timeInWords[number])
+            number = timeInWords[number];
+          }
           const timeValue = (parseInt(number[number.length-1]));
-          let timeUnit = sanitizedWord.toLowerCase();
+          let timeUnit = cleanWord.toLowerCase();
+          // converting total time to minutes
           if (timeUnit.includes('hour') || timeUnit.includes('hr')) {
             timeTaken += timeValue * 60;
           } else if (timeUnit.includes('second') || timeUnit.includes('sec')) {
@@ -66,6 +79,7 @@ export function calculateDifficulty(ingredients, directions){
       });
     });
     console.log(timeTaken);
+    // giving points based on approximate time of prep
     let rank = 0
     if(timeTaken <= 20){
       rank +=1;
@@ -74,7 +88,7 @@ export function calculateDifficulty(ingredients, directions){
     } else{
       rank += 2;
     }
-
+    //giving points based on average of ingredients and steps
     const stepAndIngDifficulty = (ingredientAmount + amountOfSteps) / 2;
     console.log(stepAndIngDifficulty);
     if(stepAndIngDifficulty <= 10){
@@ -84,6 +98,7 @@ export function calculateDifficulty(ingredients, directions){
     } else{
       rank += 2;
     }
+    //assigning a final rank based on the average of all 3 points
     const finalRank = rank / 2;
     console.log(finalRank);
     if(finalRank <= 1){
@@ -95,7 +110,7 @@ export function calculateDifficulty(ingredients, directions){
     }
     return difficultyInfo
   }
-
+  //assigning a score based on #of ingredeints only if scrape is not supported
   if(ingredientAmount <= 10){
     difficultyInfo.difficulty=  "Easy";
   } else if(ingredientAmount >=25){
@@ -106,6 +121,7 @@ export function calculateDifficulty(ingredients, directions){
   return difficultyInfo;
 }
 
+//tooltip messages
 export const difficultyFactorMessage = {
   1: `Based on total ingredients`,
   3: `Based on recipe ingredients, recipe steps, and approximate time`
