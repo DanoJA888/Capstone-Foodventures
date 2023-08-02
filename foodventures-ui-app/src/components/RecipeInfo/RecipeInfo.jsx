@@ -24,25 +24,27 @@ export default function RecipeInfo() {
   const [loadStatus, setLoadStatus] = useState(true);
 
   const scrape = async () =>{
-    const response = await fetch(`http://localhost:3001/scrape_recipe`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ 
-        recipeLink: recipe.url,
-      })
-    });
-    const directions = await response.json();
-    console.log(directions);
-    if (Array.isArray(directions) && directions.length > 0) {
-      setRecipeScrape(directions);
-    } 
-    else if (recipe.directions){
+    if(recipe.directions){
       setRecipeScrape(recipe.directions);
-    }else {
-      console.error("Invalid data format:", directions);
-      setUrlSupported(false);
+    }
+    else{
+      const response = await fetch(`http://localhost:3001/scrape_recipe`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ 
+          recipeLink: recipe.url,
+        })
+      });
+      const directions = await response.json();
+      console.log(directions);
+      if (Array.isArray(directions) && directions.length > 0) {
+        setRecipeScrape(directions);
+      } else {
+        console.error("Invalid data format:", directions);
+        setUrlSupported(false);
+      }
     }
     setIsScraped(true);
   }
@@ -115,14 +117,13 @@ export default function RecipeInfo() {
       });
       const recipeInfo= await dbSearch.json();
       console.log(recipeInfo.recipe);
-        if (recipeInfo.recipe) {
-          setRecipe(recipeInfo.recipe);
-          findMainIngredients(recipeInfo.recipe);
-          setRecipeFetched(true);
-        } else {
-          console.error('Recipe not found in both APIs');
-          setRecipeFetched(true);
-        }
+      if (recipeInfo.recipe) {
+        setRecipe(recipeInfo.recipe);
+        findMainIngredients(recipeInfo.recipe);
+      } else {
+        console.error('Recipe not found in both APIs');
+      }
+      setRecipeFetched(true);
     }
   };
 

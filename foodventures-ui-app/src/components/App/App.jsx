@@ -6,7 +6,6 @@ import Navbar from "../Navbar/Navbar";
 import Home from "../Home/Home";
 import Search from "../Search/Search";
 import "./App.css";
-import MealPlan from "../MealPlan/MealPlan";
 import Login from "../User/Login/Login";
 import Signup from "../User/Signup/Signup";
 import RecipeInfo from "../RecipeInfo/RecipeInfo";
