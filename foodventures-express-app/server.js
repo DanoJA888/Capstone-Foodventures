@@ -9,6 +9,7 @@ import favoritesRouter from "./routes/favorites.js";
 import cusineRouter from "./routes/cuisine.js";
 import recipeRouter from "./routes/recipe.js";
 import reccomendationRouter from "./routes/reccomendations.js"
+import scrapeRouter from "./routes/scrape.js"
 
 const app = express();
 const port = process.env.PORT || 3001;
@@ -48,6 +49,7 @@ app.use(favoritesRouter);
 app.use(cusineRouter);
 app.use(recipeRouter);
 app.use(reccomendationRouter);
+app.use(scrapeRouter);
 
 app.listen(port, () => {
   console.log(`App is listening on port ${port}`);

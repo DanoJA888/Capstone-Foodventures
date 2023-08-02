@@ -1,12 +1,10 @@
-import React, { useState, useContext, useEffect } from "react";
-import { UserContext } from "../UserContext.js";
+import React from "react";
 import { Link } from 'react-router-dom';
 
 import "./Home.css";
 
-export default function Home({cuisineList, setCuisineList, updateCuisine}) {
-  const { currUser, updateUser } = useContext(UserContext);
-  
+export default function Home({cuisineList, updateCuisine}) {
+
   return (
   <div >
     <h1 className="title">Discover Dishes From Around the World!</h1>

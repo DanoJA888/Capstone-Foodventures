@@ -2,8 +2,8 @@ import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { UserContext } from "../UserContext.js";
 import { url, calculateDifficulty, difficultyFactorMessage} from "../../../constant.js";
-import cheerio from "cheerio";
-import axios from "axios";
+import FavoriteButton from "../FavoriteButton/FavoriteButton.jsx";
+import IngredientsAndDirections from "../IngredientsAndDirections/IngredientsAndDirections.jsx";
 import "./RecipeInfo.css";
 
 export default function RecipeInfo() {
@@ -14,89 +14,41 @@ export default function RecipeInfo() {
   const [isScraped, setIsScraped] = useState(false);
   const [recipeScrape, setRecipeScrape] = useState([]);
   const [urlSupported, setUrlSupported] = useState(true);
+  const [mainIngredient, setMainIngredient] = useState("");
+  const [secondaryIngredient, setSecondaryIngredient] = useState("");
+  const [loadStatus, setLoadStatus] = useState(true);
   const [recipe, setRecipe] = useState({
     ingredientLines: [],
   });
-  const [mainIngredient, setMainIngredient] = useState("");
-  const [secondaryIngredient, setSecondaryIngredient] = useState("");
   const [difficulty, setDifficulty] = useState({
     difficulty : "",
     factors: 0
   });
-  const [loadStatus, setLoadStatus] = useState(true);
 
   const scrape = async () =>{
-    const response = await fetch(`http://localhost:3001/scrape_recipe`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ 
-        recipeLink: recipe.url,
-      })
-    });
-    const directions = await response.json();
-    console.log(directions);
-    if (Array.isArray(directions) && directions.length > 0) {
-      setRecipeScrape(directions);
-    } 
-    else if (recipe.directions){
+    if(recipe.directions){
       setRecipeScrape(recipe.directions);
-    }else {
-      console.error("Invalid data format:", directions);
-      setUrlSupported(false);
     }
-    setIsScraped(true);
-  }
-
-
-  async function addToFavs() {
-
-    try {
-      const calories = (recipe.calories / recipe.yield);
-      const response = await fetch(`http://localhost:3001/add_favorites`, {
+    else{
+      const response = await fetch(`http://localhost:3001/scrape_recipe`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ 
-          recipeId, 
-          recipeName: recipe.label, 
-          recipeCuisine: recipe.cuisineType[0],
-          mainIngredient: mainIngredient,
-          secondaryIngredient: secondaryIngredient,
-          calories: calories
-        }),
-        credentials: "include",
+          recipeLink: recipe.url,
+        })
       });
-      setFavorited(true);
-      alert("Added to Favorites");
-    } catch (error) {
-      alert({ error });
+      const directions = await response.json();
+      console.log(directions);
+      if (Array.isArray(directions) && directions.length > 0) {
+        setRecipeScrape(directions);
+      } else {
+        console.error("Invalid data format:", directions);
+        setUrlSupported(false);
+      }
     }
-  }
-  async function removeFromFavs() {
-    const calories = (recipe.calories / recipe.yield);
-    try {
-      const response = await fetch(`http://localhost:3001/remove_favorites`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ 
-          recipeId, 
-          recipeCuisine: recipe.cuisineType[0],
-          mainIngredient:mainIngredient,
-          secondaryIngredient: secondaryIngredient,
-          calories: calories
-        }),
-        credentials: "include",
-      });
-      setFavorited(false);
-      alert("Removed from Favorites");
-    } catch (error) {
-      alert({ error });
-    }
+    setIsScraped(true);
   }
 
   const apiCall = async () => {
@@ -117,14 +69,13 @@ export default function RecipeInfo() {
       });
       const recipeInfo= await dbSearch.json();
       console.log(recipeInfo.recipe);
-        if (recipeInfo.recipe) {
-          setRecipe(recipeInfo.recipe);
-          findMainIngredients(recipeInfo.recipe);
-          setRecipeFetched(true);
-        } else {
-          console.error('Recipe not found in both APIs');
-          setRecipeFetched(true);
-        }
+      if (recipeInfo.recipe) {
+        setRecipe(recipeInfo.recipe);
+        findMainIngredients(recipeInfo.recipe);
+      } else {
+        console.error('Recipe not found in both APIs');
+      }
+      setRecipeFetched(true);
     }
   };
 
@@ -156,7 +107,6 @@ export default function RecipeInfo() {
     });
     const data = await response.json();
     setFavorited(Object.keys(data).length !== 0);
-    
   };
 
   useEffect(() => {
@@ -176,7 +126,7 @@ export default function RecipeInfo() {
       apiCall();
     }
     checkInFavs();
-  }, [recipeId, favorited]);
+  }, [recipeId]);
 
   useEffect(() =>{
     console.log(mainIngredient);
@@ -207,11 +157,7 @@ export default function RecipeInfo() {
           <div class="pill col-md-1 d-flex align-items-center justify-content-start">
             <span 
               class={`pill ${difficulty.difficulty}`}
-              data-tooltip={
-                difficulty.factors === 3
-                  ? difficultyFactorMessage[difficulty.factors]
-                  : `Based on total ingredients`
-              }>
+              data-tooltip= {difficultyFactorMessage[difficulty.factors]}>
               {difficulty.difficulty}
             </span>
           </div>
@@ -220,56 +166,14 @@ export default function RecipeInfo() {
           </div>
           {currUser && 
             <div className="col-md-1 d-flex align-items-center justify-content-end">
-              <div>
-                {favorited ? (
-                  <button className="btn btn-danger" onClick={() => removeFromFavs()}>Remove From Favorites</button>
-                ) : (
-                  <button className="btn btn-success"onClick={() => addToFavs()}>Add To Favorites</button>
-                )}
-              </div>
+              <FavoriteButton recipeId = {recipeId} recipe = {recipe} favorited = {favorited} setFavorited = {setFavorited} mainIngredient = {mainIngredient} secondaryIngredient = {secondaryIngredient}/>
             </div>
           }
         </div>
         <div className="container text-center">
           <img src={recipe.image} alt={recipe.label} />
           <p>{recipe.source}</p>
-          <div className="row ">
-            <div className="col-md-6 mb-4">
-              <h3>Ingredients</h3>
-              <ul className="list-group">
-                {recipe.ingredientLines.map((ingredient) => (
-                  <li className="list-group-item">{ingredient}</li>
-                ))}
-              </ul>
-              
-            </div>
-            <div className="col-md-6 mb-4">
-              <h3>Directions</h3>
-              {loadStatus ? (
-                  <div class="d-flex justify-content-center spinner-view">
-                    <div class="spinner-border" role="status">
-                    </div>
-                  </div>
-                ) : !urlSupported ? (
-                  <div>
-                    <p>Unsupported URL</p>
-                    <a href={recipe.url} target="_blank" className="btn btn-primary">
-                      Recipe
-                    </a>
-                  </div>
-                ) : (
-                  <div>
-                    <ul className="list-group">
-                      {recipeScrape.map((paragraph) => (
-                        <li className="list-group-item">{paragraph}</li>
-                      ))}
-                    </ul>
-                    
-                  </div>
-                )
-              }
-            </div>
-          </div>
+          <IngredientsAndDirections recipe = {recipe} recipeScrape={recipeScrape} loadStatus= {loadStatus} urlSupported= {urlSupported}/>
         </div>
       </div>
   );
