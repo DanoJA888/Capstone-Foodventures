@@ -1,7 +1,9 @@
 import React, { useEffect, useState, useContext } from "react";
 import { UserContext } from "../../UserContext.js";
-import { Link } from 'react-router-dom';
 import "./Profile.css";
+import Favorites from "../Favorites/Favorites.jsx";
+import Reccomendations from "../Reccomendations/Reccomendations.jsx";
+import UserInfo from "../UserInfo/UserInfo.jsx";
 
 export default function Profile() {
   const { currUser } = useContext(UserContext);
@@ -15,7 +17,6 @@ export default function Profile() {
   const [isLoading, setIsLoading] = useState(true);
   const [calorieRange, setCalorieRange] = useState([]);
 
-  
   const fetchFavorites = async () => {
     const response = await fetch("http://localhost:3001/get_favorites", {
       method: "GET",
@@ -53,9 +54,11 @@ export default function Profile() {
   }
   
   const setInformaion = async () => {
-    const mainIngs = await fetchMainIngredients();
-    const secondaryIngs = await fetchSecondaryIngredients();
-    const calRange = await fetchCalorieRange();
+    const [mainIngs, secondaryIngs, calRange] = await Promise.all([
+      fetchMainIngredients(),
+      fetchSecondaryIngredients(),
+      fetchCalorieRange()
+    ]);
     if(mainIngs.length == 0){
       setIsLoading(false);
     }
@@ -89,7 +92,6 @@ export default function Profile() {
     const data = await response.json();
     return data.topThreeSecondary;
   }
-
   const fetchCalorieRange = async () =>{
     const response = await fetch("http://localhost:3001/get_calorie_range", {
       method: "GET",
@@ -124,7 +126,6 @@ export default function Profile() {
     }
     return false;
   }
-
   const noChangeForReccs = async (cachedCuisine, cachedMainIngs, cachedSecondaryIngs, cachedCalorieRange) =>{
     const fetchedCuisine = await fetchCuisine();
     const fetchedMainIngredients = await fetchMainIngredients();
@@ -197,63 +198,14 @@ export default function Profile() {
   return (
     <div>
       <h1 className="title">Profile</h1>
-      <div class="container ">
-        <div class="row justify-content-center">
-          <div class="col-md-6 info-box">
-            <h1 className="fw-bold mb-0">{currUser.username}</h1> 
-            <h3 className="mb-2">{currUser.firstName} {currUser.lastName}</h3>
-            <h5> {currUser.email} </h5>
-            <p className="mb-0">Height {currUser.heightFt}'{currUser.heightIn}</p>
-            <p>Weight {currUser.weight} lbs</p>
-          </div>
-        </div>
-      </div>
+      <UserInfo />
       <div class="px-5 py-3 container text-center">
         <div className="row">
-          <div className="col-md-5 mb-4 favs-and-reccs">
-              <h1>Favorites</h1>
-            {favorites.length === 0 && (
-              <div>
-                <p>No Favorites</p>
-              </div>
-            )}
-            {favorites && (
-              <div>
-                {favorites.map((fav) => {
-                  const recipeId = fav.recipeId;
-                  return (
-                    <div>
-                      <Link to= {`/searched/${recipeId}`}><h2>{fav.recipeName}</h2></Link>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
+          <Favorites favorites={favorites}/>
           <div className="col-md-2 mb-4"></div>
-          <div className="col-md-5 mb-4 favs-and-reccs"> 
-            <h1>Recipes You Might Like</h1>
-              {isLoading ? (
-                <p>Loading recommendations...</p>
-              ) : reccomendations.length == 0 ? (
-                <p>No reccomendations to load</p>
-              ) :
-              (
-                <div>
-                  {reccomendations.map((rec) => {
-                    const recipeId = rec.recipeId;
-                    return (
-                      <div>
-                        <Link to= {`/searched/${recipeId}`}><h2>{rec.label}</h2></Link>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-          </div>
+          <Reccomendations isLoading={isLoading} reccomendations={reccomendations}/>
         </div>
       </div>
-    </div>
-    
+    </div> 
   );
 }
