@@ -65,4 +65,39 @@ router.get("/get_recipe", async (req, res) => {
   }
 });
 
+router.post("/store_recipe_info", async (req,res) =>{
+  const {
+    recipeId,
+    cuisine,
+    difficulty,
+    recipe
+    } = req.body;
+  try{
+    const newRecipeStored = await Recipe.create(
+      {
+        recipeId: recipeId,
+        cuisine: cuisine,
+        recipe: recipe,
+        difficulty: difficulty
+      }
+    );
+    res.status(200).json(recipe)
+  }
+  catch(error){
+    res.status(500).json({error: "Server Error: " + error});
+  }
+})
+
+router.delete("/remove_recipe_info", async (req, res) => {
+  const {recipeId} = req.body;
+  try{
+    const favorite = await Recipe.findOne({ where: { userId: null, recipeId: recipeId} });
+    await favorite.destroy();
+    res.status(200).json({res: "destroyed"})
+  }
+  catch(error){
+    res.status(500).json({error: "Server Error: " + error});
+  }
+})
+
 export default router;

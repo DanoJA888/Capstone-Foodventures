@@ -10,7 +10,7 @@ export const Recipe = sequelize.define('Recipe', {
   },
   userId: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: true
   },
   recipeId: {
     type: DataTypes.STRING,
@@ -23,6 +23,10 @@ export const Recipe = sequelize.define('Recipe', {
   recipe :{
     type: DataTypes.JSONB,
     allowNull: false
+  },
+  difficulty :{
+    type: DataTypes.JSONB,
+    allowNull: true
   }
 });
 
