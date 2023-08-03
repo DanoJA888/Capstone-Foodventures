@@ -18,7 +18,7 @@ export const Recipe = sequelize.define('Recipe', {
   },
   cuisine: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
   },
   recipe :{
     type: DataTypes.JSONB,
@@ -26,6 +26,10 @@ export const Recipe = sequelize.define('Recipe', {
   },
   difficulty :{
     type: DataTypes.JSONB,
+    allowNull: true
+  },
+  scrape :{
+    type: DataTypes.ARRAY(DataTypes.STRING),
     allowNull: true
   }
 });

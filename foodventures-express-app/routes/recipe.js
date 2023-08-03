@@ -70,7 +70,8 @@ router.post("/store_recipe_info", async (req,res) =>{
     recipeId,
     cuisine,
     difficulty,
-    recipe
+    recipe,
+    scrape
     } = req.body;
   try{
     const newRecipeStored = await Recipe.create(
@@ -78,7 +79,8 @@ router.post("/store_recipe_info", async (req,res) =>{
         recipeId: recipeId,
         cuisine: cuisine,
         recipe: recipe,
-        difficulty: difficulty
+        difficulty: difficulty,
+        scrape: scrape
       }
     );
     

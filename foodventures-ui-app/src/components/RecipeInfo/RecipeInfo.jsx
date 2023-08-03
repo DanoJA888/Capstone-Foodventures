@@ -119,9 +119,9 @@ export default function RecipeInfo() {
       },
       body: JSON.stringify({
         recipeId: recipeId,
-        cuisine: "hello",
         difficulty: difficulty,
-        recipe: recipe
+        recipe: recipe,
+        scrape: recipeScrape
       })
     });
     const recipeInfo= await storeRecipe.json();
@@ -159,9 +159,9 @@ export default function RecipeInfo() {
   const executeStorage = async () => {
     if(recipeFetched && isScraped && difficultyCalculated){
       setLoadStatus(false);
-      const checkingExistanceOfRewcipe = await checkIfRecipeStored();
-      console.log(checkingExistanceOfRewcipe);
-      if(!checkingExistanceOfRewcipe){
+      const isRecipeInDb = await checkIfRecipeStored();
+      console.log(isRecipeInDb);
+      if(!isRecipeInDb){
         await storeRecipeInfo();
         const cacheTimeout = setTimeout(() => {removeRecipeFromDB()}, 60000);
       }
