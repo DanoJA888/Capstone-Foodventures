@@ -1,4 +1,5 @@
 import React from "react";
+import Spinner from "../Spinner";
 
 export default function IngredientsAndDirections({recipe, recipeScrape, loadStatus, urlSupported}) {
   return(
@@ -14,10 +15,7 @@ export default function IngredientsAndDirections({recipe, recipeScrape, loadStat
       <div className="col-md-6 mb-4">
         <h3>Directions</h3>
         {loadStatus ? (
-            <div class="d-flex justify-content-center spinner-view">
-              <div class="spinner-border" role="status">
-              </div>
-            </div>
+            <Spinner/>
           ) : !urlSupported ? (
             <div>
               <p>Unsupported URL</p>

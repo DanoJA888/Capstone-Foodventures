@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from "react";
 import "./SearchResults.css";
-import { Link } from 'react-router-dom';
 import SearchParams from "../SearchParams/SearchParams";
 import { url } from "../../../constant.js";
+import Spinner from "../Spinner";
+import RecipeGrid from "../RecipeGrid/RecipeGrid";
 
 export default function SearchResults({cuisineList, cuisine, search, updateSearch, updateCuisine}) {
   const [currRecipes, updateRecipes] = useState([]);
   const [loadStatus, setLoadStatus] = useState(true);
   const [previousCuisine, setPreviousCuisine]= useState("");
   const [previousSearch, setPreviousSearch] = useState("");
+  const [previousRecipes, setPreviousRecipes] = useState([]);
 
   const apiCall = async () =>{
     const responseInternalAPI = await fetch(`http://localhost:3001/get_recipes?cuisine=${cuisine}`, {
@@ -36,7 +38,7 @@ export default function SearchResults({cuisineList, cuisine, search, updateSearc
       setLoadStatus(true);
       apiCall();
     }
-    if(currRecipes.length > 0){
+    else{
       setLoadStatus(false);
     }
   }, [cuisine, search, currRecipes]);
@@ -48,37 +50,14 @@ export default function SearchResults({cuisineList, cuisine, search, updateSearc
         <SearchParams cuisineList = {cuisineList} updateSearch = {updateSearch} updateCuisine = {updateCuisine}/>
         </div>
         {cuisine !== "" &&  
-          <h1 className="title">{cuisine.replace("%20", " ")}</h1>
+          <h1 className="title">{cuisine.replaceAll("%20", " ")}</h1>
         }
         <div className="container mt-3 mr-1">
           <div className="row">
             {loadStatus ? (
-              <div class="d-flex justify-content-center spinner-view">
-                <div class="spinner-border" role="status">
-                </div>
-              </div>
-            ) : currRecipes.length == 0 ? (
-              <h5 className="title">No Recipes Found</h5>
-            ):(
-              currRecipes.map((recipe) => {
-                // using substring method to extract recipeId
-                let recipeId = "";
-                {recipe._links? (
-                  recipeId = recipe._links.self.href.substring(38, 71)
-                  ):(
-                  recipeId = recipe.recipeId
-                )}
-                return (
-                  <div className="col-md-3">
-                    <div className="border p-4 text-center">
-                      <img src={recipe.recipe.image} alt={recipe.recipe.label} className="img-fluid" />
-                      <Link to={`/searched/${recipeId}`}>
-                        <h2 className="text-truncate">{recipe.recipe.label}</h2>
-                      </Link>
-                    </div>
-                  </div>
-                );
-              })
+              <Spinner/>
+            ) : (
+              <RecipeGrid currRecipes={currRecipes}/>
             )}
           </div>
         </div>
