@@ -68,22 +68,24 @@ router.post("/add_favorites", async (req, res) =>{
         }
 
         calorieList.push(calories);
-        const updatedCount = await User.update(
-          {
-            favCuisines: userCuisines,
-            mainIngredients: mainIngredients,
-            secondaryIngredients: secondaryIngredients, 
-            minAndMaxCals: calorieList,
-          },
-          {where: { id: user.id }}
-        );
         const followData = {
-            userId: user.id,
-            recipeId: recipeId,
-            recipeName: recipeName,
+          userId: user.id,
+          recipeId: recipeId,
+          recipeName: recipeName,
         };
-        const newFav = await Favorite.create(followData);
         
+        const [updatedCount, newFav] = await Promise.all([
+          User.update(
+            {
+              favCuisines: userCuisines,
+              mainIngredients: mainIngredients,
+              secondaryIngredients: secondaryIngredients, 
+              minAndMaxCals: calorieList,
+            },
+            {where: { id: user.id }}
+          ),
+          Favorite.create(followData)
+        ]);
         res.status(200).json({mainIngredients: mainIngredient})
 
     }

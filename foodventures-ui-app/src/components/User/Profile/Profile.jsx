@@ -53,9 +53,11 @@ export default function Profile() {
   }
   
   const setInformaion = async () => {
-    const mainIngs = await fetchMainIngredients();
-    const secondaryIngs = await fetchSecondaryIngredients();
-    const calRange = await fetchCalorieRange();
+    const [mainIngs, secondaryIngs, calRange] = await Promise.all([
+      fetchMainIngredients(),
+      fetchSecondaryIngredients(),
+      fetchCalorieRange()
+    ]);
     if(mainIngs.length == 0){
       setIsLoading(false);
     }
