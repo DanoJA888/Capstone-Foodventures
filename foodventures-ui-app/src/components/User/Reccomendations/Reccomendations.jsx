@@ -15,11 +15,16 @@ export default function Reccomendations({isLoading, reccomendations}) {
         ) :
         (
           <div>
-            {reccomendations.map((rec) => {
-              const recipeId = rec.recipeId;
+            {reccomendations.map((reccomendation) => {
+              // using substring method to extract recipeId, ternary to check if recipe is from db or external api
               return (
-                <div>
-                  <Link to= {`/searched/${recipeId}`}><h2>{rec.label}</h2></Link>
+                <div className="col-md-12">
+                  <div className=" text-center">
+                    <img src={reccomendation.image} alt={reccomendation.label} className="img-fluid" />
+                    <Link to={`/searched/${reccomendation.recipeId}`}>
+                      <h2 >{reccomendation.label}</h2>
+                    </Link>
+                  </div>
                 </div>
               );
             })}
