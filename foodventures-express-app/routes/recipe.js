@@ -81,9 +81,11 @@ router.post("/store_recipe_info", async (req,res) =>{
         difficulty: difficulty
       }
     );
+    
     res.status(200).json(recipe)
   }
   catch(error){
+    console.error(error);
     res.status(500).json({error: "Server Error: " + error});
   }
 })
@@ -96,6 +98,7 @@ router.delete("/remove_recipe_info", async (req, res) => {
     res.status(200).json({res: "destroyed"})
   }
   catch(error){
+    console.error(error);
     res.status(500).json({error: "Server Error: " + error});
   }
 })
