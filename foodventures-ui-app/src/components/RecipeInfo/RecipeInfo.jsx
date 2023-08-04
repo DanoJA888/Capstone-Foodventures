@@ -163,26 +163,33 @@ export default function RecipeInfo() {
       console.log(isRecipeInDb);
       if(!isRecipeInDb){
         await storeRecipeInfo();
-        const cacheTimeout = setTimeout(() => {removeRecipeFromDB()}, 60000);
+        const cacheTimeout = setTimeout(() => {removeRecipeFromDB()}, 300000);
       }
     }
   };
 
-  useEffect(() => {
-    /*const inCache = localStorage.getItem(`searched/${recipeId}`)
-    console.log(inCache)
-    if(inCache){
-      const cachedInfo = JSON.parse(inCache);
-      setRecipe(cachedInfo.recipe);
-      findMainIngredients(cachedInfo.recipe);
-      setRecipeScrape(cachedInfo.recipeScrape);
+  const displayStoredRecipe = async () => {
+    console.log("im in");
+    const confirmingRecipeExistance = await checkIfRecipeStored();
+    console.log(confirmingRecipeExistance);
+    if(confirmingRecipeExistance !== null){
+      setRecipe(confirmingRecipeExistance.recipe);
+      findMainIngredients(confirmingRecipeExistance.recipe);
+      setRecipeScrape(confirmingRecipeExistance.scrape);
       setRecipeFetched(true);
       setIsScraped(true);
-      setUrlSupported(cachedInfo.recipeScrape.length > 1);
-      setDifficulty(cachedInfo.difficulty);
-    }*/
-    apiCall();
+      setUrlSupported(confirmingRecipeExistance.scrape.length > 1);
+      setDifficulty(confirmingRecipeExistance.difficulty);
+      setDifficultyCalculated(true);
+    }
+    else{
+      apiCall();
+    }
     checkInFavs();
+  };
+
+  useEffect(() => {
+    displayStoredRecipe();
   }, [recipeId]);
 
   useEffect(() =>{
@@ -197,16 +204,6 @@ export default function RecipeInfo() {
   }, [recipeFetched, isScraped]);
 
   useEffect(() =>{
-    /*if(recipeFetched && isScraped && difficulty){
-      setLoadStatus(false);
-      const cachedInfo = {
-        recipe,
-        recipeScrape,
-        difficulty
-      };
-      localStorage.setItem(`searched/${recipeId}`, JSON.stringify(cachedInfo));
-      const cacheTimeout = setTimeout(() => {localStorage.removeItem(`searched/${recipeId}`);}, 60000);
-    }*/
     executeStorage();
   }, [recipeFetched, isScraped, difficultyCalculated]);
 
