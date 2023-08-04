@@ -2,6 +2,7 @@ import React, { useRef, useContext, useState } from "react";
 import { UserContext } from "../../UserContext.js";
 import "./UploadRecipe.css";
 import { useNavigate } from 'react-router-dom';
+import {calculateDifficulty} from "../../../../constant.js"
 
 export default function UploadRecipe({cuisineList}) {
   const navigate = useNavigate();
