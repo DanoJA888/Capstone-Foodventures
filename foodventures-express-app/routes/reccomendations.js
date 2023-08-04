@@ -12,9 +12,6 @@ function rankByPoints(c1, c2) {
 function calorieDistanceCalculation(max, min, option){
   const optionCalories = option.recipe.calories / option.recipe.yield;
   console.log(optionCalories)
-  if(max === min){
-    return optionCalories === max ? 1 : 0;
-  }
   if (min <= optionCalories && optionCalories <= max) {
     return 1.0;
   } else if (optionCalories < min){
@@ -59,7 +56,6 @@ router.post("/generate_reccomendations", async (req, res) => {
       // check each recipes mainIngredients to see if users fave ings are included
       // sacrifice performance for accuracy 
       let reccomendations = [];
-      let takenIdx = new Set();
       possibleReccomendations.forEach((option, index) => {
         let recipeWithPoint = {
           label : option.recipe.label,
@@ -79,26 +75,9 @@ router.post("/generate_reccomendations", async (req, res) => {
         recipeWithPoint['points'] += calorieDistanceCalculation(calorieRange[0], calorieRange[1], option) * .20;
         if(recipeWithPoint.points > 0){
           reccomendations.push(recipeWithPoint);
-          takenIdx.add(index);
         }
       })
       console.log(reccomendations);
-      // avoids repeating recipes
-      while(takenIdx.size < 8){
-        const idx = Math.floor(Math.random()*possibleReccomendations.length);
-        if(!takenIdx.has(idx)){
-          //reccomendations.push(possibleReccomendations[idx]);
-          reccomendations.push(
-            {
-              label : possibleReccomendations[idx].recipe.label,
-              recipeId : possibleReccomendations[idx]._links.self.href.substring(38, 71),
-              points : 0,
-              image: possibleReccomendations[idx].recipe.image
-            }
-          )
-          takenIdx.add(idx);
-        }
-      }
       reccomendations.sort((point1, point2) => rankByPoints(point1.points, point2.points));
       res.status(200).json(reccomendations.slice(0, 8));
     } catch (error) {

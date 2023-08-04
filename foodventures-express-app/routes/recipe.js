@@ -8,7 +8,7 @@ const router = express.Router();
 router.post("/add_recipe", async (req, res) => {
     const {
         label,
-        recipeSource,
+        source,
         ingredientLines,
         directions,
         url,
