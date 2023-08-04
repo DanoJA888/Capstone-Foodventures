@@ -18,7 +18,7 @@ export default function UploadRecipe({cuisineList}) {
   //                  food: apple
   const [recipe, setRecipe] = useState({
     label: "Title",
-    recipeSource: `${currUser.username} (User)`,
+    source: `${currUser.username} (User)`,
     ingredientLines: [],
     ingredients: [],
     directions: [],
@@ -254,7 +254,7 @@ export default function UploadRecipe({cuisineList}) {
           <p className="mb-2 fw-bold">Recipe Name</p>
           <h2>{recipe.label}</h2>
           <p className="mb-2 fw-bold">Source</p>
-          <h4 className="fw-normal">{recipe.recipeSource}</h4>
+          <h4 className="fw-normal">{recipe.source}</h4>
           <p className="mb-2 fw-bold">Ingredients</p>
           <div className="recipe-box">
             {
