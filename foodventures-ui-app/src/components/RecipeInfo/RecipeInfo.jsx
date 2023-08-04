@@ -179,7 +179,12 @@ export default function RecipeInfo() {
       setRecipeFetched(true);
       setIsScraped(true);
       setUrlSupported(confirmingRecipeExistance.scrape.length > 1);
-      setDifficulty(confirmingRecipeExistance.difficulty);
+      if(!confirmingRecipeExistance.userId){
+        setDifficulty(confirmingRecipeExistance.difficulty);
+      }
+      else{
+        setDifficulty(calculateDifficulty(confirmingRecipeExistance.recipe.ingredientLines, confirmingRecipeExistance.recipe.directions));
+      }
       setDifficultyCalculated(true);
     }
     else{

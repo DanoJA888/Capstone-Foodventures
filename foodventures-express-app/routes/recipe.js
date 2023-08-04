@@ -34,7 +34,8 @@ router.post("/add_recipe", async (req, res) => {
         userId: user.id,
         recipeId,
         recipe: req.body, 
-        cuisine: cuisine
+        cuisine: cuisine,
+        scrape: directions
       });
       res.status(200).json({recipeId: recipeId, cuisine: code})
     }
