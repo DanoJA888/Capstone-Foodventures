@@ -20,6 +20,7 @@ export default function RecipeInfo() {
   const [recipe, setRecipe] = useState({
     ingredientLines: [],
   });
+  const [difficultyCalculated, setDifficultyCalculated] = useState(false);
   const [difficulty, setDifficulty] = useState({
     difficulty : "",
     factors: 0
@@ -109,23 +110,86 @@ export default function RecipeInfo() {
     setFavorited(Object.keys(data).length !== 0);
   };
 
-  useEffect(() => {
-    const inCache = localStorage.getItem(`searched/${recipeId}`)
-    console.log(inCache)
-    if(inCache){
-      const cachedInfo = JSON.parse(inCache);
-      setRecipe(cachedInfo.recipe);
-      findMainIngredients(cachedInfo.recipe);
-      setRecipeScrape(cachedInfo.recipeScrape);
+  const storeRecipeInfo = async () =>{
+    try{
+    const storeRecipe = await fetch(`http://localhost:3001/store_recipe_info`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        recipeId: recipeId,
+        difficulty: difficulty,
+        recipe: recipe,
+        scrape: recipeScrape
+      })
+    });
+    const recipeInfo= await storeRecipe.json();
+  } catch (error) {
+    console.error("Error while storing recipe info:", error);
+  }
+  }
+  
+  const checkIfRecipeStored = async () =>{
+    const dbSearch = await fetch(`http://localhost:3001/get_recipe?recipeId=${recipeId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const recipeInfo= await dbSearch.json();
+    return recipeInfo;
+  }
+  const removeRecipeFromDB = async () =>{
+    try{
+      const dbSearch = await fetch(`http://localhost:3001/remove_recipe_info`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          recipeId: recipeId
+        })
+      });
+    } catch (error) {
+      console.error("Error while storing recipe info:", error);
+    }
+  }
+
+  const executeStorage = async () => {
+    if(recipeFetched && isScraped && difficultyCalculated){
+      setLoadStatus(false);
+      const isRecipeInDb = await checkIfRecipeStored();
+      console.log(isRecipeInDb);
+      if(!isRecipeInDb){
+        await storeRecipeInfo();
+        const cacheTimeout = setTimeout(() => {removeRecipeFromDB()}, 300000);
+      }
+    }
+  };
+
+  const displayStoredRecipe = async () => {
+    console.log("im in");
+    const confirmingRecipeExistance = await checkIfRecipeStored();
+    console.log(confirmingRecipeExistance);
+    if(confirmingRecipeExistance !== null){
+      setRecipe(confirmingRecipeExistance.recipe);
+      findMainIngredients(confirmingRecipeExistance.recipe);
+      setRecipeScrape(confirmingRecipeExistance.scrape);
       setRecipeFetched(true);
       setIsScraped(true);
-      setUrlSupported(cachedInfo.recipeScrape.length > 1);
-      setDifficulty(cachedInfo.difficulty);
+      setUrlSupported(confirmingRecipeExistance.scrape.length > 1);
+      setDifficulty(confirmingRecipeExistance.difficulty);
+      setDifficultyCalculated(true);
     }
     else{
       apiCall();
     }
     checkInFavs();
+  };
+
+  useEffect(() => {
+    displayStoredRecipe();
   }, [recipeId]);
 
   useEffect(() =>{
@@ -135,21 +199,13 @@ export default function RecipeInfo() {
     }
     if (recipeFetched && isScraped) {
       setDifficulty(calculateDifficulty(recipe.ingredientLines, recipeScrape));
+      setDifficultyCalculated(true);
     }
   }, [recipeFetched, isScraped]);
 
   useEffect(() =>{
-    if(recipeFetched && isScraped && difficulty){
-      setLoadStatus(false);
-      const cachedInfo = {
-        recipe,
-        recipeScrape,
-        difficulty
-      };
-      localStorage.setItem(`searched/${recipeId}`, JSON.stringify(cachedInfo));
-      const cacheTimeout = setTimeout(() => {localStorage.removeItem(`searched/${recipeId}`);}, 60000);
-    }
-  }, [recipeFetched, isScraped, difficulty]);
+    executeStorage();
+  }, [recipeFetched, isScraped, difficultyCalculated]);
 
   return (
       <div class="px-5 py-3">
