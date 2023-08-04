@@ -11,7 +11,7 @@ export default function Profile() {
   const [cuisines, setCuisines] = useState([]);
   const [mainIngredients, setMainIngredients] = useState([]);
   const [secondaryIngredients, setSecondaryIngredients] = useState([]);
-  const [reccomendations, setReccomendations] = useState([]);
+  const [recommendations, setRecommendations] = useState([]);
   const [cuisinesFetched, setCuisinesFetched] = useState(false);
   const [mainIngredientsFetched, setMainIngredientsFetched] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -115,7 +115,7 @@ export default function Profile() {
     });
     const data = await response.json();
     console.log(data);
-    setReccomendations(data);
+    setRecommendations(data);
     setIsLoading(false);
   }
   
@@ -142,12 +142,12 @@ export default function Profile() {
     const inCache = localStorage.getItem(`profile/${currUser.username}`);
     const determineCacheAction = async () => {
       if (inCache) {
-        console.log(reccomendations);
+        console.log(recommendations);
         const profileInfo = JSON.parse(inCache);
         const noChange = await noChangeForReccs(profileInfo.cuisines, profileInfo.mainIngredients, profileInfo.secondaryIngredients, profileInfo.calorieRange);
         if (noChange) {
           console.log("no, this is running");
-          setReccomendations(profileInfo.reccomendations);
+          setRecommendations(profileInfo.recommendations);
           fetchFavorites();
           setMainIngredients(profileInfo.mainIngredients);
           setSecondaryIngredients(profileInfo.secondaryIngredients);
@@ -181,19 +181,19 @@ export default function Profile() {
   }, [cuisinesFetched, mainIngredientsFetched])
 
   useEffect(() =>{
-    console.log(reccomendations);
-    if (reccomendations.length > 0){
+    console.log(recommendations);
+    if (recommendations.length > 0){
       const cachedInfo = {
         mainIngredients,
         secondaryIngredients,
         cuisines,
         calorieRange,
-        reccomendations
+        recommendations
       };
       localStorage.setItem(`profile/${currUser.username}`, JSON.stringify(cachedInfo));
-      const reccomendationsCacheTimeout = setTimeout(() => {localStorage.removeItem(`profile/${currUser.username}`);}, 600000);
+      const recommendationsCacheTimeout = setTimeout(() => {localStorage.removeItem(`profile/${currUser.username}`);}, 600000);
     }
-  }, [reccomendations]);
+  }, [recommendations]);
 
   return (
     <div>
@@ -203,7 +203,7 @@ export default function Profile() {
         <div className="row">
           <Favorites favorites={favorites}/>
           <div className="col-md-2 mb-4"></div>
-          <Reccomendations isLoading={isLoading} reccomendations={reccomendations}/>
+          <Reccomendations isLoading={isLoading} recommendations={recommendations}/>
         </div>
       </div>
     </div> 
