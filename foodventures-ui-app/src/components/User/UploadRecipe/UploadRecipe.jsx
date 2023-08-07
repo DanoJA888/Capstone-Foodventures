@@ -49,8 +49,6 @@ export default function UploadRecipe({cuisineList}) {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    console.log(name);
-    console.log(value);
     setRecipe({
       ...recipe,
       [name]: value,
@@ -90,7 +88,6 @@ export default function UploadRecipe({cuisineList}) {
     //updates array with entire line
     const updatedIngredients = [...recipe["ingredients"]];
     const index = updatedIngredients.indexOf(ingredient);
-    console.log(index);
     updatedIngredients.splice(index, 1);
     setRecipe(prevRecipe => ({
       ...prevRecipe,
@@ -115,8 +112,7 @@ export default function UploadRecipe({cuisineList}) {
     });
     directionsRef.current.value = "";
   }
-
-  console.log(recipe);
+  
   return (
     <div class="px-5 py-3 container text-center">
       <h1 class= "title">Upload A Recipe!</h1>

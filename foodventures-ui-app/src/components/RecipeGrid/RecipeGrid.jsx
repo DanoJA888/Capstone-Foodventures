@@ -1,3 +1,4 @@
+import "./RecipeGrid.css";
 import React from "react";
 import { Link } from 'react-router-dom';
 
@@ -20,8 +21,8 @@ export default function RecipeGrid({currRecipes}){
             <div className="col-md-3">
               <div className="border p-4 text-center">
                 <img src={recipe.recipe.image} alt={recipe.recipe.label} className="img-fluid" />
-                <Link to={`/searched/${recipeId}`}>
-                  <h2 className="text-truncate">{recipe.recipe.label}</h2>
+                <Link className="link" to={`/searched/${recipeId}`}>
+                  <h2 className="text-truncate text-primary">{recipe.recipe.label}</h2>
                 </Link>
               </div>
             </div>

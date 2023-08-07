@@ -8,8 +8,6 @@ import RecipeGrid from "../RecipeGrid/RecipeGrid";
 
 export default function SearchResults({cuisineList, updateSearch, updateCuisine}) {
   const {cuisine, search} = useParams();
-  console.log(cuisine);
-  console.log(search);
   const [currRecipes, updateRecipes] = useState([]);
   const [loadStatus, setLoadStatus] = useState(true);
   const [previousCuisine, setPreviousCuisine]= useState("");
@@ -27,13 +25,10 @@ export default function SearchResults({cuisineList, updateSearch, updateCuisine}
     setPreviousSearch(search);
     let results = []
     const recipes = await responseInternalAPI.json();
-    console.log(recipes);
     results = results.concat(recipes);
     const responseExternalApi = await fetch(url({cuisine, q: search}));
     const urlRecipes = await responseExternalApi.json();
-    console.log(urlRecipes);
     results= results.concat(urlRecipes.hits)
-    console.log(results);
     updateRecipes(results);
   };
 

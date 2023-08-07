@@ -41,11 +41,10 @@ export default function RecipeInfo() {
         })
       });
       const directions = await response.json();
-      console.log(directions);
+
       if (Array.isArray(directions) && directions.length > 0) {
         setRecipeScrape(directions);
       } else {
-        console.error("Invalid data format:", directions);
         setUrlSupported(false);
       }
     }
@@ -53,7 +52,6 @@ export default function RecipeInfo() {
   }
 
   const apiCall = async () => {
-    console.log(recipeId);
     const response = await fetch(url({recipeId}));
     if (response.ok) {
       const recipeInfo = await response.json();
@@ -69,7 +67,6 @@ export default function RecipeInfo() {
         },
       });
       const recipeInfo= await dbSearch.json();
-      console.log(recipeInfo.recipe);
       if (recipeInfo.recipe) {
         setRecipe(recipeInfo.recipe);
         findMainIngredients(recipeInfo.recipe);
@@ -91,8 +88,6 @@ export default function RecipeInfo() {
         currSecondaryIng = ingredient;
       }
     });
-    console.log(currMainIng.food);
-    console.log(currSecondaryIng.food);
     setMainIngredient(currMainIng.food);
     setSecondaryIngredient(currSecondaryIng.food);
   }
@@ -160,7 +155,6 @@ export default function RecipeInfo() {
     if(recipeFetched && isScraped && difficultyCalculated){
       setLoadStatus(false);
       const isRecipeInDb = await checkIfRecipeStored();
-      console.log(isRecipeInDb);
       if(!isRecipeInDb){
         await storeRecipeInfo();
         const cacheTimeout = setTimeout(() => {removeRecipeFromDB()}, 300000);
@@ -169,9 +163,7 @@ export default function RecipeInfo() {
   };
 
   const displayStoredRecipe = async () => {
-    console.log("im in");
     const confirmingRecipeExistance = await checkIfRecipeStored();
-    console.log(confirmingRecipeExistance);
     if(confirmingRecipeExistance !== null){
       setRecipe(confirmingRecipeExistance.recipe);
       findMainIngredients(confirmingRecipeExistance.recipe);
@@ -198,7 +190,6 @@ export default function RecipeInfo() {
   }, [recipeId]);
 
   useEffect(() =>{
-    console.log(mainIngredient);
     if(recipeFetched && !isScraped){
       scrape();
     }
