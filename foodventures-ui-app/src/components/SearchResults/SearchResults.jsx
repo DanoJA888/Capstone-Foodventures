@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import "./SearchResults.css";
 import SearchParams from "../SearchParams/SearchParams";
 import { url } from "../../../constant.js";
 import Spinner from "../Spinner";
 import RecipeGrid from "../RecipeGrid/RecipeGrid";
 
-export default function SearchResults({cuisineList, cuisine, search, updateSearch, updateCuisine}) {
+export default function SearchResults({cuisineList, updateSearch, updateCuisine}) {
+  const {cuisine, search} = useParams();
+  console.log(cuisine);
+  console.log(search);
   const [currRecipes, updateRecipes] = useState([]);
   const [loadStatus, setLoadStatus] = useState(true);
   const [previousCuisine, setPreviousCuisine]= useState("");
@@ -49,9 +53,7 @@ export default function SearchResults({cuisineList, cuisine, search, updateSearc
         <div>
         <SearchParams cuisineList = {cuisineList} updateSearch = {updateSearch} updateCuisine = {updateCuisine}/>
         </div>
-        {cuisine !== "" &&  
-          <h1 className="title">{cuisine.replaceAll("%20", " ")}</h1>
-        }
+        <h3 className="title">Search Results For {cuisine} {search}</h3>
         <div className="container mt-3 mr-1">
           <div className="row">
             {loadStatus ? (
