@@ -21,8 +21,8 @@ export default function App() {
     return storedUser ? JSON.parse(storedUser) : null;
   });
   const [cuisineList, setCuisineList] = useState([]);
-  const [selectedCuisine, updateCuisine] = useState(null);
-  const [currSearch, updateSearch] = useState(null);
+  const [selectedCuisine, updateCuisine] = useState("");
+  const [currSearch, updateSearch] = useState("");
   const updateUser = (newUser) => {
     setUser(newUser);
   };
@@ -48,7 +48,8 @@ export default function App() {
           <Routes>
             <Route path = '/' element={<Home cuisineList  = {cuisineList} setCuisineList = {setCuisineList} updateCuisine = {updateCuisine}/>}></Route>
             <Route path = '/search' element={<Search cuisineList  = {cuisineList} updateSearch  = {updateSearch} updateCuisine = {updateCuisine}/>}></Route>
-            <Route path = '/search_results' element={<SearchResults cuisineList  = {cuisineList} cuisine = {selectedCuisine} search = {currSearch} updateSearch = {updateSearch} updateCuisine = {updateCuisine}/>}></Route>
+            <Route path = '/search_results/cuisine/:cuisine/search/:search?' element={<SearchResults cuisineList  = {cuisineList}  updateSearch = {updateSearch} updateCuisine = {updateCuisine}/>}></Route>
+            <Route path = '/search_results/search/:search/cuisine/:cuisine?' element={<SearchResults cuisineList  = {cuisineList}  updateSearch = {updateSearch} updateCuisine = {updateCuisine}/>}></Route>
             <Route path = '/searched/:recipeId' element={<RecipeInfo/>}></Route>
             <Route path = '/login' element={<Login/>}></Route>
             <Route path = '/signup' element={<Signup/>}></Route>

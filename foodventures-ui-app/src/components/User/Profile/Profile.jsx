@@ -49,7 +49,6 @@ export default function Profile() {
       credentials: "include",
     });
     const data = await response.json();
-    console.log(data.topCuisines);
     return data.topCuisines;
   }
   
@@ -114,7 +113,6 @@ export default function Profile() {
       credentials: "include",
     });
     const data = await response.json();
-    console.log(data);
     setRecommendations(data);
     setIsLoading(false);
   }
@@ -142,11 +140,9 @@ export default function Profile() {
     const inCache = localStorage.getItem(`profile/${currUser.username}`);
     const determineCacheAction = async () => {
       if (inCache) {
-        console.log(recommendations);
         const profileInfo = JSON.parse(inCache);
         const noChange = await noChangeForReccs(profileInfo.cuisines, profileInfo.mainIngredients, profileInfo.secondaryIngredients, profileInfo.calorieRange);
         if (noChange) {
-          console.log("no, this is running");
           setRecommendations(profileInfo.recommendations);
           fetchFavorites();
           setMainIngredients(profileInfo.mainIngredients);
@@ -155,7 +151,6 @@ export default function Profile() {
           setCalorieRange(profileInfo.calorieRange);
           setIsLoading(false);
         } else {
-          console.log("this is running");
           fetchFavorites();
           topCuisines();
           setInformaion();
@@ -174,14 +169,12 @@ export default function Profile() {
   // since i have an awaiting expression to fetch the users favorite cuisines and the generateReccomendations function is an async function, 
   // I have to wait for the cuisines to update in the state in order to make the external api calls.
   useEffect(() => {
-    console.log(isLoading);
     if (cuisines.length !== 0 && mainIngredients.length !== 0) {
       generateReccomendations();
     }
   }, [cuisinesFetched, mainIngredientsFetched])
 
   useEffect(() =>{
-    console.log(recommendations);
     if (recommendations.length > 0){
       const cachedInfo = {
         mainIngredients,

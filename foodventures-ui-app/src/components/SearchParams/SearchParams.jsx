@@ -9,9 +9,12 @@ export default function SearchParams({cuisineList, updateSearch, updateCuisine})
 
   function enterSearch(event){
     event.preventDefault();
-    updateSearch(currentSearchField); 
-    updateCuisine(selectedCuisine);
-    navigate('/search_results')
+    if(selectedCuisine === ""){
+     navigate(`/search_results/search/${currentSearchField}/cuisine/${selectedCuisine}`)
+    }
+    else{
+      navigate(`/search_results/cuisine/${selectedCuisine}/search/${currentSearchField}`);
+    }
   }
   
   return (

@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import "./SearchResults.css";
 import SearchParams from "../SearchParams/SearchParams";
 import { url } from "../../../constant.js";
 import Spinner from "../Spinner";
 import RecipeGrid from "../RecipeGrid/RecipeGrid";
 
-export default function SearchResults({cuisineList, cuisine, search, updateSearch, updateCuisine}) {
+export default function SearchResults({cuisineList, updateSearch, updateCuisine}) {
+  const {cuisine, search} = useParams();
   const [currRecipes, updateRecipes] = useState([]);
   const [loadStatus, setLoadStatus] = useState(true);
   const [previousCuisine, setPreviousCuisine]= useState("");
@@ -23,13 +25,10 @@ export default function SearchResults({cuisineList, cuisine, search, updateSearc
     setPreviousSearch(search);
     let results = []
     const recipes = await responseInternalAPI.json();
-    console.log(recipes);
     results = results.concat(recipes);
     const responseExternalApi = await fetch(url({cuisine, q: search}));
     const urlRecipes = await responseExternalApi.json();
-    console.log(urlRecipes);
     results= results.concat(urlRecipes.hits)
-    console.log(results);
     updateRecipes(results);
   };
 
@@ -49,9 +48,7 @@ export default function SearchResults({cuisineList, cuisine, search, updateSearc
         <div>
         <SearchParams cuisineList = {cuisineList} updateSearch = {updateSearch} updateCuisine = {updateCuisine}/>
         </div>
-        {cuisine !== "" &&  
-          <h1 className="title">{cuisine.replaceAll("%20", " ")}</h1>
-        }
+        <h3 className="title">Search Results For {cuisine} {search}</h3>
         <div className="container mt-3 mr-1">
           <div className="row">
             {loadStatus ? (
