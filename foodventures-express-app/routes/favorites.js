@@ -44,7 +44,7 @@ router.post("/add_favorites", async (req, res) =>{
         let secondaryIngredients = user.secondaryIngredients;
         let calorieList = user.minAndMaxCals;
         
-        const {recipeId, recipeName, recipeCuisine, mainIngredient, secondaryIngredient, calories} = req.body;
+        const {recipeId, recipeName, recipeCuisine, mainIngredient, secondaryIngredient, calories, image} = req.body;
         if (!user) {
             throw new Error('User not authenticated'); 
         }
@@ -72,6 +72,7 @@ router.post("/add_favorites", async (req, res) =>{
           userId: user.id,
           recipeId: recipeId,
           recipeName: recipeName,
+          image: image.link
         };
         
         const [updatedCount, newFav] = await Promise.all([
@@ -86,7 +87,7 @@ router.post("/add_favorites", async (req, res) =>{
           ),
           Favorite.create(followData)
         ]);
-        res.status(200).json({mainIngredients: mainIngredient})
+        res.status(200).json({user: user})
 
     }
     catch(error){

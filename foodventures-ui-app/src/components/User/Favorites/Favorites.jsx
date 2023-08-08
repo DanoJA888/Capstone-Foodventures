@@ -15,7 +15,8 @@ export default function Favorites({favorites}) {
               // using substring method to extract recipeId, ternary to check if recipe is from db or external api
               return (
                 <div className="col-md-12">
-                  <div className=" -4 text-center">
+                  <div className="text-center">
+                  <img src={fav.image} alt={fav.recipeName} className="img-fluid border border-dark" />
                     <Link to={`/searched/${fav.recipeId}`}>
                       <h2 >{fav.recipeName}</h2>
                     </Link>

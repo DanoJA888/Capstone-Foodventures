@@ -15,7 +15,10 @@ export default function FavoriteButton({favorited, setFavorited, recipe, recipeI
             recipeCuisine: recipe.cuisineType[0],
             mainIngredient: mainIngredient,
             secondaryIngredient: secondaryIngredient,
-            calories: calories
+            calories: calories,
+            image: {
+              link: recipe.image
+            }
         }),
         credentials: "include",
       });
