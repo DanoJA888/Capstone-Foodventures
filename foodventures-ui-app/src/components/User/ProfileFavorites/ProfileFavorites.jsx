@@ -1,11 +1,11 @@
 import React, { useEffect, useState, useContext } from "react";
 import { UserContext } from "../../UserContext.js";
-import "./Profile.css";
+import "./ProfileFavorites.css";
 import Favorites from "../Favorites/Favorites.jsx";
 import Reccomendations from "../Reccomendations/Reccomendations.jsx";
 import UserInfo from "../UserInfo/UserInfo.jsx";
 
-export default function Profile() {
+export default function ProfileFavorites() {
   const { currUser } = useContext(UserContext);
   const [favorites, setFavorites] = useState([]);
   const [cuisines, setCuisines] = useState([]);
@@ -190,12 +190,11 @@ export default function Profile() {
 
   return (
     <div>
-      <h1 className="title">Profile</h1>
-      <UserInfo />
+      <h1 className="title">{currUser.username}'s Favorites</h1>
       <div class="px-5 py-3 container text-center">
         <div className="row">
           <Favorites favorites={favorites}/>
-          <div className="col-md-2 mb-4"></div>
+            <div className="col-md-2 mb-4"></div>
           <Reccomendations isLoading={isLoading} recommendations={recommendations}/>
         </div>
       </div>
