@@ -3,7 +3,6 @@ import { UserContext } from "../../UserContext.js";
 import "./ProfileFavorites.css";
 import Favorites from "../Favorites/Favorites.jsx";
 import Reccomendations from "../Reccomendations/Reccomendations.jsx";
-import UserInfo from "../UserInfo/UserInfo.jsx";
 
 export default function ProfileFavorites() {
   const { currUser } = useContext(UserContext);
@@ -189,8 +188,8 @@ export default function ProfileFavorites() {
   }, [recommendations]);
 
   return (
-    <div>
-      <h1 className="title">{currUser.username}'s Favorites</h1>
+    <div class="text-center">
+      <h1>{currUser.username}'s Favorites</h1>
       <div class="px-5 py-3 container text-center">
         <div className="row">
           <Favorites favorites={favorites}/>

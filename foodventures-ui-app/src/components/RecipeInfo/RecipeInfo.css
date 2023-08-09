@@ -1,9 +1,12 @@
 .title{
     text-align: center;
+    width: 50%;
+    word-wrap: break-word;
 }
-.recipe-title {
-  text-align: center;
-  }
+.content-border{
+  
+  border: 2px dashed #28a745;
+}
 .pill {
     position: relative;
     padding: 8px 16px;
@@ -26,50 +29,50 @@
 }
 
 .pill span {
-    position: relative;
-  }
-  .pill span[data-tooltip="Based on recipe ingredients, recipe steps, and approximate time"]::before {
-    content: attr(data-tooltip);
-    position: absolute;
-    bottom: -30px;
-    left: 50%;
-    transform: translateX(-25%);
-    padding: 4px 8px;
-    border-radius: 25px; 
-    background-color: lightgrey;
-    color: black;
-    font-size: 12px;
-    white-space: nowrap;
-    visibility: hidden;
-    opacity: 0;
-    z-index: 1;
-  }
-  
-  .pill span[data-tooltip="Based on recipe ingredients, recipe steps, and approximate time"]:hover::before {
-    visibility: visible;
-    opacity: 1;
-    transition: opacity 0.2s ease-in-out;
-  }
+  position: relative;
+}
+.pill span[data-tooltip="Based on recipe ingredients, recipe steps, and approximate time"]::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-25%);
+  padding: 4px 8px;
+  border-radius: 25px; 
+  background-color: lightgrey;
+  color: black;
+  font-size: 12px;
+  white-space: nowrap;
+  visibility: hidden;
+  opacity: 0;
+  z-index: 1;
+}
 
-  .pill span[data-tooltip="Based on total ingredients"]::before {
-    content: attr(data-tooltip);
-    position: absolute;
-    bottom: -30px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 4px 8px;
-    background-color: lightgray;
-    border-radius: 25px; 
-    color: black;
-    font-size: 12px;
-    white-space: nowrap;
-    visibility: hidden;
-    opacity: 0;
-    z-index: 1;
-  }
-  
-  .pill span[data-tooltip="Based on total ingredients"]:hover::before {
-    visibility: visible;
-    opacity: 1;
-    transition: opacity 0.2s ease-in-out;
-  }
+.pill span[data-tooltip="Based on recipe ingredients, recipe steps, and approximate time"]:hover::before {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.pill span[data-tooltip="Based on total ingredients"]::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 8px;
+  background-color: lightgray;
+  border-radius: 25px; 
+  color: black;
+  font-size: 12px;
+  white-space: nowrap;
+  visibility: hidden;
+  opacity: 0;
+  z-index: 1;
+}
+
+.pill span[data-tooltip="Based on total ingredients"]:hover::before {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.2s ease-in-out;
+}

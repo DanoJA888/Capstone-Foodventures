@@ -6,7 +6,7 @@ export default function UserInfo() {
   const { currUser } = useContext(UserContext);
   return(
     <div class="container ">
-      <h1 className="title">Your Profile Info</h1>
+      <h1 class= "text-center p-4">Your Profile Info</h1>
       <div class="row justify-content-center">
         <div class="col-md-6 info-box">
           <div class="col-md-3">

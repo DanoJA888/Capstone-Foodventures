@@ -52,9 +52,9 @@ export default function FavoriteButton({favorited, setFavorited, recipe, recipeI
   return(
     <div>
       {favorited ? (
-        <button className="btn btn-danger" onClick={() => removeFromFavs()}>Remove From Favorites</button>
+        <button className="btn btn-danger btn-block" onClick={() => removeFromFavs()}>Remove From Favorites</button>
       ) : (
-        <button className="btn btn-success"onClick={() => addToFavs()}>Add To Favorites</button>
+        <button className="btn btn-success btn-block"onClick={() => addToFavs()}>Add To Favorites</button>
       )}
     </div>
   )

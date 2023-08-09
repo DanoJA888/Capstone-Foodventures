@@ -5,7 +5,7 @@ import SearchParams from "../SearchParams/SearchParams";
 export default function Search({cuisineList, updateSearch, updateCuisine}) {
   return (
     <div>
-        <h1 className="title">Search</h1>
+        <h1 class= "text-center p-4">Search</h1>
         <div>
           <SearchParams cuisineList = {cuisineList} updateSearch = {updateSearch} updateCuisine = {updateCuisine}/>
         </div>

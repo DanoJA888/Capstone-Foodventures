@@ -5,6 +5,7 @@ import { url, calculateDifficulty, difficultyFactorMessage} from "../../../const
 import FavoriteButton from "../FavoriteButton/FavoriteButton.jsx";
 import IngredientsAndDirections from "../IngredientsAndDirections/IngredientsAndDirections.jsx";
 import "./RecipeInfo.css";
+import Card from 'react-bootstrap/Card';
 
 export default function RecipeInfo() {
   const { recipeId } = useParams();
@@ -20,6 +21,7 @@ export default function RecipeInfo() {
   const [recipe, setRecipe] = useState({
     ingredientLines: [],
   });
+  const [cuisine, setCuisine] = useState("");
   const [difficultyCalculated, setDifficultyCalculated] = useState(false);
   const [difficulty, setDifficulty] = useState({
     difficulty : "",
@@ -55,7 +57,9 @@ export default function RecipeInfo() {
     const response = await fetch(url({recipeId}));
     if (response.ok) {
       const recipeInfo = await response.json();
+      console.log(recipeInfo)
       setRecipe(recipeInfo.recipe);
+      setCuisine(recipeInfo.recipe.cuisineType[0]);
       findMainIngredients(recipeInfo.recipe);
       setRecipeFetched(true);
     } 
@@ -69,6 +73,7 @@ export default function RecipeInfo() {
       const recipeInfo= await dbSearch.json();
       if (recipeInfo.recipe) {
         setRecipe(recipeInfo.recipe);
+        setCuisine(recipeInfo.cuisine)
         findMainIngredients(recipeInfo.recipe);
       } else {
         console.error('Recipe not found in both APIs');
@@ -164,8 +169,12 @@ export default function RecipeInfo() {
 
   const displayStoredRecipe = async () => {
     const confirmingRecipeExistance = await checkIfRecipeStored();
+    console.log(confirmingRecipeExistance);
     if(confirmingRecipeExistance !== null){
       setRecipe(confirmingRecipeExistance.recipe);
+      {confirmingRecipeExistance.userId !== undefined && confirmingRecipeExistance.userId !== null
+        ? setCuisine(confirmingRecipeExistance.cuisine)
+        : setCuisine(confirmingRecipeExistance.recipe.cuisineType[0]);}
       findMainIngredients(confirmingRecipeExistance.recipe);
       setRecipeScrape(confirmingRecipeExistance.scrape);
       setRecipeFetched(true);
@@ -201,12 +210,14 @@ export default function RecipeInfo() {
 
   useEffect(() =>{
     executeStorage();
+    
   }, [recipeFetched, isScraped, difficultyCalculated]);
-
+  
   return (
       <div class="px-5 py-3">
         <div className="row">
           <div class="pill col-md-1 d-flex align-items-center justify-content-start">
+            <h5 style={{ padding: '12px', marginTop: "4px"}}>Difficulty:</h5>
             <span 
               class={`pill ${difficulty.difficulty}`}
               data-tooltip= {difficultyFactorMessage[difficulty.factors]}>
@@ -222,10 +233,21 @@ export default function RecipeInfo() {
             </div>
           }
         </div>
-        <div className="container text-center">
-          <img src={recipe.image} alt={recipe.label} />
-          <p>{recipe.source}</p>
-          <IngredientsAndDirections recipe = {recipe} recipeScrape={recipeScrape} loadStatus= {loadStatus} urlSupported= {urlSupported}/>
+        <div className="container my-5 content-border">
+          <div className="row">
+            <div className="col-md-6">
+              <Card style={{ width: '30rem', border: '2px solid', borderColor: '#4fb354' }}>
+                <Card.Img variant="top" src={recipe.image} />
+                <Card.Body>
+                  <strong>Cuisine:</strong> {cuisine} | <strong>Main Ingredients:</strong> {mainIngredient}, {secondaryIngredient}
+                </Card.Body>
+              </Card>
+              <p className="source">Source: {recipe.source}</p>
+            </div>
+            <div className="col-md-6 d-flex flex-column justify-content-center">  
+              <IngredientsAndDirections recipe={recipe} recipeScrape={recipeScrape} loadStatus={loadStatus} urlSupported={urlSupported} />
+            </div>
+          </div>
         </div>
       </div>
   );

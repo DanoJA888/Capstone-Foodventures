@@ -44,11 +44,11 @@ export default function SearchResults({cuisineList, updateSearch, updateCuisine}
 
   return (
     <div>
-        <h1 className="title">Search</h1>
+        <h1 class= "text-center p-4">Search</h1>
         <div>
         <SearchParams cuisineList = {cuisineList} updateSearch = {updateSearch} updateCuisine = {updateCuisine}/>
         </div>
-        <h3 className="title">Search Results For {cuisine} {search}</h3>
+        <h3 class= "text-center p-4">Search Results For: {cuisine} {search}</h3>
         <div className="container mt-3 mr-1">
           <div className="row">
             {loadStatus ? (
