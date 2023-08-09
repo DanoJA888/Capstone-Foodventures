@@ -91,6 +91,7 @@ router.post("/add_favorites", async (req, res) =>{
 
     }
     catch(error){
+      console.log("ERROR" , error)
         res.status(500).json({error: "Server Error: " + error});
     }
 })
@@ -145,6 +146,7 @@ router.delete("/remove_favorites", async (req, res) =>{
 
     }
     catch(error){
+      console.log("ERROR", error);
         res.status(500).json({error: "Server Error: " + error});
     }
 })

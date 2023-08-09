@@ -85,16 +85,28 @@ export default function RecipeInfo() {
   function findMainIngredients(recipe){
     let currMainIng = { weight: 0 };
     let currSecondaryIng = {weight : 0}
-    recipe.ingredients.forEach(ingredient => {
-      if (ingredient.weight >currMainIng.weight ){
-        currMainIng = ingredient
-      }
-      else if(ingredient.weight >currSecondaryIng.weight ){
-        currSecondaryIng = ingredient;
-      }
-    });
-    setMainIngredient(currMainIng.food);
-    setSecondaryIngredient(currSecondaryIng.food);
+    if(recipe.ingredients.length === 1){
+      setMainIngredient(recipe.ingredients[0].food);
+      setSecondaryIngredient(recipe.ingredients[0].food);
+    }
+    else{
+      recipe.ingredients.forEach(ingredient => {
+        const ingredientWeight = parseFloat(ingredient.weight);
+        if (ingredientWeight >currMainIng.weight ){
+          const temp = currMainIng;
+          currMainIng = ingredient;
+          if (temp.weight > currSecondaryIng.weight){
+            currSecondaryIng = temp;
+          }
+        }
+        else if(ingredientWeight >currSecondaryIng.weight ){
+          currSecondaryIng = ingredient;
+        }
+        
+      });
+      setMainIngredient(currMainIng.food);
+      setSecondaryIngredient(currSecondaryIng.food);
+    }
   }
 
   const checkInFavs = async () => {
@@ -169,7 +181,6 @@ export default function RecipeInfo() {
 
   const displayStoredRecipe = async () => {
     const confirmingRecipeExistance = await checkIfRecipeStored();
-    console.log(confirmingRecipeExistance);
     if(confirmingRecipeExistance !== null){
       setRecipe(confirmingRecipeExistance.recipe);
       {confirmingRecipeExistance.userId !== undefined && confirmingRecipeExistance.userId !== null
