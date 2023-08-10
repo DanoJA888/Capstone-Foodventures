@@ -144,3 +144,14 @@ export const recipeInfoForFavorating = async (recipe) =>{
                 : "https://static.thenounproject.com/png/526867-200.png";
   return info;
 }
+
+export function groupRecipes(recipes){
+  let groupedRecipes = [];
+  for (let i = 0; i < recipes.length; i += 3) {
+    const endOfGroup = i+3;
+    const group = recipes.slice(i, endOfGroup);
+    groupedRecipes.push(group);
+    console.log(group);
+  }
+  return groupedRecipes;
+}

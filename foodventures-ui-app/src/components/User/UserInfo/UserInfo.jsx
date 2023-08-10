@@ -1,7 +1,8 @@
 import React, {useContext, useState, useEffect} from "react";
 import { UserContext } from "../../UserContext.js";
 import { Link } from 'react-router-dom';
-import Carousel from 'react-bootstrap/Carousel';
+import { groupRecipes } from "../../../../constant.js";
+import RecipeCarousel from "../../RecipeCarousel.jsx";
 import './UserInfo.css'
 
 export default function UserInfo() {
@@ -19,17 +20,9 @@ export default function UserInfo() {
     const recipes = await response.json();
     console.log(recipes);
     if (recipes.length > 0) {
-      let groupedRecipes = [];
-      for (let i = 0; i < recipes.length; i += 3) {
-        const endOfGroup = i+3;
-        const group = recipes.slice(i, endOfGroup);
-        groupedRecipes.push(group);
-        console.log(group);
-      }
-      console.log(groupedRecipes);
+      const groupedRecipes = groupRecipes(recipes);
       setUserUploadedRecipes(groupedRecipes);
     }
-    
   };
 
   useEffect(() => {
@@ -55,25 +48,7 @@ export default function UserInfo() {
         {userUploadedRecipes.length == 0 ? (
           <h5 className="title">It Seems You Havent Uploaded Any Recipes Yet</h5>
           ):(
-          <Carousel interval={5000} indicators={true} className="col-md-9 info-box">
-            {userUploadedRecipes.map((recipes) => {
-              return (
-                <Carousel.Item>
-                  <div className="d-flex justify-content-around">
-                  {recipes.map((recipe) =>{
-                    return(
-                    <div className="border p-4 text-center bg-white">
-                      <img src={recipe.recipe.image} alt={recipe.recipe.label} className="img-fluid" />
-                      <Link className="link" to={`/searched/${recipe.recipeId}`}>
-                        <p className="text-truncate text-primary">{recipe.recipe.label}</p>
-                      </Link>
-                    </div>
-                  )})}
-                  </div>
-                </Carousel.Item>
-              );
-            })}
-          </Carousel>
+          <RecipeCarousel groupedRecipes={userUploadedRecipes}/>
         )}
       </div>
     </div>

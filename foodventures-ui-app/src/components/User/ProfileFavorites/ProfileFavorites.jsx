@@ -3,6 +3,8 @@ import { UserContext } from "../../UserContext.js";
 import "./ProfileFavorites.css";
 import Favorites from "../Favorites/Favorites.jsx";
 import Reccomendations from "../Reccomendations/Reccomendations.jsx";
+import { groupRecipes } from "../../../../constant.js";
+
 
 export default function ProfileFavorites() {
   const { currUser } = useContext(UserContext);
@@ -24,9 +26,12 @@ export default function ProfileFavorites() {
       },
       credentials: "include",
     });
-    const data = await response.json();
-    console.log(data);
-    setFavorites(data);
+    const favs = await response.json();
+    if (favs.length > 0) {
+      const groupedRecipes = groupRecipes(favs);
+      console.log(groupedRecipes);
+      setFavorites(groupedRecipes);
+    }
   };
 
   const topCuisines = async () => {
@@ -189,12 +194,11 @@ export default function ProfileFavorites() {
   }, [recommendations]);
 
   return (
-    <div class="text-center">
+    <div class="text-center justify-content-center">
       <h1>{currUser.username}'s Favorites</h1>
-      <div class="px-5 py-3 container text-center">
+      <div class="px-5 py-3 container text-center justify-content-center">
+      <Favorites favorites={favorites}/>
         <div className="row">
-          <Favorites favorites={favorites}/>
-            <div className="col-md-2 mb-4"></div>
           <Reccomendations isLoading={isLoading} recommendations={recommendations}/>
         </div>
       </div>
