@@ -19,6 +19,10 @@ export const Favorite = sequelize.define('Favorite', {
   recipeName: {
     type: DataTypes.STRING,
     allowNull: false
+  },
+  image : {
+    type: DataTypes.JSONB,
+    allowNull: true
   }
 });
 

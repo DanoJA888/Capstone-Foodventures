@@ -114,8 +114,8 @@ export default function UploadRecipe({cuisineList}) {
   }
   
   return (
-    <div class="px-5 py-3 container text-center">
-      <h1 class= "title">Upload A Recipe!</h1>
+    <div class="px-5 container text-center">
+      <h1 class= "text-center p-4">Upload A Recipe!</h1>
       <div className="row ">
           <div className="col-md-5 mb-4 form-box">
             <form onSubmit={uploadRecipe} >

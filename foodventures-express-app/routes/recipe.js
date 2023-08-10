@@ -55,6 +55,17 @@ router.get("/get_recipes", async (req, res) => {
   }
 });
 
+router.get("/get_user_uploaded", async (req, res) => {
+  try {
+    const user = req.session.user;
+    const recipes = await Recipe.findAll({where: {userId : user.id}});
+    res.json(recipes);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Server Error" });
+  }
+});
+
 router.get("/get_recipe", async (req, res) => {
   try {
     const recipeId = req.query.recipeId;

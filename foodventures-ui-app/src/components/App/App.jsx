@@ -10,8 +10,9 @@ import Login from "../User/Login/Login";
 import Signup from "../User/Signup/Signup";
 import RecipeInfo from "../RecipeInfo/RecipeInfo";
 import SearchResults from "../SearchResults/SearchResults";
-import Profile from "../User/Profile/Profile";
+import ProfileFavorites from "../User/ProfileFavorites/ProfileFavorites";
 import UploadRecipe from "../User/UploadRecipe/UploadRecipe";
+import UserInfo from "../User/UserInfo/UserInfo";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { fetchCuisines } from "../../../constant.js";
 
@@ -53,7 +54,8 @@ export default function App() {
             <Route path = '/searched/:recipeId' element={<RecipeInfo/>}></Route>
             <Route path = '/login' element={<Login/>}></Route>
             <Route path = '/signup' element={<Signup/>}></Route>
-            <Route path = '/profile' element = {<Profile/>}></Route>
+            <Route path = '/profile/favorites' element = {<ProfileFavorites/>}></Route>
+            <Route path = '/profile/info' element = {<UserInfo/>}></Route>
             <Route path = '/upload' element = {<UploadRecipe cuisineList={cuisineList}/>}></Route>
           </Routes>
           

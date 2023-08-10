@@ -22,7 +22,7 @@ export default function RecipeGrid({currRecipes}){
               <div className="border p-4 text-center">
                 <img src={recipe.recipe.image} alt={recipe.recipe.label} className="img-fluid" />
                 <Link className="link" to={`/searched/${recipeId}`}>
-                  <h2 className="text-truncate text-primary">{recipe.recipe.label}</h2>
+                  <p className="text-truncate text-primary">{recipe.recipe.label}</p>
                 </Link>
               </div>
             </div>

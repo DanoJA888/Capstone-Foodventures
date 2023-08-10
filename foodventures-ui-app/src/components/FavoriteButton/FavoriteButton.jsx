@@ -1,9 +1,11 @@
 import React from "react";
+import { recipeInfoForFavorating } from "../../../constant";
 
-export default function FavoriteButton({favorited, setFavorited, recipe, recipeId, mainIngredient, secondaryIngredient}) {
-  async function addToFavs() {
+export default function FavoriteButton({favorited, setFavorited, recipe, recipeId, mainIngredient, secondaryIngredient}) {  
+    async function addToFavs() {
     try {
-      const calories = (recipe.calories / recipe.yield);
+      const recipeDetails = await recipeInfoForFavorating(recipe);
+      console.log(recipeDetails);
       const response = await fetch(`http://localhost:3001/add_favorites`, {
         method: "POST",
         headers: {
@@ -12,20 +14,23 @@ export default function FavoriteButton({favorited, setFavorited, recipe, recipeI
         body: JSON.stringify({ 
             recipeId, 
             recipeName: recipe.label, 
-            recipeCuisine: recipe.cuisineType[0],
+            recipeCuisine: recipeDetails.cuisine,
             mainIngredient: mainIngredient,
             secondaryIngredient: secondaryIngredient,
-            calories: calories
+            calories: recipeDetails.calories,
+            image: {
+              link: recipeDetails.image
+            }
         }),
         credentials: "include",
       });
       setFavorited(true);
     } catch (error) {
-      alert({ error });
+      console.log(error);
     }
   }
   async function removeFromFavs() {
-    const calories = (recipe.calories / recipe.yield);
+    const recipeDetails = await recipeInfoForFavorating(recipe);
     try {
       const response = await fetch(`http://localhost:3001/remove_favorites`, {
         method: "DELETE",
@@ -34,10 +39,10 @@ export default function FavoriteButton({favorited, setFavorited, recipe, recipeI
         },
         body: JSON.stringify({ 
             recipeId, 
-            recipeCuisine: recipe.cuisineType[0],
+            recipeCuisine: recipeDetails.cuisine,
             mainIngredient:mainIngredient,
             secondaryIngredient: secondaryIngredient,
-            calories: calories
+            calories: recipeDetails.calories
         }),
         credentials: "include",
       });
@@ -49,9 +54,9 @@ export default function FavoriteButton({favorited, setFavorited, recipe, recipeI
   return(
     <div>
       {favorited ? (
-        <button className="btn btn-danger" onClick={() => removeFromFavs()}>Remove From Favorites</button>
+        <button className="btn btn-danger btn-block" onClick={() => removeFromFavs()}>Remove From Favorites</button>
       ) : (
-        <button className="btn btn-success"onClick={() => addToFavs()}>Add To Favorites</button>
+        <button className="btn btn-success btn-block"onClick={() => addToFavs()}>Add To Favorites</button>
       )}
     </div>
   )

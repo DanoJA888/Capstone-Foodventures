@@ -126,3 +126,21 @@ export const difficultyFactorMessage = {
   1: `Based on total ingredients`,
   3: `Based on recipe ingredients, recipe steps, and approximate time`
 }
+
+export const recipeInfoForFavorating = async (recipe) =>{
+  let info = {
+    calories: 0,
+    cuisine: "",
+    image: ""
+  };
+  info.calories = recipe.yield !== undefined && recipe.yield !== null
+                  ? recipe.calories / recipe.yield
+                  : recipe.calories / recipe.servings;
+  info.cuisine =  recipe.cuisineType!== undefined && recipe.cuisineType !== null
+                  ? recipe.cuisineType[0]
+                  : recipe.cuisine.toLowerCase();
+  info.image =  recipe.image!== undefined && recipe.image !== null
+                ? recipe.image
+                : "https://static.thenounproject.com/png/526867-200.png";
+  return info;
+}

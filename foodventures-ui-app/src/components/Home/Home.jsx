@@ -6,8 +6,8 @@ import "./Home.css";
 export default function Home({cuisineList, updateCuisine}) {
 
   return (
-  <div >
-    <h1 className="title">Discover Dishes From Around the World!</h1>
+  <div>
+    <h1 class= "text-center p-4">Discover Dishes From Around the World!</h1>
     <div className="row mt-3 mx-4 justify-content-center">
       {cuisineList.map((cuisine) => (
         <div className="col-md-4 d-flex justify-content-center">

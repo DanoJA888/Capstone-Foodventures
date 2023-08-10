@@ -6,7 +6,7 @@ export default function IngredientsAndDirections({recipe, recipeScrape, loadStat
     <div className="row ">
       <div className="col-md-6 mb-4">
         <h3>Ingredients</h3>
-        <ul className="list-group">
+        <ul className="list-group border-dark">
           {recipe.ingredientLines.map((ingredient) => (
             <li className="list-group-item">{ingredient}</li>
           ))}
@@ -18,7 +18,7 @@ export default function IngredientsAndDirections({recipe, recipeScrape, loadStat
             <Spinner/>
           ) : !urlSupported ? (
             <div>
-              <p>Unsupported URL</p>
+              <p>Unsupported scrape, visit URL for more info</p>
               <a href={recipe.url} target="_blank" className="btn btn-primary">
                 Recipe
               </a>

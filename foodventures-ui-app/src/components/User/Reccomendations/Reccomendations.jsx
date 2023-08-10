@@ -5,6 +5,7 @@ import "./Reccomendations.css"
 
 
 export default function Reccomendations({isLoading, recommendations}) {
+  console.log(recommendations);
   return(
     <div className="col-md-5 mb-4 favs-and-reccs"> 
       <h1>Recipes You Might Like</h1>
@@ -20,7 +21,7 @@ export default function Reccomendations({isLoading, recommendations}) {
               return (
                 <div className="col-md-12">
                   <div className=" text-center">
-                    <img src={recommendation.image} alt={recommendation.label} className="img-fluid" />
+                    <img src={recommendation.image} alt={recommendation.label} className="img-fluid border border-dark" />
                     <Link to={`/searched/${recommendation.recipeId}`}>
                       <h2 >{recommendation.label}</h2>
                     </Link>
