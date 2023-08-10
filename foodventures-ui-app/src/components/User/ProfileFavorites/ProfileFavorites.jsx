@@ -117,8 +117,12 @@ export default function ProfileFavorites() {
       body : JSON.stringify({mainIngredients, secondaryIngredients, cuisines, calorieRange}),
       credentials: "include",
     });
-    const data = await response.json();
-    setRecommendations(data);
+    const generatedRecommendations = await response.json();
+    if (generatedRecommendations.length > 0) {
+      const groupedRecipes = groupRecipes(generatedRecommendations);
+      console.log(groupedRecipes);
+      setRecommendations(groupedRecipes);
+    }
     setIsLoading(false);
   }
   
