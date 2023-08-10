@@ -1,6 +1,7 @@
 import React, {useContext, useState, useEffect} from "react";
 import { UserContext } from "../../UserContext.js";
 import { Link } from 'react-router-dom';
+import Carousel from 'react-bootstrap/Carousel';
 import './UserInfo.css'
 
 export default function UserInfo() {
@@ -15,8 +16,20 @@ export default function UserInfo() {
       },
       credentials: "include",
     });
-    const data = await response.json();
-    setUserUploadedRecipes(data);
+    const recipes = await response.json();
+    console.log(recipes);
+    if (recipes.length > 0) {
+      let groupedRecipes = [];
+      for (let i = 0; i < recipes.length; i += 3) {
+        const endOfGroup = i+3;
+        const group = recipes.slice(i, endOfGroup);
+        groupedRecipes.push(group);
+        console.log(group);
+      }
+      console.log(groupedRecipes);
+      setUserUploadedRecipes(groupedRecipes);
+    }
+    
   };
 
   useEffect(() => {
@@ -42,25 +55,25 @@ export default function UserInfo() {
         {userUploadedRecipes.length == 0 ? (
           <h5 className="title">It Seems You Havent Uploaded Any Recipes Yet</h5>
           ):(
-          userUploadedRecipes.map((recipe) => {
-            // using substring method to extract recipeId, ternary to check if recipe is from db or external api
-            let recipeId = "";
-            {recipe._links? (
-              recipeId = recipe._links.self.href.substring(38, 71)
-              ):(
-              recipeId = recipe.recipeId
-            )}
-            return (
-              <div className="col-md-3">
-                <div className="border p-4 text-center">
-                  <img src={recipe.recipe.image} alt={recipe.recipe.label} className="img-fluid" />
-                  <Link className="link" to={`/searched/${recipeId}`}>
-                    <p className="text-truncate text-primary">{recipe.recipe.label}</p>
-                  </Link>
-                </div>
-              </div>
-            );
-          })
+          <Carousel interval={5000} indicators={true} className="col-md-9 info-box">
+            {userUploadedRecipes.map((recipes) => {
+              return (
+                <Carousel.Item>
+                  <div className="d-flex justify-content-around">
+                  {recipes.map((recipe) =>{
+                    return(
+                    <div className="border p-4 text-center bg-white">
+                      <img src={recipe.recipe.image} alt={recipe.recipe.label} className="img-fluid" />
+                      <Link className="link" to={`/searched/${recipe.recipeId}`}>
+                        <p className="text-truncate text-primary">{recipe.recipe.label}</p>
+                      </Link>
+                    </div>
+                  )})}
+                  </div>
+                </Carousel.Item>
+              );
+            })}
+          </Carousel>
         )}
       </div>
     </div>

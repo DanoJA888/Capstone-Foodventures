@@ -25,6 +25,7 @@ export default function ProfileFavorites() {
       credentials: "include",
     });
     const data = await response.json();
+    console.log(data);
     setFavorites(data);
   };
 
