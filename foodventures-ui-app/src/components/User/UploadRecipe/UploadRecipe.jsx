@@ -102,6 +102,18 @@ export default function UploadRecipe({cuisineList}) {
     }));
   }
 
+  const removeDirections = (event, step) => {
+    event.preventDefault();
+    //updates array with entire line
+    const updatedDirections = [...recipe["directions"]];
+    const index = updatedDirections.indexOf(step);
+    updatedDirections.splice(index, 1);
+    setRecipe(prevRecipe => ({
+      ...prevRecipe,
+      ["directions"]: updatedDirections,
+    }));
+  }
+
   const addDirections = (event, name) =>{
     event.preventDefault();
     const updateDirections = [...recipe["directions"]];
@@ -272,7 +284,13 @@ export default function UploadRecipe({cuisineList}) {
           <div className="recipe-box">
             {
               recipe.directions.map((step) => (
+                <div className="ingredient-container">
                   <p>{step}</p>
+                  <button 
+                  onClick={(event) => removeDirections(event, step)}
+                  className="btn btn-outline-dark btn-remove"
+                  >x</button>
+                </div>
               ))
             }
           </div>

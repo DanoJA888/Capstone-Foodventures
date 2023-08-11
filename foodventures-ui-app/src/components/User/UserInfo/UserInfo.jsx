@@ -42,7 +42,7 @@ export default function UserInfo() {
             <p>Weight {currUser.weight} lbs</p>
           </div>
           <div class="col-md-6 d-flex justify-content-end">
-            <img src="https://t3.ftcdn.net/jpg/00/64/67/52/360_F_64675209_7ve2XQANuzuHjMZXP3aIYIpsDKEbF5dD.jpg" 
+            <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" 
             alt={userUploadedRecipes.username}
             className="profile-pic" />
           </div>

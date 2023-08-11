@@ -174,7 +174,7 @@ export default function RecipeInfo() {
       const isRecipeInDb = await checkIfRecipeStored();
       if(!isRecipeInDb){
         await storeRecipeInfo();
-        const cacheTimeout = setTimeout(() => {removeRecipeFromDB()}, 300000);
+        const cacheTimeout = setTimeout(() => {removeRecipeFromDB()}, 180000);
       }
     }
   };

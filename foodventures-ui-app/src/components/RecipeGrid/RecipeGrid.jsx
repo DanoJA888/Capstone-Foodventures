@@ -8,7 +8,7 @@ export default function RecipeGrid({currRecipes}){
   return(
     <div className="row">
       {currRecipes.length == 0 ? (
-        <h5 className="title">No Recipes Found</h5>
+        <h5 className="text-center">No Recipes Found</h5>
         ):(
         currRecipes.map((recipe) => {
           // using substring method to extract recipeId, ternary to check if recipe is from db or external api
