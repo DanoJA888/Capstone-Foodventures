@@ -39,7 +39,7 @@ export default function LoginForm(){
 
   return (
     <div className ="container">
-      <h2 className="title mb-4">Login</h2>
+      <h2 className="text-center my-3">Login</h2>
       <div className="container d-flex justify-content-center align-items-center">
         <form onSubmit={handleLogin}>
           <div className="mb-3">

@@ -4,7 +4,7 @@ import RecipeCarousel from "../../RecipeCarousel.jsx";
 
 export default function Favorites({favorites}) {
   return(
-    <div className="col-md-12 justify-content-center">
+    <div className="col-md-12 justify-content-center py-4">
       <h1>Favorites</h1>
       {favorites.length === 0 ? (
         <div>

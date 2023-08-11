@@ -1,6 +1,7 @@
 import "./RecipeGrid.css";
 import React from "react";
 import { Link } from 'react-router-dom';
+import { Card } from "react-bootstrap";
 
 export default function RecipeGrid({currRecipes}){
 
@@ -18,13 +19,15 @@ export default function RecipeGrid({currRecipes}){
             recipeId = recipe.recipeId
           )}
           return (
-            <div className="col-md-3">
-              <div className="border p-4 text-center">
-                <img src={recipe.recipe.image} alt={recipe.recipe.label} className="img-fluid" />
+            <div className="col-md-3 d-flex justify-content-center mb-4">
+              <Card style={{ width: '15rem', border: '2px solid', borderColor: '#4fb354', height: '325px'}}>
+                <Card.Img variant="top" src={recipe.recipe.image} />
+                <Card.Body>
                 <Link className="link" to={`/searched/${recipeId}`}>
-                  <p className="text-truncate text-primary">{recipe.recipe.label}</p>
+                  <p className="text-center text-primary">{recipe.recipe.label}</p>
                 </Link>
-              </div>
+                </Card.Body>
+              </Card>
             </div>
           );
         })

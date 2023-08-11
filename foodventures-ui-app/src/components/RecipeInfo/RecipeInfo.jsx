@@ -244,10 +244,10 @@ export default function RecipeInfo() {
             </div>
           }
         </div>
-        <div className="container my-5 content-border">
+        <div className="container my-5">
           <div className="row">
             <div className="col-md-6">
-              <Card style={{ width: '30rem', border: '2px solid', borderColor: '#4fb354' }}>
+              <Card style={{ width: '30rem', border: '2px solid', borderColor: 'black' }}>
                 <Card.Img variant="top" src={recipe.image} />
                 <Card.Body>
                   <strong>Cuisine:</strong> {cuisine} | <strong>Main Ingredients:</strong> {mainIngredient}, {secondaryIngredient}
@@ -255,7 +255,7 @@ export default function RecipeInfo() {
               </Card>
               <p className="source">Source: {recipe.source}</p>
             </div>
-            <div className="col-md-6 d-flex flex-column justify-content-center">  
+            <div className="col-md-6 d-flex flex-column justify-content-center border border-dark border-2 rounded">  
               <IngredientsAndDirections recipe={recipe} recipeScrape={recipeScrape} loadStatus={loadStatus} urlSupported={urlSupported} />
             </div>
           </div>

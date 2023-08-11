@@ -9,25 +9,25 @@ export default function RecipeCarousel({groupedRecipes}) {
         <Carousel.Item>
           <div className="d-flex justify-content-around">
             {recipes.map((recipe) => (
-              <div className="border p-4 text-center bg-white">
+              <div className="border border-dark border-2 p-4 text-center bg-white rounded">
                 {recipe.recipe !== undefined ? (
                   <>
-                  <Card style={{ width: '15rem', border: '2px solid', borderColor: '#4fb354' }}>
+                  <Card style={{ width: '15rem', border: '2px solid', borderColor: '#4fb354', height: '325px'}}>
                     <Card.Img variant="top" src={recipe.recipe.image} />
                     <Card.Body>
                     <Link className="link" to={`/searched/${recipe.recipeId}`}>
-                      <p className="text-truncate text-primary">{recipe.recipe.label}</p>
+                      <p className=" text-primary">{recipe.recipe.label}</p>
                     </Link>
                     </Card.Body>
                   </Card>
                   </>
                 ) : (
                   <>
-                    <Card style={{ width: '15rem', border: '2px solid', borderColor: '#4fb354' }}>
+                    <Card style={{ width: '15rem', border: '2px solid', borderColor: '#4fb354', height: '325px'}}>
                     <Card.Img variant="top" src={recipe.image} />
                     <Card.Body>
                     <Link className="link" to={`/searched/${recipe.recipeId}`}>
-                      <p className="text-truncate text-primary">{recipe.recipeName}</p>
+                      <p className=" text-primary">{recipe.recipeName}</p>
                     </Link>
                     </Card.Body>
                   </Card>

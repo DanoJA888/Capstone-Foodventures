@@ -199,8 +199,37 @@ export default function ProfileFavorites() {
 
   return (
     <div class="text-center justify-content-center">
-      <h1>{currUser.username}'s Favorites</h1>
-      <div class="px-5 py-3 container text-center justify-content-center">
+      <h1 class= "text-center p-4">{currUser.username}'s Favorites</h1>
+          {mainIngredients.length == 0 ? (
+            <p>It Seems You Have No Favorites Yet</p>
+          ) : (
+            <div className="px-5 container text-center justify-content-center info-box">
+              <div className="row">
+                <div className="col-md-4">
+                  <h5>Top Main Ingredients</h5>
+                  {mainIngredients.map((ingredient) =>{
+                    return(
+                      <p>{ingredient}</p>
+                    )})}
+                </div>
+                <div className="col-md-4">
+                  <h5>Top Secondary Ingredients</h5>
+                  {secondaryIngredients.map((ingredient) =>{
+                    return(
+                      <p>{ingredient}</p>
+                    )})}
+                </div>
+                <div className="col-md-4">
+                  <h5>Top Cuisines</h5>
+                  {cuisines.map((cuisine) =>{
+                    return(
+                      <p>{cuisine}</p>
+                    )})}
+                </div>
+              </div>
+            </div>
+          )}
+      <div class="px-5 container text-center justify-content-center">
       <Favorites favorites={favorites}/>
         <div className="row">
           <Reccomendations isLoading={isLoading} recommendations={recommendations}/>

@@ -5,3 +5,8 @@
     background-color: #67c76c;
     border-radius: 25px;
 }
+.profile-pic{
+    border-radius: 50%;
+    height: 80%;
+    max-width: 75%
+}

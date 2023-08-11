@@ -55,7 +55,7 @@ export default function Signup() {
 
   return (
     <div className="container">
-      <h2 className="title mb-4">Sign Up</h2>
+      <h2 className="text-center my-3">Sign Up</h2>
       <div className="container d-flex justify-content-center align-items-center">
         <form className="mt-4" onSubmit={uploadNewUser}>
           <div className="mb-3">
