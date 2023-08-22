@@ -3,6 +3,8 @@ import { UserContext } from "../../UserContext.js";
 import "./ProfileFavorites.css";
 import Favorites from "../Favorites/Favorites.jsx";
 import Reccomendations from "../Reccomendations/Reccomendations.jsx";
+import { groupRecipes } from "../../../../constant.js";
+
 
 export default function ProfileFavorites() {
   const { currUser } = useContext(UserContext);
@@ -24,8 +26,12 @@ export default function ProfileFavorites() {
       },
       credentials: "include",
     });
-    const data = await response.json();
-    setFavorites(data);
+    const favs = await response.json();
+    if (favs.length > 0) {
+      const groupedRecipes = groupRecipes(favs);
+      console.log(groupedRecipes);
+      setFavorites(groupedRecipes);
+    }
   };
 
   const topCuisines = async () => {
@@ -111,8 +117,12 @@ export default function ProfileFavorites() {
       body : JSON.stringify({mainIngredients, secondaryIngredients, cuisines, calorieRange}),
       credentials: "include",
     });
-    const data = await response.json();
-    setRecommendations(data);
+    const generatedRecommendations = await response.json();
+    if (generatedRecommendations.length > 0) {
+      const groupedRecipes = groupRecipes(generatedRecommendations);
+      console.log(groupedRecipes);
+      setRecommendations(groupedRecipes);
+    }
     setIsLoading(false);
   }
   
@@ -188,12 +198,40 @@ export default function ProfileFavorites() {
   }, [recommendations]);
 
   return (
-    <div class="text-center">
-      <h1>{currUser.username}'s Favorites</h1>
-      <div class="px-5 py-3 container text-center">
+    <div class="text-center justify-content-center">
+      <h1 class= "text-center p-4">{currUser.username}'s Favorites</h1>
+          {mainIngredients.length == 0 ? (
+            <p>It Seems You Have No Favorites Yet</p>
+          ) : (
+            <div className="px-5 container text-center justify-content-center info-box">
+              <div className="row">
+                <div className="col-md-4">
+                  <h5>Top Main Ingredients</h5>
+                  {mainIngredients.map((ingredient) =>{
+                    return(
+                      <p>{ingredient}</p>
+                    )})}
+                </div>
+                <div className="col-md-4">
+                  <h5>Top Secondary Ingredients</h5>
+                  {secondaryIngredients.map((ingredient) =>{
+                    return(
+                      <p>{ingredient}</p>
+                    )})}
+                </div>
+                <div className="col-md-4">
+                  <h5>Top Cuisines</h5>
+                  {cuisines.map((cuisine) =>{
+                    return(
+                      <p>{cuisine}</p>
+                    )})}
+                </div>
+              </div>
+            </div>
+          )}
+      <div class="px-5 container text-center justify-content-center">
+      <Favorites favorites={favorites}/>
         <div className="row">
-          <Favorites favorites={favorites}/>
-            <div className="col-md-2 mb-4"></div>
           <Reccomendations isLoading={isLoading} recommendations={recommendations}/>
         </div>
       </div>

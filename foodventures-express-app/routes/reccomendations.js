@@ -58,7 +58,7 @@ router.post("/generate_reccomendations", async (req, res) => {
       let reccomendations = [];
       possibleReccomendations.forEach((option, index) => {
         let recipeWithPoint = {
-          label : option.recipe.label,
+          recipeName : option.recipe.label,
           image : option.recipe.image,
           recipeId : option._links.self.href.substring(38, 71),
           points : 0

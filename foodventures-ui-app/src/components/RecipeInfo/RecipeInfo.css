@@ -3,10 +3,6 @@
     width: 50%;
     word-wrap: break-word;
 }
-.content-border{
-  
-  border: 2px dashed #28a745;
-}
 .pill {
     position: relative;
     padding: 8px 16px;

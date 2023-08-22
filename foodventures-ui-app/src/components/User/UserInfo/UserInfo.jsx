@@ -1,6 +1,8 @@
 import React, {useContext, useState, useEffect} from "react";
 import { UserContext } from "../../UserContext.js";
 import { Link } from 'react-router-dom';
+import { groupRecipes } from "../../../../constant.js";
+import RecipeCarousel from "../../RecipeCarousel.jsx";
 import './UserInfo.css'
 
 export default function UserInfo() {
@@ -15,8 +17,12 @@ export default function UserInfo() {
       },
       credentials: "include",
     });
-    const data = await response.json();
-    setUserUploadedRecipes(data);
+    const recipes = await response.json();
+    console.log(recipes);
+    if (recipes.length > 0) {
+      const groupedRecipes = groupRecipes(recipes);
+      setUserUploadedRecipes(groupedRecipes);
+    }
   };
 
   useEffect(() => {
@@ -27,13 +33,18 @@ export default function UserInfo() {
     <div class="container ">
       <h1 class= "text-center p-4">Your Profile Info</h1>
       <div class="row justify-content-center">
-        <div class="col-md-6 info-box">
-          <div class="col-md-3">
+        <div class="row col-md-6 info-box">
+          <div class="col-md-6">
             <h1 className="fw-bold mb-0">{currUser.username}</h1> 
             <h3 className="mb-2">{currUser.firstName} {currUser.lastName}</h3>
             <h5> {currUser.email} </h5>
             <p className="mb-0">Height {currUser.heightFt}'{currUser.heightIn}</p>
             <p>Weight {currUser.weight} lbs</p>
+          </div>
+          <div class="col-md-6 d-flex justify-content-end">
+            <img src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png" 
+            alt={userUploadedRecipes.username}
+            className="profile-pic" />
           </div>
         </div>
       </div>
@@ -42,25 +53,7 @@ export default function UserInfo() {
         {userUploadedRecipes.length == 0 ? (
           <h5 className="title">It Seems You Havent Uploaded Any Recipes Yet</h5>
           ):(
-          userUploadedRecipes.map((recipe) => {
-            // using substring method to extract recipeId, ternary to check if recipe is from db or external api
-            let recipeId = "";
-            {recipe._links? (
-              recipeId = recipe._links.self.href.substring(38, 71)
-              ):(
-              recipeId = recipe.recipeId
-            )}
-            return (
-              <div className="col-md-3">
-                <div className="border p-4 text-center">
-                  <img src={recipe.recipe.image} alt={recipe.recipe.label} className="img-fluid" />
-                  <Link className="link" to={`/searched/${recipeId}`}>
-                    <p className="text-truncate text-primary">{recipe.recipe.label}</p>
-                  </Link>
-                </div>
-              </div>
-            );
-          })
+          <RecipeCarousel groupedRecipes={userUploadedRecipes}/>
         )}
       </div>
     </div>
